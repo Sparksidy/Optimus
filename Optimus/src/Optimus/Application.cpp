@@ -11,9 +11,4 @@ namespace OP
 	{
 
 	}
-
-	void Application::Run()
-	{
-		while (true);
-	}
 }
