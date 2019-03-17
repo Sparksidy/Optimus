@@ -18,6 +18,9 @@ project "Optimus"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "pch.h"
+	pchsource "Optimus/src/pch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

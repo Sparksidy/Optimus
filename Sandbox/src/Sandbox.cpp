@@ -11,7 +11,6 @@ public:
 	{
 
 	}
-	
 };
 
 OP::Application* OP::CreateApplication()

@@ -1,8 +1,6 @@
 #pragma once
 #include "Event.h"
 
-#include <sstream>
-
 namespace OP
 {
 
@@ -32,7 +30,7 @@ namespace OP
 		std::string ToString()const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressed Event: " << "KeyCode: " << m_KeyCode << "RepeatCount: " << m_RepeatCount << '\n';
+			ss << "KeyPressed Event: " << "KeyCode: " << m_KeyCode << " RepeatCount: " << m_RepeatCount << '\n';
 			return ss.str();
 		}
 

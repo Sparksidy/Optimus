@@ -28,6 +28,7 @@
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
@@ -36,5 +37,6 @@
     <ClCompile Include="src\Optimus\Log.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
+    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #pragma once
 #include "Optimus/Core.h"
-#include <string>
 
 namespace OP
 {
@@ -28,6 +27,8 @@ namespace OP
 	class OPTIMUS_API Event
 	{
 	public:
+		bool m_Handled = false;
+
 		Event() {};
 		virtual ~Event() {}
 
@@ -38,7 +39,37 @@ namespace OP
 		inline bool isInCategory(EVENT_CATEGORY category) { return  category & GetEventCategory(); }
 
 		virtual std::string ToString()const { return GetName(); }
+
+
 	};
+
+	class EventDispatcher
+	{
+	public:
+		template <typename T>
+		using EventFunc = std::function<bool(T&)>;
+
+		EventDispatcher(Event& event) :m_Event(event) {}
+
+		template <typename T>
+		bool Dispatch(EventFunc<T> func)
+		{
+			if (m_Event.GetEventType() == T::GetStaticType())
+			{
+				m_Handled = func(*(T*)&m_Event);
+				return true;
+			}
+
+			return false;
+		}
+
+	private:
+		Event& m_Event;
+	};
+
+
+
+
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
