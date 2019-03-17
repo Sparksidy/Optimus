@@ -26,6 +26,7 @@ project "Optimus"
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/ThirdParty/spdlog/include"
 	}
 
@@ -76,7 +77,6 @@ project "Sandbox"
 		"Optimus/ThirdParty/spdlog/include",
 		"Optimus/src"
 	}
-	
 	
 	links
 	{

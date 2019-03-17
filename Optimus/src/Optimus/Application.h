@@ -1,5 +1,7 @@
 #pragma once
 #include "Core.h"
+#include "Events/Event.h"
+#include "Events/KeyboardEvents.h"
 
 namespace OP
 {
@@ -9,7 +11,7 @@ namespace OP
 		Application();
 		virtual ~Application();
 
-		virtual void Run() = 0;
+		virtual void Run();
 
 	};
 

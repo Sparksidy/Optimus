@@ -11,10 +11,7 @@ public:
 	{
 
 	}
-	void Run()
-	{
-		while (true);
-	}
+	
 };
 
 OP::Application* OP::CreateApplication()

@@ -4,6 +4,9 @@
     <Filter Include="Optimus">
       <UniqueIdentifier>{D6B0A8D2-4290-276E-4BA8-B244B7068ECF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Events">
+      <UniqueIdentifier>{FA4F80D2-E61D-74D8-CFB1-E4FEBB1E503D}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Optimus.h" />
@@ -15,6 +18,12 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\EntryPoint.h">
       <Filter>Optimus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Events\Event.h">
+      <Filter>Optimus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Events\KeyboardEvents.h">
+      <Filter>Optimus\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
