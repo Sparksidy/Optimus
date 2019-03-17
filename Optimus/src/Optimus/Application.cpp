@@ -7,21 +7,18 @@ namespace OP
 {
 	Application::Application()
 	{
-
+		m_Window = std::make_unique<Window>();
 	}
 
 	Application::~Application()
 	{
-
 	}
 
 	void Application::Run()
 	{
-		OP::KeyPressedEvent e(12, 2);
-		if (e.isInCategory(EVENT_CATEGORY::KEYBOARD))
+		while (isRunning)
 		{
-			OP_TRACE(e);
+			m_Window->Update();
 		}
-		while (true);
 	}
 }

@@ -10,6 +10,12 @@ workspace "Optimus"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+--Dependencies in a IncludeDir structure
+IncludeDir = {}
+IncludeDir["GLFW"] = "Optimus/ThirdParty/GLFW/include"
+
+include "Optimus/ThirdParty/GLFW"
+
 project "Optimus"
 	location "Optimus"
 	kind "SharedLib"
@@ -30,7 +36,14 @@ project "Optimus"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/ThirdParty/spdlog/include"
+		"%{prj.name}/ThirdParty/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -78,7 +91,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Optimus/ThirdParty/spdlog/include",
-		"Optimus/src"
+		"Optimus/src",
+		"%{IncludeDir.GLFW}"
 	}
 	
 	links

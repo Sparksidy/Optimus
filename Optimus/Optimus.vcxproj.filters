@@ -28,6 +28,9 @@
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Window.h">
+      <Filter>Optimus</Filter>
+    </ClInclude>
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +38,9 @@
       <Filter>Optimus</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Log.cpp">
+      <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Window.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />

@@ -1,3 +1,6 @@
 [submodule "Optimus/ThirdParty/spdlog"]
 	path = Optimus/ThirdParty/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Optimus/ThirdParty/GLFW"]
+	path = Optimus/ThirdParty/GLFW
+	url = https://github.com/glfw/glfw.git
