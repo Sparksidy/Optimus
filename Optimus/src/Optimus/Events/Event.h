@@ -6,7 +6,8 @@ namespace OP
 	enum class EVENT_TYPE
 	{
 		 NONE = 0,
-		 KEY_PRESS, KEY_HOLD, KEY_RELEASED
+		 KEY_PRESS, KEY_HOLD, KEY_RELEASED,
+		 MOUSE_MOVE, MOUSE_BUTTON_PRESSED, MOUSE_BUTTON_RELEASED, MOUSE_SCROLL
 	};
 
 	enum EVENT_CATEGORY
@@ -39,8 +40,6 @@ namespace OP
 		inline bool isInCategory(EVENT_CATEGORY category) { return  category & GetEventCategory(); }
 
 		virtual std::string ToString()const { return GetName(); }
-
-
 	};
 
 	class EventDispatcher
@@ -64,11 +63,9 @@ namespace OP
 		}
 
 	private:
+		bool m_Handled = false;
 		Event& m_Event;
 	};
-
-
-
 
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)

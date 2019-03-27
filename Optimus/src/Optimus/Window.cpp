@@ -2,6 +2,9 @@
 #include "Window.h"
 #include "Log.h"
 
+#include "Events/KeyboardEvents.h"
+#include "Events/MouseEvents.h"
+
 bool OP::Window::s_isGLFWInitialized = false;
 
 OP::Window::Window(const WindowProps & props)
@@ -32,6 +35,41 @@ void OP::Window::InitWindow(const WindowProps& props)
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
 	glfwSetWindowUserPointer(m_Window, &m_Data);
+
+	glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		switch (action)
+		{
+			case GLFW_PRESS:
+			{
+				KeyPressedEvent e(key, 0);
+				data.EventCallback(e);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				KeyReleasedEvent e(key);
+				data.EventCallback(e);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				KeyHoldEvent e(key);
+				data.EventCallback(e);
+				break;
+			}
+		}
+	}
+	);
+
+	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		MouseMoveEvent e(x, y);
+		data.EventCallback(e);
+	}
+	);
 }
 
 

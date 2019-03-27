@@ -155,6 +155,7 @@
     <ClInclude Include="src\Optimus\EntryPoint.h" />
     <ClInclude Include="src\Optimus\Events\Event.h" />
     <ClInclude Include="src\Optimus\Events\KeyboardEvents.h" />
+    <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
     <ClInclude Include="src\Optimus\Log.h" />
     <ClInclude Include="src\Optimus\Window.h" />
     <ClInclude Include="src\pch.h" />
