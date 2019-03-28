@@ -2,8 +2,6 @@
 #include "Window.h"
 #include "Log.h"
 
-#include "Events/KeyboardEvents.h"
-#include "Events/MouseEvents.h"
 
 bool OP::Window::s_isGLFWInitialized = false;
 
@@ -70,8 +68,62 @@ void OP::Window::InitWindow(const WindowProps& props)
 		data.EventCallback(e);
 	}
 	);
-}
 
+	glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		switch (action)
+		{
+			case GLFW_PRESS:
+			{
+				MouseButtonPressed e(button);
+				data.EventCallback(e);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				MouseButtonReleased e(button);
+				data.EventCallback(e);
+				break;
+
+			}
+		}
+
+	}
+	);
+
+	glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		MouseScroll e(xOffset, yOffset);
+		data.EventCallback(e);
+	}
+	);
+
+	glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		data.width = width;
+		data.height = height;
+
+		WindowResizeEvent e(width, height);
+		data.EventCallback(e);
+	}
+	);
+
+	glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		WindowCloseEvent e;
+		data.EventCallback(e);
+	}
+	);
+
+
+}
 
 void OP::Window::Update()
 {

@@ -5,6 +5,7 @@
 #include "Events/KeyboardEvents.h"
 
 #include "Events/MouseEvents.h"
+#include "Events/ApplicationEvents.h"
 
 #include "Log.h"
 
@@ -20,11 +21,11 @@ namespace OP
 
 		void OnEvent(Event&);
 
-		bool OnMouseMove(Event&);
+		bool OnWindowClose(Event&);
 
 	private:
 		std::unique_ptr<Window> m_Window;
-		bool isRunning = true;
+		bool m_isRunning = true;
 
 	};
 

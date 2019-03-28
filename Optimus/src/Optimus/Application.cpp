@@ -19,21 +19,22 @@ namespace OP
 
 	void Application::Run()
 	{
-		while (isRunning)
+		while (m_isRunning)
 		{
-			glClearColor(1.0, 0.0, 1.0, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->Update();
 		}
 	}
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dis(e);
-		dis.Dispatch<MouseMoveEvent>(OP_BIND_FN(OnMouseMove));
-	}
-	bool Application::OnMouseMove(Event & e)
-	{
+		dis.Dispatch<WindowCloseEvent>(OP_BIND_FN(OnWindowClose));
+
 		OP_CORE_INFO("{0}", e);
+	}
+
+	bool Application::OnWindowClose(Event& e)
+	{
+		m_isRunning = false;
 		return true;
 	}
 }

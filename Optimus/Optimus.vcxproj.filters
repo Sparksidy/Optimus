@@ -33,6 +33,7 @@
     </ClInclude>
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
+    <ClInclude Include="src\Optimus\Events\ApplicationEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">

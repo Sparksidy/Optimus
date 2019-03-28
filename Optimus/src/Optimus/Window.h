@@ -3,6 +3,10 @@
 
 #include "Core.h"
 #include "Events/Event.h"
+#include "Events/KeyboardEvents.h"
+#include "Events/MouseEvents.h"
+#include "Events/ApplicationEvents.h"
+
 
 namespace OP
 {
@@ -32,7 +36,6 @@ namespace OP
 			inline int GetWindowHeight()const { return m_Data.height;}
 			void Update();
 
-			
 		private:
 			void DestroyWindow();
 			void InitWindow(const WindowProps& props);
