@@ -65,14 +65,17 @@ project "Optimus"
 	filter "configurations:Debug"
 		defines "OP_DEBUG"
 		symbols "On"
+		buildoptions "/MDd"
 
 	filter "configurations:Release"
 		defines "OP_RELEASE"
 		optimize "On"
+		buildoptions "/MDd"
 
 	filter "configurations:Distribution"
 		defines "OP_DIST"
 		optimize "On"
+		buildoptions "/MDd"
 
 project "Sandbox"
 	location "Sandbox"
@@ -94,7 +97,7 @@ project "Sandbox"
 		"Optimus/src",
 		"%{IncludeDir.GLFW}"
 	}
-	
+
 	links
 	{
 		"Optimus"

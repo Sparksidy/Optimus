@@ -21,13 +21,27 @@ namespace OP
 	{
 		while (m_isRunning)
 		{
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnUpdate();
+			}
+
 			m_Window->Update();
+
 		}
 	}
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dis(e);
 		dis.Dispatch<WindowCloseEvent>(OP_BIND_FN(OnWindowClose));
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+		{
+			(*it)->OnEvent(e);
+			--it;
+			if (e.Handled())
+				break;
+		}
 
 		OP_CORE_INFO("{0}", e);
 	}

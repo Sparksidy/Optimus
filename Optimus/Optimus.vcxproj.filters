@@ -19,11 +19,23 @@
     <ClInclude Include="src\Optimus\EntryPoint.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Events\ApplicationEvents.h">
+      <Filter>Optimus\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Events\Event.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Events\KeyboardEvents.h">
       <Filter>Optimus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Events\MouseEvents.h">
+      <Filter>Optimus\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Layer.h">
+      <Filter>Optimus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\LayerStack.h">
+      <Filter>Optimus</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
@@ -32,11 +44,12 @@
       <Filter>Optimus</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
-    <ClInclude Include="src\Optimus\Events\ApplicationEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
+      <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\LayerStack.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Log.cpp">

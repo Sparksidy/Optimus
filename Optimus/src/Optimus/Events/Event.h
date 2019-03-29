@@ -29,8 +29,6 @@ namespace OP
 	class OPTIMUS_API Event
 	{
 	public:
-		bool m_Handled = false;
-
 		Event() {};
 		virtual ~Event() {}
 
@@ -40,7 +38,12 @@ namespace OP
 
 		inline bool isInCategory(EVENT_CATEGORY category) { return  category & GetEventCategory(); }
 
+		inline bool Handled()const { return m_Handled; }
+
 		virtual std::string ToString()const { return GetName(); }
+
+	private:
+		bool m_Handled = false;
 	};
 
 	class EventDispatcher

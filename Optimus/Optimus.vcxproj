@@ -84,6 +84,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -109,6 +110,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,6 +137,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -157,12 +160,15 @@
     <ClInclude Include="src\Optimus\Events\Event.h" />
     <ClInclude Include="src\Optimus\Events\KeyboardEvents.h" />
     <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
+    <ClInclude Include="src\Optimus\Layer.h" />
+    <ClInclude Include="src\Optimus\LayerStack.h" />
     <ClInclude Include="src\Optimus\Log.h" />
     <ClInclude Include="src\Optimus\Window.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp" />
+    <ClCompile Include="src\Optimus\LayerStack.cpp" />
     <ClCompile Include="src\Optimus\Log.cpp" />
     <ClCompile Include="src\Optimus\Window.cpp" />
     <ClCompile Include="src\pch.cpp">
