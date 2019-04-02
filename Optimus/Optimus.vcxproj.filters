@@ -7,6 +7,12 @@
     <Filter Include="Optimus\Events">
       <UniqueIdentifier>{FA4F80D2-E61D-74D8-CFB1-E4FEBB1E503D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Imgui">
+      <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms">
+      <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Optimus.h" />
@@ -31,6 +37,9 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
+      <Filter>Optimus\Imgui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Layer.h">
       <Filter>Optimus</Filter>
     </ClInclude>
@@ -43,11 +52,17 @@
     <ClInclude Include="src\Optimus\Window.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platforms\ImguiVulkanRenderer.h">
+      <Filter>Platforms</Filter>
+    </ClInclude>
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
+      <Filter>Optimus\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\LayerStack.cpp">
       <Filter>Optimus</Filter>
@@ -57,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Window.cpp">
       <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platforms\ImguiVulkanRenderer.cpp">
+      <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
   </ItemGroup>

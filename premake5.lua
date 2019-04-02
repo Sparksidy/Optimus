@@ -1,5 +1,6 @@
 workspace "Optimus"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -13,8 +14,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 --Dependencies in a IncludeDir structure
 IncludeDir = {}
 IncludeDir["GLFW"] = "Optimus/ThirdParty/GLFW/include"
+IncludeDir["imgui"] = "Optimus/ThirdParty/imgui"
+IncludeDir["Vulkan"] = "Optimus/ThirdParty/VulkanSDK/1.1.82.1/Include"
+IncludeDir["GLAD"] = "Optimus/ThirdParty/GLAD/include"
 
 include "Optimus/ThirdParty/GLFW"
+include "Optimus/ThirdParty/imgui"
+include "Optimus/ThirdParty/GLAD"
 
 project "Optimus"
 	location "Optimus"
@@ -37,13 +43,20 @@ project "Optimus"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/ThirdParty/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.Vulkan}"
 	}
 
 	links
 	{
 		"GLFW",
-		"opengl32.lib"
+		"GLAD",
+		"opengl32.lib",
+		"ImGui",
+		"Optimus/ThirdParty/VulkanSDK/1.1.82.1/Lib/vulkan-1.lib"
 	}
 
 	filter "system:windows"
@@ -54,7 +67,8 @@ project "Optimus"
 	defines
 	{
 		"OP_PLATFORM_WINDOWS",
-		"OP_BUILD_DLL"
+		"OP_BUILD_DLL",
+		"GLFW_INCLUDE_NONE"
 	}
 
 	postbuildcommands

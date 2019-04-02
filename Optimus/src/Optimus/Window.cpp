@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "Log.h"
 
+#include <glad/glad.h>
 
 bool OP::Window::s_isGLFWInitialized = false;
 
@@ -27,11 +28,14 @@ void OP::Window::InitWindow(const WindowProps& props)
 
 	OP_CORE_INFO("Creating window... {0} ({1}, {2})", props.m_Title, props.m_Width, props.m_Height);
 
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
+	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	if (!status)
+	{
+		OP_FATAL("Unable to initialize GLAD");
+	}
+
 	glfwSetWindowUserPointer(m_Window, &m_Data);
 
 	glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
