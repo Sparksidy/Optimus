@@ -4,3 +4,6 @@
 [submodule "Optimus/ThirdParty/GLFW"]
 	path = Optimus/ThirdParty/GLFW
 	url = https://github.com/glfw/glfw.git
+[submodule "Optimus/ThirdParty/imgui"]
+	path = Optimus/ThirdParty/imgui
+	url = https://github.com/ocornut/imgui.git
