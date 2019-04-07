@@ -30,6 +30,7 @@ void OP::Window::InitWindow(const WindowProps& props)
 
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
+
 	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (!status)
 	{
@@ -64,11 +65,22 @@ void OP::Window::InitWindow(const WindowProps& props)
 	}
 	);
 
+	glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int codepoint)
+	{
+		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		KeyTypedEvent e(codepoint);
+		data.EventCallback(e);
+
+		OP_CORE_INFO("Character pressed:  {0}", codepoint);
+	}
+	);
+
 	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y)
 	{
 		OP::Window::WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		MouseMoveEvent e(x, y);
+		MouseMove e(x, y);
 		data.EventCallback(e);
 	}
 	);

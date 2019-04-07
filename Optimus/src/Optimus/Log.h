@@ -27,6 +27,7 @@ namespace OP {
 #define OP_CORE_WARN(...)		::OP::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define OP_CORE_ERROR(...)		::OP::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define OP_CORE_FATAL(...)		::OP::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define OP_ASSERT(x) if (!(x)) {OP_CORE_ERROR("Assertion Failed! File: {0}, Line: {1}",__FILE__, __LINE__);}
 
 
 //Client Loggers

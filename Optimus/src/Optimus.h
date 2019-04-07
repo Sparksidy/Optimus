@@ -5,5 +5,6 @@
 #include "Optimus/Log.h"
 #include "Optimus/Layer.h"
 
+#include "Optimus/Imgui/ImguiLayer.h"
 
 #include "Optimus/EntryPoint.h"

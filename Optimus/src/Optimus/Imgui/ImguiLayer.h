@@ -2,9 +2,13 @@
 #include "Optimus/Core.h"
 #include "Optimus/Layer.h"
 
+
+#include "Optimus/Events/MouseEvents.h"
+#include "Optimus/Events/KeyboardEvents.h"
+
 namespace OP
 {
-	class ImguiLayer : public Layer
+	class OPTIMUS_API ImguiLayer : public Layer
 	{
 	public:
 		ImguiLayer();
@@ -14,7 +18,18 @@ namespace OP
 		virtual void OnDetach()override;
 		virtual void OnUpdate()override;
 		virtual void OnEvent(Event&)override;
-	private:
 
+		bool OnMouseButtonPressedEvent(MouseButtonPressed&);
+		bool OnMouseButtonReleasedEvent(MouseButtonReleased&);
+		bool OnMouseScrollEvent(MouseScroll&);
+		bool OnMouseMoveEvent(MouseMove&);
+		bool OnKeyPressedEvent(KeyPressedEvent&);
+		bool OnKeyReleasedEvent(KeyReleasedEvent&);
+		bool OnKeyTypedEvent(KeyTypedEvent&);
+
+		static void ShowSimpleOverlay(bool* p_open);
+
+	private:
+		float m_time = 0.0f;
 	};
 }

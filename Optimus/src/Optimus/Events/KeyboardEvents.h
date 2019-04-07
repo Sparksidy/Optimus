@@ -72,6 +72,21 @@ namespace OP
 		EVENT_CLASS_TYPE(KEY_HOLD)
 	};
 
+	class OPTIMUS_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keyCode) :KeyEvent(keyCode) {}
+		virtual ~KeyTypedEvent() {}
+
+		std::string ToString()const override
+		{
+			std::stringstream ss;
+			ss << "KeyTyped Event: " << "KeyCode: " << m_KeyCode <<'\n';
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(KEY_TYPED)
+	};
 
 }
 

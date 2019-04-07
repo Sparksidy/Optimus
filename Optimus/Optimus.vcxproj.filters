@@ -52,10 +52,14 @@
     <ClInclude Include="src\Optimus\Window.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platforms\ImguiOpenGLRenderer.h">
+      <Filter>Platforms</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platforms\ImguiVulkanRenderer.h">
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Optimus\Input.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
@@ -73,9 +77,13 @@
     <ClCompile Include="src\Optimus\Window.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platforms\ImguiOpenGLRenderer.cpp">
+      <Filter>Platforms</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platforms\ImguiVulkanRenderer.cpp">
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\Optimus\Input.cpp" />
   </ItemGroup>
 </Project>

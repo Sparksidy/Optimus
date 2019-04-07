@@ -11,7 +11,7 @@ namespace OP
 {
 	typedef std::vector<Layer* >::iterator LayerVectorIterator;
 
-	class LayerStack
+	class OPTIMUS_API LayerStack
 	{
 	public:
 		LayerStack();
@@ -25,7 +25,6 @@ namespace OP
 
 		LayerVectorIterator begin() { return m_LayerStack.begin(); }
 		LayerVectorIterator end() { return m_LayerStack.end(); }
-
 
 	private:
 		std::vector<Layer* >m_LayerStack;

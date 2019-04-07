@@ -3,11 +3,11 @@
 
 namespace OP
 {
-	class OPTIMUS_API MouseMoveEvent : public Event
+	class OPTIMUS_API MouseMove : public Event
 	{
 	public:
-		MouseMoveEvent(float x, float y) :m_CursorX(x), m_CursorY(y) {}
-		~MouseMoveEvent() {}
+		MouseMove(float x, float y) :m_CursorX(x), m_CursorY(y) {}
+		~MouseMove() {}
 
 		inline float GetX()const { return m_CursorX; }
 		inline float GetY()const { return m_CursorY; }

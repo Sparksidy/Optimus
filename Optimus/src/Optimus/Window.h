@@ -34,13 +34,14 @@ namespace OP
 			inline void SetWindowCallbackFunc(const EventCallbackFn& eventCallback) { m_Data.EventCallback = eventCallback; }
 			inline int GetWindowWidth()const { return m_Data.width; }
 			inline int GetWindowHeight()const { return m_Data.height;}
+			inline GLFWwindow* GetWindowPointer()const { return m_Window; }
+
 			void Update();
 
 		private:
 			void DestroyWindow();
 			void InitWindow(const WindowProps& props);
 
-			inline GLFWwindow* GetWindowPointer()const { return m_Window; }
 		private:
 
 			struct WindowData
