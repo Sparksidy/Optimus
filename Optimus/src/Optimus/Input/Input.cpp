@@ -3,40 +3,49 @@
 
 namespace OP
 {
-	InputManager* InputManager::s_Instance = nullptr;
+	Input* Input::s_Instance = nullptr;
 
-	InputManager::InputManager()
+	Input::Input()
 	{
-		OP_ASSERT(s_Instance);
+		OP_ASSERT(!s_Instance);
 		s_Instance = this;
 	}
-	InputManager::~InputManager()
+	Input::~Input()
 	{
+		s_Instance = nullptr;
 	}
-	void InputManager::Initialize()
+	bool Input::IsKeyPressed(const int& key) const
 	{
-		//Initialize Keyboard
+		Window& window = Application::Get().GetWindow();
+		int status = glfwGetKey(window.GetWindowPointer(), key);
 
-		//Initialize Controller
-
-		//Initialize Mouse
+		return true ? status == GLFW_PRESS || status == GLFW_REPEAT : false;
 	}
-	void InputManager::Update()
+	bool Input::IsMouseButtonPressed(const int& button) const
 	{
-		//Update Keyboard
+		Window& window = Application::Get().GetWindow();
+		int status = glfwGetMouseButton(window.GetWindowPointer(), button);
 
-		//Update Controller
-
-		//Update Mouse
-
+		return true ? status == GLFW_PRESS : false;
 	}
-	void InputManager::Shutdown()
+	std::pair<double, double> Input::GetMousePos() const
 	{
-		//Shut Keyboard
+		double xPos, yPos;
+		Window& window = Application::Get().GetWindow();
+		glfwGetCursorPos(window.GetWindowPointer(), &xPos, &yPos);
 
-		//Shut Controller
-
-		//Shut Mouse
+		return std::make_pair(xPos, yPos);
 	}
+	double Input::GetMousePosX() const
+	{
+		auto [x, y] = GetMousePos();
+		return x;
+	}
+	double Input::GetMousePosY() const
+	{
+		auto[x, y] = GetMousePos();
+		return y;
+	}
+
 }
 

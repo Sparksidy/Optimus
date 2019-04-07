@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Window.h"
 #include "Log.h"
+#include "Input/Input.h"
 
 #include <glad/glad.h>
 
@@ -30,6 +31,8 @@ void OP::Window::InitWindow(const WindowProps& props)
 
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
+
+	Input::s_Instance = new Input(); //Initialize the Input Manager
 
 	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (!status)

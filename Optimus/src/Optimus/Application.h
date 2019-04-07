@@ -4,6 +4,8 @@
 
 #include "Optimus/Imgui/ImguiLayer.h"
 
+#include "Optimus/Input/Input.h"
+
 #include "Layer.h"
 #include "LayerStack.h"
 

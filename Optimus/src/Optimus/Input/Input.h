@@ -1,24 +1,29 @@
 #pragma once
-#include "Core.h"
-
-#include "Log.h"
+#include <GLFW/glfw3.h>
+#include "Optimus/Core.h"
+#include "Optimus/KeyCodes.h"
+#include "Optimus/Application.h"
 
 namespace OP
 {
-	class OPTIMUS_API InputManager
+	class OPTIMUS_API Input
 	{
 	public:
-		InputManager();
-		~InputManager();
+		Input();
+		~Input();
 
-		void Initialize();
-		void Update();
-		void Shutdown();
+		bool IsKeyPressed(const int&)const;
+		bool IsMouseButtonPressed(const int&)const;
 
-		inline static InputManager& Get() { return *s_Instance; }
+		std::pair<double, double> GetMousePos()const;
+		double GetMousePosX()const;
+		double GetMousePosY()const;
+
+		inline static Input& Get() { return *s_Instance; }
 
 	private:
-		static InputManager* s_Instance;
-		Keyboard m_keyBoard;
+		static Input* s_Instance;
+
+		friend class Window;
 	};
 }

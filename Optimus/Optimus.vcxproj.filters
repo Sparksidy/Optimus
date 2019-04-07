@@ -10,6 +10,9 @@
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Input">
+      <UniqueIdentifier>{5529A506-C1E9-203D-8A24-6ABAF6A36519}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platforms">
       <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
     </Filter>
@@ -40,6 +43,9 @@
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
       <Filter>Optimus\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Input\Input.h">
+      <Filter>Optimus\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Layer.h">
       <Filter>Optimus</Filter>
     </ClInclude>
@@ -59,7 +65,7 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Optimus\Input.h" />
+    <ClInclude Include="src\Optimus\KeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
@@ -67,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Input\Input.cpp">
+      <Filter>Optimus\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\LayerStack.cpp">
       <Filter>Optimus</Filter>
@@ -84,6 +93,5 @@
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Optimus\Input.cpp" />
   </ItemGroup>
 </Project>
