@@ -29,6 +29,7 @@ void OP::Window::InitWindow(const WindowProps& props)
 
 	OP_CORE_INFO("Creating window... {0} ({1}, {2})", props.m_Title, props.m_Width, props.m_Height);
 
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
 

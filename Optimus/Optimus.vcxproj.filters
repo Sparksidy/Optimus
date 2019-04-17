@@ -7,6 +7,9 @@
     <Filter Include="Optimus\Events">
       <UniqueIdentifier>{FA4F80D2-E61D-74D8-CFB1-E4FEBB1E503D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics">
+      <UniqueIdentifier>{D6C9370F-C2C2-5661-EBF4-3BE6D74C366D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
     </Filter>
@@ -40,11 +43,17 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Renderer.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
       <Filter>Optimus\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Input\Input.h">
       <Filter>Optimus\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\KeyCodes.h">
+      <Filter>Optimus</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Layer.h">
       <Filter>Optimus</Filter>
@@ -65,11 +74,13 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Optimus\KeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Renderer.cpp">
+      <Filter>Optimus\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>

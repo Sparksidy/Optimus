@@ -79,8 +79,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;OP_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\1.1.82.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;NOMINMAX;OP_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\Vulkan1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -90,7 +90,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\1.1.82.1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\Vulkan1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Optimus\Optimus.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -102,8 +102,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;OP_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\1.1.82.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;NOMINMAX;OP_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\Vulkan1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -117,7 +117,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\1.1.82.1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\Vulkan1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Release-windows-x86_64\Optimus\Optimus.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -129,8 +129,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;OP_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\1.1.82.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>OP_PLATFORM_WINDOWS;OP_BUILD_DLL;GLFW_INCLUDE_NONE;NOMINMAX;OP_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;ThirdParty\spdlog\include;ThirdParty\GLAD\include;ThirdParty\GLFW\include;ThirdParty\imgui;ThirdParty\VulkanSDK\Vulkan1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -144,7 +144,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\1.1.82.1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;ThirdParty\VulkanSDK\Vulkan1\Lib\vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Distribution-windows-x86_64\Optimus\Optimus.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -160,6 +160,7 @@
     <ClInclude Include="src\Optimus\Events\Event.h" />
     <ClInclude Include="src\Optimus\Events\KeyboardEvents.h" />
     <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
+    <ClInclude Include="src\Optimus\Graphics\Renderer.h" />
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\Optimus\Input\Input.h" />
     <ClInclude Include="src\Optimus\KeyCodes.h" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\Optimus\Input\Input.cpp" />
     <ClCompile Include="src\Optimus\LayerStack.cpp" />

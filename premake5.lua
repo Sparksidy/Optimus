@@ -15,12 +15,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Optimus/ThirdParty/GLFW/include"
 IncludeDir["imgui"] = "Optimus/ThirdParty/imgui"
-IncludeDir["Vulkan"] = "Optimus/ThirdParty/VulkanSDK/1.1.82.1/Include"
+IncludeDir["Vulkan"] = "Optimus/ThirdParty/VulkanSDK/Vulkan1/Include"
 IncludeDir["GLAD"] = "Optimus/ThirdParty/GLAD/include"
 
 include "Optimus/ThirdParty/GLFW"
 include "Optimus/ThirdParty/imgui"
 include "Optimus/ThirdParty/GLAD"
+
 
 project "Optimus"
 	location "Optimus"
@@ -56,7 +57,7 @@ project "Optimus"
 		"GLAD",
 		"opengl32.lib",
 		"ImGui",
-		"Optimus/ThirdParty/VulkanSDK/1.1.82.1/Lib/vulkan-1.lib"
+		"Optimus/ThirdParty/VulkanSDK/Vulkan1/Lib/vulkan-1.lib"
 	}
 
 	filter "system:windows"
@@ -68,7 +69,8 @@ project "Optimus"
 	{
 		"OP_PLATFORM_WINDOWS",
 		"OP_BUILD_DLL",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"NOMINMAX"
 	}
 
 	postbuildcommands
@@ -109,7 +111,8 @@ project "Sandbox"
 	{
 		"Optimus/ThirdParty/spdlog/include",
 		"Optimus/src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Vulkan}"
 	}
 
 	links

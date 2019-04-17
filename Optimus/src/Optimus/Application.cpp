@@ -3,8 +3,7 @@
 #include "Application.h"
 #include "Log.h"
 
-#include "glad/glad.h"
-
+#include "Optimus/Graphics/Renderer.h"
 
 namespace OP
 {
@@ -20,8 +19,11 @@ namespace OP
 		m_Window = std::make_unique<Window>();
 		m_Window->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
 
-		m_ImguiLayer = new ImguiLayer();
-		PushOverlay(m_ImguiLayer);
+		//m_ImguiLayer = new ImguiLayer();
+		//PushOverlay(m_ImguiLayer);
+
+		Renderer* r = new Renderer();
+		r->Init();
 	}
 
 	Application::~Application()
@@ -32,8 +34,6 @@ namespace OP
 	{
 		while (m_isRunning)
 		{
-			glClearColor(0.2, 0, 0, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
 			{
