@@ -10,6 +10,12 @@
     <Filter Include="Optimus\Graphics">
       <UniqueIdentifier>{D6C9370F-C2C2-5661-EBF4-3BE6D74C366D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Shaders">
+      <UniqueIdentifier>{AF64DBB9-9B89-2A3A-C4D4-0FCAB0582958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Optimus\Graphics\Shaders\SPIR-V">
+      <UniqueIdentifier>{5FD001D7-CBB3-1017-D4B6-3E534019D767}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
     </Filter>
@@ -104,5 +110,13 @@
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_frag.spv">
+      <Filter>Optimus\Graphics\Shaders\SPIR-V</Filter>
+    </None>
+    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_vert.spv">
+      <Filter>Optimus\Graphics\Shaders\SPIR-V</Filter>
+    </None>
   </ItemGroup>
 </Project>

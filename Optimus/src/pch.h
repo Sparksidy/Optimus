@@ -11,9 +11,10 @@
 #include <vector>
 #include <unordered_map>
 #include <set>
+#include <fstream>
 
 
 
 #ifdef OP_PLATFORM_WINDOWS
-	#include <Windows.h>
+#include <Windows.h>
 #endif

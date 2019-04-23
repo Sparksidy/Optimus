@@ -3,7 +3,6 @@
 #include "Application.h"
 #include "Log.h"
 
-#include "Optimus/Graphics/Renderer.h"
 
 namespace OP
 {
@@ -22,12 +21,13 @@ namespace OP
 		//m_ImguiLayer = new ImguiLayer();
 		//PushOverlay(m_ImguiLayer);
 
-		Renderer* r = new Renderer();
-		r->Init();
+		m_Renderer = new Renderer();
+		m_Renderer->Init();
 	}
 
 	Application::~Application()
 	{
+		delete m_Renderer;
 	}
 
 	void Application::Run()
@@ -41,6 +41,8 @@ namespace OP
 			}
 
 			m_Window->Update();
+
+			m_Renderer->drawFrame();
 		}
 	}
 	void Application::OnEvent(Event& e)

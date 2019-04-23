@@ -16,6 +16,8 @@ namespace OP
 
 		void Init();
 
+		void drawFrame();
+
 	private:
 		VkInstance m_Instance;
 
@@ -83,6 +85,16 @@ namespace OP
 		std::vector<VkImageView> m_SwapChainImageViews;
 #pragma endregion
 
+		VkRenderPass m_RenderPass;
+		VkPipelineLayout m_PipelineLayout;
+		VkPipeline m_GraphicsPipeline;
+
+		std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+		VkCommandPool m_CommandPool;
+		std::vector<VkCommandBuffer> m_CommandBuffers;
+
+		VkSemaphore imageAvailableSemaphore;
+		VkSemaphore renderFinishedSemaphore;
 
 	private:
 		void Shutdown();
@@ -124,5 +136,14 @@ namespace OP
 		void _createSwapChain();
 
 		void _createImageViews();
+
+		void _createGraphicsPipeline();
+		VkShaderModule _createShaderModule(const std::vector<char>& code);
+		void _createRenderPass();
+
+		void _createFramebuffers();
+		void _createCommandPool();
+		void _createCommandBuffers();
+		void _createSemaphores();
 	};
 }

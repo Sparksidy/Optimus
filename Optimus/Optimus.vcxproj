@@ -187,6 +187,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_frag.spv" />
+    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_vert.spv" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="ThirdParty\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
