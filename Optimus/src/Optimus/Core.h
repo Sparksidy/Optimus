@@ -10,4 +10,4 @@
 	#error Optimus can fly only on Windows!
 #endif
 
-#define BIT(x) (1 << x)
+#include <Optimus/Utilities/Macros.h>
