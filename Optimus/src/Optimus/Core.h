@@ -10,4 +10,3 @@
 	#error Optimus can fly only on Windows!
 #endif
 
-#include <Optimus/Utilities/Macros.h>

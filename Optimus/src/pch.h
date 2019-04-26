@@ -13,7 +13,7 @@
 #include <set>
 #include <fstream>
 
-
+#include <Optimus/Utilities/Macros.h>
 
 #ifdef OP_PLATFORM_WINDOWS
 #include <Windows.h>
