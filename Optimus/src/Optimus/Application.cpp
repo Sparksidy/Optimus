@@ -3,6 +3,9 @@
 #include "Application.h"
 #include "Log.h"
 
+#include <Optimus/Graphics/Devices/Instance.h>
+#include <Optimus/Graphics/Devices/PhysicalDevice.h>
+
 
 namespace OP
 {
@@ -21,13 +24,13 @@ namespace OP
 		//m_ImguiLayer = new ImguiLayer();
 		//PushOverlay(m_ImguiLayer);
 
-		m_Renderer = new Renderer();
-		m_Renderer->Init();
+		/*TEST*/
+		std::unique_ptr<Instance> instance = std::make_unique<Instance>();
+		std::unique_ptr<PhysicalDevice> physicalDevice = std::make_unique<PhysicalDevice>(*instance.get());
 	}
 
 	Application::~Application()
 	{
-		delete m_Renderer;
 	}
 
 	void Application::Run()
@@ -42,7 +45,7 @@ namespace OP
 
 			m_Window->Update();
 
-			m_Renderer->drawFrame();
+			//m_Renderer->drawFrame();
 		}
 	}
 	void Application::OnEvent(Event& e)
