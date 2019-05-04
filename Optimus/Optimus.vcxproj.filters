@@ -10,17 +10,17 @@
     <Filter Include="Optimus\Graphics">
       <UniqueIdentifier>{D6C9370F-C2C2-5661-EBF4-3BE6D74C366D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Optimus\Graphics\Shaders">
-      <UniqueIdentifier>{AF64DBB9-9B89-2A3A-C4D4-0FCAB0582958}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Optimus\Graphics\Shaders\SPIR-V">
-      <UniqueIdentifier>{5FD001D7-CBB3-1017-D4B6-3E534019D767}</UniqueIdentifier>
+    <Filter Include="Optimus\Graphics\Devices">
+      <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Input">
       <UniqueIdentifier>{5529A506-C1E9-203D-8A24-6ABAF6A36519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Optimus\Utilities">
+      <UniqueIdentifier>{C158188C-2D6F-1622-76E6-A143E23BE7A9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platforms">
       <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
@@ -49,8 +49,8 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Renderer.h">
-      <Filter>Optimus\Graphics</Filter>
+    <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h">
+      <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
       <Filter>Optimus\Imgui</Filter>
@@ -70,6 +70,9 @@
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Utilities\Macros.h">
+      <Filter>Optimus\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Window.h">
       <Filter>Optimus</Filter>
     </ClInclude>
@@ -80,13 +83,15 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Renderer.cpp">
-      <Filter>Optimus\Graphics</Filter>
+    <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
+      <Filter>Optimus\Graphics\Devices</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>
@@ -110,13 +115,6 @@
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_frag.spv">
-      <Filter>Optimus\Graphics\Shaders\SPIR-V</Filter>
-    </None>
-    <None Include="src\Optimus\Graphics\Shaders\SPIR-V\Triangle_vert.spv">
-      <Filter>Optimus\Graphics\Shaders\SPIR-V</Filter>
-    </None>
+    <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
   </ItemGroup>
 </Project>
