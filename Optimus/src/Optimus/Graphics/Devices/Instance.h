@@ -49,6 +49,9 @@ namespace OP
 		 */
 		void _setupDebugLayer();
 
+	public:
+		static const std::vector<const char*> m_DeviceExtensions;
+
 	private:
 		VkInstance m_Instance;
 		std::vector<const char*> m_InstanceExtensions;
