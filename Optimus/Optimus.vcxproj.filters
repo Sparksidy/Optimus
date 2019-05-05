@@ -85,6 +85,8 @@
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
@@ -116,5 +118,7 @@
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp" />
   </ItemGroup>
 </Project>

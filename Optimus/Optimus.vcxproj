@@ -162,7 +162,9 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
+    <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h" />
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\Optimus\Input\Input.h" />
     <ClInclude Include="src\Optimus\KeyCodes.h" />
@@ -178,7 +180,9 @@
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp" />
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\Optimus\Input\Input.cpp" />
     <ClCompile Include="src\Optimus\LayerStack.cpp" />
