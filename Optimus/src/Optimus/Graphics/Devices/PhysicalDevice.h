@@ -10,8 +10,12 @@ namespace OP
 	class OPTIMUS_API PhysicalDevice
 	{
 	public:
-		PhysicalDevice(const Instance& instance);
+		explicit PhysicalDevice(const Instance& instance);
 		~PhysicalDevice();
+
+		const VkPhysicalDeviceFeatures& GetFeatures()const;
+
+		inline operator const VkPhysicalDevice &() const { return m_PhysicalDevice; }
 
 	private:
 		void _pickPhysicalDevice();

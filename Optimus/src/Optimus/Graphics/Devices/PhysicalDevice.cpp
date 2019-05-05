@@ -13,8 +13,13 @@ namespace OP
 
 	PhysicalDevice::~PhysicalDevice()
 	{
+
 	}
 
+	const VkPhysicalDeviceFeatures & PhysicalDevice::GetFeatures() const
+	{
+		return m_PhysicalDeviceFeatures;
+	}
 
 	void PhysicalDevice::_pickPhysicalDevice()
 	{
@@ -35,7 +40,7 @@ namespace OP
 	void PhysicalDevice::_choosePhysicalDevice()
 	{
 		uint32_t physicalDevicesCount = 0;
-		vkEnumeratePhysicalDevices(m_Instance->GetInstance(), &physicalDevicesCount, nullptr);
+		vkEnumeratePhysicalDevices(*m_Instance, &physicalDevicesCount, nullptr);
 
 		if (physicalDevicesCount == 0)
 		{
@@ -43,7 +48,7 @@ namespace OP
 		}
 
 		std::vector<VkPhysicalDevice> physicalDevices(physicalDevicesCount);
-		vkEnumeratePhysicalDevices(m_Instance->GetInstance(), &physicalDevicesCount, physicalDevices.data());
+		vkEnumeratePhysicalDevices(*m_Instance, &physicalDevicesCount, physicalDevices.data());
 
 		std::multimap<int, VkPhysicalDevice> candidates;
 
@@ -76,7 +81,7 @@ namespace OP
 		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionPropertyCount, extensionProperties.data());
 
 		// Iterates through all extensions requested.
-		for (const char *currentExtension : Instance::m_DeviceExtensions)
+		for (const char *currentExtension : m_Instance->GetDeviceExtensions())
 		{
 			bool extensionFound = false;
 
