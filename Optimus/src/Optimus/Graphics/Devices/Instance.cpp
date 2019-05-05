@@ -7,6 +7,7 @@ namespace OP
 {
 	const std::vector<const char*> Instance::m_ValidationLayers = { "VK_LAYER_LUNARG_standard_validation" };
 	const std::vector<const char*> Instance::m_DeviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+	//const std::vector<const char *> Instance::m_InstanceExtensions = { VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME };
 
 	Instance::Instance()
 	{
@@ -14,7 +15,7 @@ namespace OP
 		_setupDebugLayer();
 
 		OP_CORE_INFO("Vulkan Instance has been created!");
-		OP_CORE_INFO("Vulkan Debug Layer is {0}", m_EnableValidationLayers);
+		OP_CORE_INFO("Vulkan Debug Layer is {0}\n", m_EnableValidationLayers);
 	}
 
 	Instance::~Instance()
@@ -91,11 +92,12 @@ namespace OP
 		std::vector<VkExtensionProperties> extensionProperties(extensionCount);
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensionProperties.data());
 
-		OP_CORE_INFO("Vulkan available extensions...");
+		/*OP_CORE_INFO("Vulkan available extensions...");
 		for (const auto& extension : extensionProperties)
 		{
 			OP_CORE_INFO("\t {0}", extension.extensionName);
 		}
+		*/
 
 		return extensionProperties;
 	}

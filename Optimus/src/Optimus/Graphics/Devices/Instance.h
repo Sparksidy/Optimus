@@ -15,9 +15,13 @@ namespace OP
 
 		/*GETTERS*/
 
-		inline const VkInstance& GetInstance()const { return m_Instance; }
+		inline operator const VkInstance &() const { return m_Instance; }
 
 		inline const std::vector<const char*>& GetInstanceExtensions()const { return m_InstanceExtensions; }
+
+		inline const std::vector<const char*>& GetInstanceValidationLayers()const { return m_ValidationLayers; }
+
+		inline const std::vector<const char*>& GetDeviceExtensions()const { return m_DeviceExtensions; }
 
 	private:
 		/**
@@ -49,14 +53,14 @@ namespace OP
 		 */
 		void _setupDebugLayer();
 
-	public:
-		static const std::vector<const char*> m_DeviceExtensions;
-
 	private:
 		VkInstance m_Instance;
+
 		std::vector<const char*> m_InstanceExtensions;
 
 		static const std::vector<const char*> m_ValidationLayers;
+		static const std::vector<const char*> m_DeviceExtensions;
+
 		VkDebugUtilsMessengerEXT m_DebugMessenger;
 
 #ifdef NDEBUG
