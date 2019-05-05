@@ -3,8 +3,12 @@
 #include "Application.h"
 #include "Log.h"
 
+/*TEST*/
 #include <Optimus/Graphics/Devices/Instance.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
+#include <Optimus/Graphics/Devices/Surface.h>
+#include <Optimus/Graphics/Devices/LogicalDevice.h>
+/*TEST*/
 
 
 namespace OP
@@ -27,6 +31,9 @@ namespace OP
 		/*TEST*/
 		std::unique_ptr<Instance> instance = std::make_unique<Instance>();
 		std::unique_ptr<PhysicalDevice> physicalDevice = std::make_unique<PhysicalDevice>(*instance.get());
+		std::unique_ptr<Surface> surface = std::make_unique<Surface>(instance.get(), physicalDevice.get());
+		std::unique_ptr<LogicalDevice> logicalDevice = std::make_unique<LogicalDevice>(instance.get(), physicalDevice.get(), surface.get());
+		/*TEST*/
 	}
 
 	Application::~Application()
