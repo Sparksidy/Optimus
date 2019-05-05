@@ -1,4 +1,5 @@
 #pragma once
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
 #include "Core.h"
@@ -22,6 +23,8 @@ namespace OP
 	};
 
 
+	class Instance;
+
 	class OPTIMUS_API Window
 	{
 		public:
@@ -37,6 +40,8 @@ namespace OP
 			inline GLFWwindow* GetWindowPointer()const { return m_Window; }
 
 			void Update();
+
+			VkResult CreateSurface(const VkInstance& instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface)const;
 
 		private:
 			void DestroyWindow();

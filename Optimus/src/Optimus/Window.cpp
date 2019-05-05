@@ -141,14 +141,17 @@ void OP::Window::InitWindow(const WindowProps& props)
 		data.EventCallback(e);
 	}
 	);
-
-
 }
 
 void OP::Window::Update()
 {
 	glfwPollEvents();
 	glfwSwapBuffers(m_Window);
+}
+
+VkResult OP::Window::CreateSurface(const VkInstance& instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const
+{
+	return glfwCreateWindowSurface(instance, m_Window, allocator, surface);
 }
 
 void OP::Window::DestroyWindow()
