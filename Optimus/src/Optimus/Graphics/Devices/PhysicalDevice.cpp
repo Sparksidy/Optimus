@@ -91,6 +91,7 @@ namespace OP
 				if (strcmp(currentExtension, extension.extensionName) == 0)
 				{
 					extensionFound = true;
+					OP_CORE_INFO("Extension found: {0} ", currentExtension);
 					break;
 				}
 			}

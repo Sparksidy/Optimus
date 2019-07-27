@@ -1,7 +1,7 @@
 #pragma once
 #include <vulkan/vulkan.hpp>
 
-#include "Optimus/Core.h"
+#include <Optimus/Core.h>
 
 namespace OP
 {
