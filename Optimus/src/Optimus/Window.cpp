@@ -3,15 +3,12 @@
 #include "Log.h"
 #include "Input/Input.h"
 
-#include <glad/glad.h>
-
 bool OP::Window::s_isGLFWInitialized = false;
 
 OP::Window::Window(const WindowProps & props)
 {
 	InitWindow(props);
 }
-
 
 void OP::Window::InitWindow(const WindowProps& props)
 {
@@ -33,13 +30,8 @@ void OP::Window::InitWindow(const WindowProps& props)
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
 
-	Input::s_Instance = new Input(); //Initialize the Input Manager
-
-	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	if (!status)
-	{
-		OP_FATAL("Unable to initialize GLAD");
-	}
+	//Initialize the Input Manager
+	Input::s_Instance = new Input(); 
 
 	glfwSetWindowUserPointer(m_Window, &m_Data);
 
