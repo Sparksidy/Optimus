@@ -22,8 +22,8 @@ namespace OP
 		const Instance *m_Instance;
 		const PhysicalDevice *m_PhysicalDevice;
 
-		VkSurfaceKHR m_Surface;
-		VkSurfaceCapabilitiesKHR m_Capabilities;
+		VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
+		VkSurfaceCapabilitiesKHR m_Capabilities{};
 		VkSurfaceFormatKHR m_Format;
 	};
 }
