@@ -15,6 +15,12 @@ namespace OP
 
 		inline operator const VkSurfaceKHR &() const { return m_Surface; }
 
+		const VkSurfaceKHR &GetSurface() const { return m_Surface; }
+
+		const VkSurfaceCapabilitiesKHR &GetCapabilities() const { return m_Capabilities; }
+
+		const VkSurfaceFormatKHR &GetFormat() const { return m_Format; }
+
 	private:
 		void _initSurface();
 
