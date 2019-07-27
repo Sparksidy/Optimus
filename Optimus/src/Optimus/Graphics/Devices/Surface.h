@@ -21,15 +21,25 @@ namespace OP
 
 		const VkSurfaceFormatKHR &GetFormat() const { return m_Format; }
 
+		const VkPresentModeKHR &GetPresentMode() const { return  m_PresentMode; }
+
 	private:
 		void _initSurface();
+
+		void _chooseSurfaceFormat();
+
+		void _choosePresentationMode();
+
 
 	private:
 		const Instance *m_Instance;
 		const PhysicalDevice *m_PhysicalDevice;
 
 		VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
+
+		//Surface Properties
 		VkSurfaceCapabilitiesKHR m_Capabilities{};
-		VkSurfaceFormatKHR m_Format;
+		VkSurfaceFormatKHR m_Format{};
+		VkPresentModeKHR m_PresentMode{};
 	};
 }

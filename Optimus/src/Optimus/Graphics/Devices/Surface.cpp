@@ -14,15 +14,14 @@ namespace OP
 		m_PhysicalDevice(physicalDevice),
 		m_Surface(VK_NULL_HANDLE),
 		m_Capabilities({}),
-		m_Format({})
+		m_Format({}),
+		m_PresentMode({})
 	{
 		if (Application::Get().GetWindow().CreateSurface(*m_Instance, nullptr, &m_Surface) != VK_SUCCESS)
 		{
 			OP_FATAL("Unable to create GLFW Surface");
 			std::terminate();
 		}
-
-		OP_VULKAN_ASSERT(vkGetPhysicalDeviceSurfaceCapabilitiesKHR, *m_PhysicalDevice, m_Surface, &m_Capabilities);
 
 		_initSurface();
 
@@ -36,6 +35,17 @@ namespace OP
 
 	void Surface::_initSurface()
 	{
+		//Surface Capabilities
+		OP_VULKAN_ASSERT(vkGetPhysicalDeviceSurfaceCapabilitiesKHR, *m_PhysicalDevice, m_Surface, &m_Capabilities);
+
+		_chooseSurfaceFormat();
+
+		_choosePresentationMode();
+	}
+
+	void Surface::_chooseSurfaceFormat()
+	{
+		//Surface Formats
 		uint32_t surfaceFormatCount = 0;
 		vkGetPhysicalDeviceSurfaceFormatsKHR(*m_PhysicalDevice, m_Surface, &surfaceFormatCount, nullptr);
 		std::vector<VkSurfaceFormatKHR> surfaceFormats(surfaceFormatCount);
@@ -71,6 +81,31 @@ namespace OP
 				m_Format.colorSpace = surfaceFormats[0].colorSpace;
 			}
 		}
+	}
+
+	void Surface::_choosePresentationMode()
+	{
+		//Presentation Modes
+		uint32_t presentModeCount;
+		vkGetPhysicalDeviceSurfacePresentModesKHR(*m_PhysicalDevice, m_Surface, &presentModeCount, nullptr);
+		std::vector<VkPresentModeKHR> presentModes{ presentModeCount };
+		if (presentModeCount != 0)
+		{
+			vkGetPhysicalDeviceSurfacePresentModesKHR(*m_PhysicalDevice, m_Surface, &presentModeCount, presentModes.data());
+		}
+
+		VkPresentModeKHR bestMode = VK_PRESENT_MODE_FIFO_KHR;
+		for (const auto& availablePresentMode : presentModes) {
+			if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+				m_PresentMode = availablePresentMode;
+				break;
+			}
+			else if (availablePresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+				bestMode = availablePresentMode;
+				break;
+			}
+		}
+		m_PresentMode = bestMode;
 	}
 
 }
