@@ -17,6 +17,29 @@ namespace OP
 
 		~LogicalDevice();
 
+		operator const VkDevice& () const { return m_LogicalDevice; }
+		
+		const VkDevice& GetLogicalDevice()const { return m_LogicalDevice; }
+
+		const VkPhysicalDeviceFeatures &GetEnabledFeatures() const { return m_enabledFeatures; }
+
+		const VkQueue &GetGraphicsQueue() const { return m_graphicsQueue; }
+
+		const VkQueue &GetPresentQueue() const { return m_presentQueue; }
+
+		const VkQueue &GetComputeQueue() const { return m_computeQueue; }
+
+		const VkQueue &GetTransferQueue() const { return m_transferQueue; }
+
+		const uint32_t &GetGraphicsFamily() const { return m_graphicsFamily; }
+
+		const uint32_t &GetPresentFamily() const { return m_presentFamily; }
+
+		const uint32_t &GetComputeFamily() const { return m_computeFamily; }
+
+		const uint32_t &GetTransferFamily() const { return m_transferFamily; }
+
+
 	private:
 		void _createLogicalDevice();
 		void _createQueueIndices();
