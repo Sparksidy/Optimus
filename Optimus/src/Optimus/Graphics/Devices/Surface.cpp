@@ -14,8 +14,8 @@ namespace OP
 		m_PhysicalDevice(physicalDevice),
 		m_Surface(VK_NULL_HANDLE),
 		m_Capabilities({}),
-		m_Format({}),
-		m_PresentMode({})
+		m_Format(),
+		m_PresentMode()
 	{
 		if (Application::Get().GetWindow().CreateSurface(*m_Instance, nullptr, &m_Surface) != VK_SUCCESS)
 		{
@@ -38,8 +38,10 @@ namespace OP
 		//Surface Capabilities
 		OP_VULKAN_ASSERT(vkGetPhysicalDeviceSurfaceCapabilitiesKHR, *m_PhysicalDevice, m_Surface, &m_Capabilities);
 
+		//Surface Formats
 		_chooseSurfaceFormat();
 
+		//Presentation modes
 		_choosePresentationMode();
 	}
 
@@ -81,6 +83,9 @@ namespace OP
 				m_Format.colorSpace = surfaceFormats[0].colorSpace;
 			}
 		}
+
+		//Store in available formats to access later by swapchain
+		_availableFormats = surfaceFormats;
 	}
 
 	void Surface::_choosePresentationMode()
@@ -106,6 +111,8 @@ namespace OP
 			}
 		}
 		m_PresentMode = bestMode;
+
+		_availablePresentModes = presentModes;
 	}
 
 }

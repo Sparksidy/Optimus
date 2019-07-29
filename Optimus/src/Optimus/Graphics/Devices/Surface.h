@@ -23,6 +23,10 @@ namespace OP
 
 		const VkPresentModeKHR &GetPresentMode() const { return  m_PresentMode; }
 
+		const std::vector<VkSurfaceFormatKHR> GetAvailableFormats() const { return _availableFormats; }
+
+		const std::vector<VkPresentModeKHR> GetAvailablePresentModes() const { return _availablePresentModes;}
+
 	private:
 		void _initSurface();
 
@@ -37,9 +41,13 @@ namespace OP
 
 		VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
 
-		//Surface Properties
-		VkSurfaceCapabilitiesKHR m_Capabilities{};
+		//Surface Properties : Selected
+		VkSurfaceCapabilitiesKHR m_Capabilities{ VK_NULL_HANDLE };
 		VkSurfaceFormatKHR m_Format{};
 		VkPresentModeKHR m_PresentMode{};
+
+		//Surface Properties : Available
+		std::vector<VkSurfaceFormatKHR> _availableFormats;
+		std::vector<VkPresentModeKHR> _availablePresentModes;
 	};
 }
