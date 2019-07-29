@@ -24,6 +24,9 @@ namespace OP
 	private:
 
 		VkSwapchainKHR m_Swapchain{ VK_NULL_HANDLE };
+		std::vector<VkImage> m_SwapChainImages;
+		VkFormat  m_SwapChainImageFormat;
+		VkExtent2D m_SwapChainExtent;
 
 		//TODO: Graphics/RenderSystem should hold these
 		const Surface* m_Surface;

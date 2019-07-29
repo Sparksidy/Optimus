@@ -77,6 +77,16 @@ namespace OP
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 
 		OP_VULKAN_ASSERT(vkCreateSwapchainKHR, m_LDevice->GetLogicalDevice(), &createInfo, nullptr, &m_Swapchain);
+		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &imageCount, m_SwapChainImages.data());
+		m_SwapChainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &imageCount, m_SwapChainImages.data());
+
+
+		m_SwapChainImageFormat = m_Surface->GetFormat().format;
+		m_SwapChainExtent = extent;
+		
 		OP_CORE_INFO("Swapchain Created Successfully");
+
+
 	}
 }
