@@ -3,6 +3,8 @@
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
 
+//TODO: Change the location of this header as this is currently used by the inline function isSwapchainadequate
+#include <Optimus/Graphics/Devices/Surface.h>
 
 namespace OP
 {
