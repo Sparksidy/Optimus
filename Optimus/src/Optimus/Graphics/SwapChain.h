@@ -14,6 +14,10 @@ namespace OP
 		SwapChain(const Surface* surface, const LogicalDevice* logicalDevice);
 		~SwapChain();
 
+		const VkSwapchainKHR &GetSwapchain() const { return m_Swapchain; }
+
+		const VkFormat &GetSwapChainImageFormat()const { return m_SwapChainImageFormat; }
+
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
 
