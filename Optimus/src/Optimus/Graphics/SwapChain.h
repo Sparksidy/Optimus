@@ -21,12 +21,16 @@ namespace OP
 
 		void _initSwapChain();
 
+		void _createImageViews();
+
 	private:
 
 		VkSwapchainKHR m_Swapchain{ VK_NULL_HANDLE };
-		std::vector<VkImage> m_SwapChainImages;
 		VkFormat  m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
+
+		std::vector<VkImageView> m_SwapChainImageViews;
+		std::vector<VkImage> m_SwapChainImages;
 
 		//TODO: Graphics/RenderSystem should hold these
 		const Surface* m_Surface;
