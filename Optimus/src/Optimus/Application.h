@@ -17,6 +17,8 @@
 
 namespace OP
 {
+	class GraphicsSystem;
+
 	class OPTIMUS_API Application
 	{
 	public:
@@ -36,6 +38,7 @@ namespace OP
 
 	private:
 		std::unique_ptr<Window> m_Window;
+		std::unique_ptr<GraphicsSystem> gSys;
 		ImguiLayer* m_ImguiLayer;
 		LayerStack m_LayerStack;
 

@@ -4,10 +4,7 @@
 #include "Log.h"
 
 /*TEST*/
-#include <Optimus/Graphics/Devices/Instance.h>
-#include <Optimus/Graphics/Devices/PhysicalDevice.h>
-#include <Optimus/Graphics/Devices/Surface.h>
-#include <Optimus/Graphics/Devices/LogicalDevice.h>
+#include <Optimus/Graphics/GraphicsSystem.h>
 /*TEST*/
 
 
@@ -27,17 +24,15 @@ namespace OP
 
 		//m_ImguiLayer = new ImguiLayer();
 		//PushOverlay(m_ImguiLayer);
-
-		/*TEST*/
-		std::unique_ptr<Instance> instance = std::make_unique<Instance>();
-		std::unique_ptr<PhysicalDevice> physicalDevice = std::make_unique<PhysicalDevice>(*instance.get());
-		std::unique_ptr<Surface> surface = std::make_unique<Surface>(instance.get(), physicalDevice.get());
-		std::unique_ptr<LogicalDevice> logicalDevice = std::make_unique<LogicalDevice>(instance.get(), physicalDevice.get(), surface.get());
+		
+		/*TEST*/ //Create a graphics system
+			gSys = std::make_unique<GraphicsSystem>();
 		/*TEST*/
 	}
 
 	Application::~Application()
 	{
+
 	}
 
 	void Application::Run()
