@@ -3,6 +3,8 @@
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
 
+#include <Optimus/Application.h>
+
 namespace OP
 {
 	class Instance;
@@ -16,6 +18,16 @@ namespace OP
 	public:
 		GraphicsSystem();
 		~GraphicsSystem();
+
+		static GraphicsSystem* Get() { return &Application::Get().GetGraphicsSystem(); }
+
+		const SwapChain* GetSwapChain()const { return m_Swapchain.get(); }
+
+		const PhysicalDevice& GetPhysicalDevice()const { return *m_PhysicalDevice; }
+
+		const LogicalDevice& GetLogicalDevice()const { return *m_LogicalDevice; }
+
+		const Surface& GetSurface()const { return *m_Surface; }
 
 	private:
 
