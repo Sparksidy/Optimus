@@ -17,7 +17,16 @@ namespace OP
 	{
 	public:
 		GraphicsSystem();
+
 		~GraphicsSystem();
+
+		void Initialize();
+
+		void Update();
+
+		void Finalize();
+
+
 
 		static GraphicsSystem* Get() { return &Application::Get().GetGraphicsSystem(); }
 
@@ -25,7 +34,7 @@ namespace OP
 
 		const PhysicalDevice& GetPhysicalDevice()const { return *m_PhysicalDevice; }
 
-		const LogicalDevice& GetLogicalDevice()const { return *m_LogicalDevice; }
+		const LogicalDevice* GetLogicalDevice()const { return m_LogicalDevice.get(); }
 
 		const Surface& GetSurface()const { return *m_Surface; }
 
