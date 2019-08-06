@@ -20,6 +20,8 @@ namespace OP
 
 		const VkFormat &GetSwapChainImageFormat()const { return m_SwapChainImageFormat; }
 
+		const VkExtent2D& GetSwapChainExtent()const { return m_SwapChainExtent; }
+
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
 
