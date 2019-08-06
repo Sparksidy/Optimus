@@ -26,6 +26,9 @@ namespace OP
 		}
 
 		vkDestroyInstance(m_Instance, nullptr);
+
+		OP_CORE_INFO("Instance is Destroyed");
+
 	}
 
 	void Instance::_createInstance()
