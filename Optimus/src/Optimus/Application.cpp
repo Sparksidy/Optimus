@@ -8,6 +8,8 @@
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Graphics/Devices/Surface.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
+#include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Graphics/RenderPass/RenderPass.h>
 /*TEST*/
 
 
@@ -33,6 +35,9 @@ namespace OP
 		std::unique_ptr<PhysicalDevice> physicalDevice = std::make_unique<PhysicalDevice>(*instance.get());
 		std::unique_ptr<Surface> surface = std::make_unique<Surface>(instance.get(), physicalDevice.get());
 		std::unique_ptr<LogicalDevice> logicalDevice = std::make_unique<LogicalDevice>(instance.get(), physicalDevice.get(), surface.get());
+
+		std::unique_ptr<SwapChain> swapchain = std::make_unique<SwapChain>(surface.get(), logicalDevice.get());
+		std::unique_ptr<RenderPass> renderPass = std::make_unique<RenderPass>(swapchain.get(), logicalDevice.get());
 		/*TEST*/
 	}
 

@@ -2,17 +2,20 @@
 
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
-
+#include <Optimus/Graphics/Devices/Surface.h>
 
 namespace OP
 {
 	class Surface;
 	class LogicalDevice;
 
-	class OPTIMUS_API SwapChain {
+	class OPTIMUS_API SwapChain
+	{
 	public:
 		SwapChain(const Surface* surface, const LogicalDevice* logicalDevice);
 		~SwapChain();
+
+		const VkFormat& GetSwapchainImageFormat() const { return m_SwapChainImageFormat; }
 
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
