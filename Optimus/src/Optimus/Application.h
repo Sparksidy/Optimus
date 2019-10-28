@@ -4,6 +4,7 @@
 
 #include "Optimus/Imgui/ImguiLayer.h"
 #include "Optimus/Input/Input.h"
+#include <Optimus/Graphics/Graphics.h>
 
 #include "Layer.h"
 #include "LayerStack.h"
@@ -36,12 +37,14 @@ namespace OP
 
 	private:
 		std::unique_ptr<Window> m_Window;
+		std::unique_ptr<Graphics> m_Graphics;
+
+
 		ImguiLayer* m_ImguiLayer;
 		LayerStack m_LayerStack;
 
 		bool m_isRunning = true;
 		static Application* s_Instance;
-
 	};
 
 	Application* CreateApplication();
