@@ -22,16 +22,18 @@ namespace OP
 				m_subPassDescription.pColorAttachments = m_ColorAttachmentReferences.data();
 			}
 
-			const VkSubpassDescription& GetSubpassDescription() const { return m_subPassDescription; }
-
+			const inline VkSubpassDescription& GetSubpassDescription() const { return m_subPassDescription; }
+			
 		private:
 			std::vector<VkAttachmentReference> m_ColorAttachmentReferences;
 			VkSubpassDescription m_subPassDescription;
 			//TODO: depth attachment references
 		};
-
+		
 		RenderPass(const SwapChain* swapchain, const LogicalDevice* device);
 		~RenderPass();
+
+		const inline VkRenderPass GetRenderPass()const { return m_RenderPass; }
 
 	private:
 		VkRenderPass m_RenderPass;

@@ -17,6 +17,10 @@ namespace OP
 
 		const VkFormat& GetSwapchainImageFormat() const { return m_SwapChainImageFormat; }
 
+		const VkExtent2D GetSwapChainExtent()const { return m_SwapChainExtent; }
+
+		const std::vector<VkImageView> GetSwapChainImageViews()const { return m_SwapChainImageViews; }
+
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
 

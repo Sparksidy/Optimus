@@ -12,6 +12,7 @@ namespace OP
 	SwapChain::SwapChain(const Surface* surface, const LogicalDevice* logicalDevice):m_Surface(surface), m_LDevice(logicalDevice)
 	{
 		_initSwapChain();
+		OP_CORE_INFO("Swapchain created!!");
 	}
 
 	SwapChain::~SwapChain()
@@ -95,7 +96,8 @@ namespace OP
 	{
 		m_SwapChainImageViews.resize(m_SwapChainImages.size());
 
-		for (size_t i = 0; i < m_SwapChainImages.size(); i++) {
+		for (size_t i = 0; i < m_SwapChainImages.size(); i++)
+		{
 			VkImageViewCreateInfo createInfo = {};
 			createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 			createInfo.image = m_SwapChainImages[i];
