@@ -21,6 +21,8 @@ namespace OP
 
 		const std::vector<VkImageView> GetSwapChainImageViews()const { return m_SwapChainImageViews; }
 
+		const VkSwapchainKHR GetSwapchain()const { return m_Swapchain; }
+
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
 
