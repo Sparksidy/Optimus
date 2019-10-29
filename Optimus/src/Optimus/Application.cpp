@@ -44,6 +44,8 @@ namespace OP
 
 			m_Window->Update();
 
+			m_Graphics->Update();
+
 		}
 	}
 	void Application::OnEvent(Event& e)

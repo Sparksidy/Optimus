@@ -28,6 +28,8 @@ namespace OP
 		void createGraphicsPipeline();
 		void createCommandPool();
 		void createCommandBuffers();
+		void createSemaphores();
+		void drawFrame();
 
 		//TODO: Make this static and move it 
 		std::vector<char> Graphics::readFile(const std::string& filename);
@@ -48,5 +50,8 @@ namespace OP
 		VkPipeline m_GraphicsPipeline;
 		VkCommandPool m_CommandPool;
 		std::vector<VkCommandBuffer> m_CommandBuffers;
+
+		VkSemaphore m_ImageAvailableSemaphore;
+		VkSemaphore m_RenderFinishedSemaphore;
 	};
 }
