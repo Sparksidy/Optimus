@@ -25,11 +25,13 @@ namespace OP
 
 		_initSurface();
 
-		OP_CORE_INFO("Surface is created\n");
+		OP_CORE_INFO("Surface is created");
 	}
 
 	Surface::~Surface()
 	{
+		OP_CORE_INFO("Destroying Surface in destructor");
+
 		vkDestroySurfaceKHR(*m_Instance, m_Surface, nullptr);
 	}
 

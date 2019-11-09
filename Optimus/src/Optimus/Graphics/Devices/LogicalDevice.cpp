@@ -27,10 +27,11 @@ namespace OP
 		_createQueueIndices();
 		_createLogicalDevice();
 
-		OP_CORE_INFO("Logical Device is created!\n");
+		OP_CORE_INFO("Logical Device is created!");
 	}
 	LogicalDevice::~LogicalDevice()
 	{
+		OP_CORE_INFO("Destroying Logical Device in destructor");
 		vkDestroyDevice(m_LogicalDevice, nullptr);
 	}
 	void LogicalDevice::_createQueueIndices()

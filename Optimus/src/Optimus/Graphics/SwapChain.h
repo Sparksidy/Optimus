@@ -13,6 +13,7 @@ namespace OP
 	{
 	public:
 		SwapChain(const Surface* surface, const LogicalDevice* logicalDevice);
+
 		~SwapChain();
 
 		const VkFormat& GetSwapchainImageFormat() const { return m_SwapChainImageFormat; }
@@ -22,6 +23,8 @@ namespace OP
 		const std::vector<VkImageView> GetSwapChainImageViews()const { return m_SwapChainImageViews; }
 
 		const VkSwapchainKHR GetSwapchain()const { return m_Swapchain; }
+
+		const uint32_t GetImageCount()const { return m_ImageCount; }
 
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
@@ -37,6 +40,8 @@ namespace OP
 		VkSwapchainKHR m_Swapchain{ VK_NULL_HANDLE };
 		VkFormat  m_SwapChainImageFormat;
 		VkExtent2D m_SwapChainExtent;
+
+		uint32_t m_ImageCount;
 
 		std::vector<VkImageView> m_SwapChainImageViews;
 		std::vector<VkImage> m_SwapChainImages;

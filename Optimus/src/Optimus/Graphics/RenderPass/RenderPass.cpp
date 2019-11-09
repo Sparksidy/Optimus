@@ -1,6 +1,7 @@
 #include <pch.h>
 #include "RenderPass.h"
 #include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Application.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Utilities/Macros.h>
 #include <Optimus/Log.h>
@@ -30,7 +31,7 @@ namespace OP
 		subpass.colorAttachmentCount = 1;
 		subpass.pColorAttachments = &colorAttachmentRef;
 
-		VkRenderPassCreateInfo renderPassInfo = {};
+		VkRenderPassCreateInfo renderPassInfo = {}; 
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
 		renderPassInfo.attachmentCount = 1;
 		renderPassInfo.pAttachments = &colorAttachment;
@@ -44,6 +45,8 @@ namespace OP
 
 	RenderPass::~RenderPass()
 	{
+		OP_CORE_INFO("Destroying Renderpass in destructor...");
+		vkDestroyRenderPass(Application::Get().GetGraphics().GetLogicalDevice()->GetLogicalDevice(), m_RenderPass, nullptr);
 	}
 
 }

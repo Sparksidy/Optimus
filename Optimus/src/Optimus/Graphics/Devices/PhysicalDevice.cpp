@@ -34,7 +34,7 @@ namespace OP
 		vkGetPhysicalDeviceProperties(m_PhysicalDevice, &m_PhysicalDeviceProperties);
 		vkGetPhysicalDeviceFeatures(m_PhysicalDevice, &m_PhysicalDeviceFeatures);
 
-		OP_CORE_TRACE("Selected Physical Device: {0}, {1}\n", m_PhysicalDeviceProperties.deviceName, m_PhysicalDeviceProperties.deviceID);
+		OP_CORE_INFO("Selected Physical Device: {0}, {1}", m_PhysicalDeviceProperties.deviceName, m_PhysicalDeviceProperties.deviceID);
 	}
 
 	void PhysicalDevice::_choosePhysicalDevice()

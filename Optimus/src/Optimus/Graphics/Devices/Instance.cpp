@@ -15,11 +15,12 @@ namespace OP
 		_setupDebugLayer();
 
 		OP_CORE_INFO("Vulkan Instance has been created!");
-		OP_CORE_INFO("Vulkan Debug Layer is {0}\n", m_EnableValidationLayers);
+		OP_CORE_INFO("Vulkan Debug Layer is {0}", m_EnableValidationLayers);
 	}
 
 	Instance::~Instance()
 	{
+		OP_CORE_INFO("Destroying Vulkan Instance");
 		if (m_EnableValidationLayers)
 		{
 			OP::Debug::DestroyDebugUtilsMessengerEXT(m_Instance, m_DebugMessenger, nullptr);

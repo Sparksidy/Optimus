@@ -1,8 +1,10 @@
 #include <pch.h>
+#include <Optimus/Application.h>
 #include <Optimus/Graphics/RenderPass/Framebuffers.h>
 #include <Optimus/Graphics/SwapChain.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
+#include <Optimus/Log.h>
 
 namespace OP
 {
@@ -32,11 +34,21 @@ namespace OP
 			}
 
 		}
+
+		OP_CORE_INFO("Framebuffers created");
 	}
 
 	Framebuffers::~Framebuffers()
 	{
-
+		OP_CORE_INFO("Destroying Framebuffers in destructor...");
+		if (m_Framebuffers.size() > 0)
+		{
+			for (auto framebuffer : m_Framebuffers)
+			{
+				vkDestroyFramebuffer(Application::Get().GetGraphics().GetLogicalDevice()->GetLogicalDevice(), framebuffer, nullptr);
+			}
+		}
+		
 	}
 
 

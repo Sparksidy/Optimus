@@ -7,57 +7,69 @@
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/RenderPass/Framebuffers.h>
 #include <Optimus/Graphics/Graphics.h>
+#include <Optimus/Graphics/Commands/CommandPool.h>
+#include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
 
 namespace OP
 {
-	Graphics::Graphics()
+	Graphics::Graphics():
+		m_Instance(std::make_unique<Instance>()),
+		m_PhysicalDevice(std::make_unique<PhysicalDevice>(*m_Instance.get())),
+		m_Surface(std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get())),
+		m_LogicalDevice(std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get()))
 	{
-		m_Instance = std::make_unique<Instance>();
-		m_PhysicalDevice = std::make_unique<PhysicalDevice>(*m_Instance.get());
-		m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get());
-		m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
-
-		m_SwapChain = std::make_unique<SwapChain>(m_Surface.get(), m_LogicalDevice.get());
-		m_Renderpass = std::make_unique<RenderPass>(m_SwapChain.get(), m_LogicalDevice.get());
-
-		createGraphicsPipeline();
-
-		OP_CORE_INFO("Graphics pipeline created");
-
-		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
-
-		OP_CORE_INFO("Framebuffers created");
-
-		//TODO: Create a class
-		createCommandPool();
-
-		//TODO: Create a class
-		createCommandBuffers();
-
-		createSemaphores();
 	}
 
 	Graphics::~Graphics()
 	{
-		//Destroy other objects consistently. Evaluate the other classes.
+		cleanupSwapChain();
 
+		//Destroy these in its own classes
+		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+		{
+			vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_RenderFinishedSemaphore[i], nullptr);
+			vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_ImageAvailableSemaphore[i], nullptr);
+			vkDestroyFence(m_LogicalDevice->GetLogicalDevice(), m_InFlightFences[i], nullptr);
+		}
+	}
 
-		vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_RenderFinishedSemaphore, nullptr);
-		vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_ImageAvailableSemaphore, nullptr);
+	void Graphics::Init()
+	{
+		m_SwapChain = std::make_unique<SwapChain>(m_Surface.get(), m_LogicalDevice.get());
+
+		m_Renderpass = std::make_unique<RenderPass>(m_SwapChain.get(), m_LogicalDevice.get());
+
+		createGraphicsPipeline();
+
+		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
+
+		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
+
+		createCommandBuffers();
+
+		if(!recreatingSwapchain)
+			createSyncObjects();
 	}
 
 	void Graphics::Update()
 	{
+		if (!m_SwapChain)
+		{
+			Init();
+		}
+
 		drawFrame();
+		
+		//Drawing operations are asynchronous, wait for logical device to finish its operation before cleanup
+		vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
 	}
 
 	void Graphics::createGraphicsPipeline()
 	{
 		auto fragShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
 		auto vertShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv");
-
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 		VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -163,6 +175,8 @@ namespace OP
 			throw std::runtime_error("failed to create graphics pipeline!");
 		}
 
+		OP_CORE_INFO("Graphics Pipeline created");
+
 		vkDestroyShaderModule(m_LogicalDevice->GetLogicalDevice(), fragShaderModule, nullptr);
 		vkDestroyShaderModule(m_LogicalDevice->GetLogicalDevice(), vertShaderModule, nullptr);
 	}
@@ -204,31 +218,19 @@ namespace OP
 		return buffer;
 	}
 
-	void Graphics::createCommandPool()
-	{
-		VkCommandPoolCreateInfo poolInfo = {};
-		poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		poolInfo.queueFamilyIndex = m_LogicalDevice->GetGraphicsFamily(); //queueFamilyIndices.graphicsFamily.value();
-
-		if (vkCreateCommandPool(m_LogicalDevice->GetLogicalDevice(), &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to create command pool!");
-		}
-
-		OP_CORE_INFO("Command Pool Created");
-	}
-
+	
 	void Graphics::createCommandBuffers()
 	{
 		m_CommandBuffers.resize(m_Framebuffers->GetFramebuffers().size());
 
 		VkCommandBufferAllocateInfo allocInfo = {};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = m_CommandPool;
+		allocInfo.commandPool = m_CommandPool->GetCommandPool();
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = (uint32_t)m_CommandBuffers.size();
 
-		if (vkAllocateCommandBuffers(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS) {
+		if (vkAllocateCommandBuffers(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
+		{
 			throw std::runtime_error("failed to allocate command buffers!");
 		}
 
@@ -268,28 +270,101 @@ namespace OP
 
 		OP_CORE_INFO("Command Buffers created");
 	}
-	void Graphics::createSemaphores()
+	
+	void Graphics::createSyncObjects()
 	{
+		m_ImageAvailableSemaphore.resize(MAX_FRAMES_IN_FLIGHT);
+		m_RenderFinishedSemaphore.resize(MAX_FRAMES_IN_FLIGHT);
+		m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+		m_ImagesInFlight.resize(m_SwapChain->GetSwapChainImageViews().size(), VK_NULL_HANDLE); //TODO: Get Swapchain images
+
 		VkSemaphoreCreateInfo semaphoreInfo = {};
 		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-		if (vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore) != VK_SUCCESS ||
-			vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore) != VK_SUCCESS)
-		{
+		VkFenceCreateInfo fenceInfo = {};
+		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-			throw std::runtime_error("failed to create semaphores!");
+		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+		{
+			if (vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore[i]) != VK_SUCCESS ||
+				vkCreateFence(m_LogicalDevice->GetLogicalDevice(), &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
+			{
+
+				throw std::runtime_error("failed to create semaphores!");
+			}
+		}
+
+		OP_CORE_INFO("Sync objects created");
+	}
+	
+	void Graphics::cleanupSwapChain()
+	{
+		OP_CORE_INFO("Destroying Framebuffers...");
+		m_Framebuffers.reset();
+
+		OP_CORE_INFO("Freeing Command buffers...");
+		vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), m_CommandPool->GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
+
+		OP_CORE_INFO("Destroying Pipeline objects...");
+		vkDestroyPipeline(m_LogicalDevice->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(m_LogicalDevice->GetLogicalDevice(), m_PipelineLayout, nullptr);
+
+		OP_CORE_INFO("Destroying RenderPasses...");
+		m_Renderpass.reset();
+
+		OP_CORE_INFO("Destroying Image Views and swapchain...");
+		m_SwapChain.reset();
+	}
+
+	void Graphics::recreateSwapchain()
+	{
+		if (recreatingSwapchain)
+		{
+			OP_CORE_INFO("Recreating swapchain");
+
+			vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
+
+			cleanupSwapChain();
+
+			Init();
+
+			recreatingSwapchain = false;
 		}
 	}
+
 	void Graphics::drawFrame()
 	{
+		vkWaitForFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
+		
 		uint32_t imageIndex;
-		vkAcquireNextImageKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+		VkResult result = vkAcquireNextImageKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
 
+		if (result == VK_ERROR_OUT_OF_DATE_KHR)
+		{
+			//recreate swapchain
+			recreatingSwapchain = true;
+			recreateSwapchain();
+			return;
+		}
+		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+		{
+			throw std::runtime_error("failed to acquire swap chain image!");
+		}
+
+		//Check if a previous frame is using this image
+		if (m_ImagesInFlight[imageIndex] != VK_NULL_HANDLE)
+		{
+			vkWaitForFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_ImagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+		}
+
+		m_ImagesInFlight[imageIndex] = m_InFlightFences[m_CurrentFrame];
 
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-		VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphore };
+		VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphore[m_CurrentFrame] };
 		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
@@ -298,11 +373,14 @@ namespace OP
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &m_CommandBuffers[imageIndex];
 
-		VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore };
+		VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore[m_CurrentFrame] };
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
-		if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+		vkResetFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame]);
+
+		if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
+		{
 			throw std::runtime_error("failed to submit draw command buffer!");
 		}
 
@@ -318,6 +396,8 @@ namespace OP
 
 		presentInfo.pImageIndices = &imageIndex;
 
-		vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
+		result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
+
+		m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 	}
 }

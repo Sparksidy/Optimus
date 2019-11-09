@@ -9,7 +9,9 @@
 
 namespace OP
 {
-	SwapChain::SwapChain(const Surface* surface, const LogicalDevice* logicalDevice):m_Surface(surface), m_LDevice(logicalDevice)
+	SwapChain::SwapChain(const Surface* surface, const LogicalDevice* logicalDevice):
+		m_Surface(surface), 
+		m_LDevice(logicalDevice)
 	{
 		_initSwapChain();
 		OP_CORE_INFO("Swapchain created!!");
@@ -17,43 +19,48 @@ namespace OP
 
 	SwapChain::~SwapChain()
 	{
+		OP_CORE_INFO("Destroying Image views and swapchain in destructor");
+		for (auto imageView : m_SwapChainImageViews)
+		{
+			vkDestroyImageView(m_LDevice->GetLogicalDevice(), imageView, nullptr);
+		}
+
 		vkDestroySwapchainKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, nullptr);
 	}
 
 	VkExtent2D SwapChain::_chooseSwapExtent()
 	{
-		if (m_Surface->GetCapabilities().currentExtent.width != std::numeric_limits<uint32_t>::max())
+		Window& window = Application::Get().GetWindow();
+		VkExtent2D actualExtent = { static_cast<uint32_t>(window.GetWindowWidth()), static_cast<uint32_t>(window.GetWindowHeight()) };
+
+		if (window.GetWindowWidth() != std::numeric_limits<uint32_t>::max())
 		{
-			return m_Surface->GetCapabilities().currentExtent;
+			return actualExtent;
 		}
 		else
 		{
-			Window& window = Application::Get().GetWindow();
-
-			VkExtent2D actualExtent = { window.GetWindowWidth(), window.GetWindowHeight() };
-
 			actualExtent.width = std::max(m_Surface->GetCapabilities().minImageExtent.width, std::min(m_Surface->GetCapabilities().maxImageExtent.width, actualExtent.width));
 			actualExtent.height = std::max(m_Surface->GetCapabilities().minImageExtent.height, std::min(m_Surface->GetCapabilities().maxImageExtent.height, actualExtent.height));
-
-			return actualExtent;
+	
 		}
+		return actualExtent;
 	}
 
 	void SwapChain::_initSwapChain()
 	{
 		VkExtent2D extent = _chooseSwapExtent();
 
-		uint32_t imageCount = m_Surface->GetCapabilities().minImageCount + 1;
+		m_ImageCount = m_Surface->GetCapabilities().minImageCount + 1;
 		if (m_Surface->GetCapabilities().maxImageCount > 0 &&
-			imageCount > m_Surface->GetCapabilities().maxImageCount)
+			m_ImageCount > m_Surface->GetCapabilities().maxImageCount)
 		{
-			imageCount = m_Surface->GetCapabilities().maxImageCount;
+			m_ImageCount = m_Surface->GetCapabilities().maxImageCount;
 		}
 
 		VkSwapchainCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		createInfo.surface = m_Surface->GetSurface();
-		createInfo.minImageCount = imageCount;
+		createInfo.minImageCount = m_ImageCount;
 		createInfo.imageFormat = m_Surface->GetFormat().format;
 		createInfo.imageColorSpace = m_Surface->GetFormat().colorSpace;
 		createInfo.imageExtent = extent;
@@ -77,10 +84,11 @@ namespace OP
 		createInfo.clipped = VK_TRUE;
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 
+
 		OP_VULKAN_ASSERT(vkCreateSwapchainKHR, m_LDevice->GetLogicalDevice(), &createInfo, nullptr, &m_Swapchain);
-		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &imageCount, m_SwapChainImages.data());
-		m_SwapChainImages.resize(imageCount);
-		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &imageCount, m_SwapChainImages.data());
+		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
+		m_SwapChainImages.resize(m_ImageCount);
+		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
 
 
 		m_SwapChainImageFormat = m_Surface->GetFormat().format;
