@@ -148,5 +148,8 @@ VkResult OP::Window::CreateSurface(const VkInstance& instance, const VkAllocatio
 
 void OP::Window::DestroyWindow()
 {
+	OP_CORE_INFO("Destroying window in destructor");
+
 	glfwDestroyWindow(m_Window);
+	glfwTerminate();
 }

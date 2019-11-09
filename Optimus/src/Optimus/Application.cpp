@@ -2,10 +2,8 @@
 
 #include "Application.h"
 #include "Log.h"
+#include <Optimus/Graphics/Devices/LogicalDevice.h>
 
-/*TEST*/
-
-/*TEST*/
 
 
 namespace OP
@@ -30,6 +28,7 @@ namespace OP
 
 	Application::~Application()
 	{
+		OP_CORE_INFO("Destroying Application");
 	}
 
 	void Application::Run()
@@ -45,7 +44,6 @@ namespace OP
 			m_Window->Update();
 
 			m_Graphics->Update();
-
 		}
 	}
 	void Application::OnEvent(Event& e)

@@ -35,6 +35,9 @@ namespace OP
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow()const { return *m_Window; }
 
+		//TODO: Get a module and cast it to graphics / All singletons as modules.
+		inline Graphics& GetGraphics()const { return *m_Graphics; }
+
 	private:
 		std::unique_ptr<Window> m_Window;
 		std::unique_ptr<Graphics> m_Graphics;
