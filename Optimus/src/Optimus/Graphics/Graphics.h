@@ -15,6 +15,7 @@ namespace OP
 	class Framebuffers;
 	class CommandPool;
 	class GraphicsPipeline;
+	class CommandBuffer;
 
 	class OPTIMUS_API Graphics
 	{
@@ -31,9 +32,11 @@ namespace OP
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
 		const RenderPass& GetRenderPass()const { return *m_Renderpass.get(); }
+		const Framebuffers& GetFramebuffers()const { return *m_Framebuffers.get(); }
+		const CommandPool& GetCommandPool()const { return *m_CommandPool.get(); }
+		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
 
 	private:
-		void createCommandBuffers();
 		void createSyncObjects();
 		void recreateSwapchain();
 		void cleanupSwapChain();
@@ -50,7 +53,7 @@ namespace OP
 		std::unique_ptr<CommandPool> m_CommandPool;
 
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
-		std::vector<VkCommandBuffer> m_CommandBuffers = {};
+		std::unique_ptr<CommandBuffer> m_CommandBuffers;
 
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;

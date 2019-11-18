@@ -9,6 +9,7 @@
 #include <Optimus/Graphics/Graphics.h>
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/GraphicsPipeline.h>
+#include <Optimus/Graphics/Commands/CommandBuffer.h>
 #include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
@@ -48,7 +49,7 @@ namespace OP
 
 		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
 
-		createCommandBuffers();
+		m_CommandBuffers = std::make_unique<CommandBuffer>();
 
 		if(!recreatingSwapchain)
 			createSyncObjects();
@@ -68,57 +69,7 @@ namespace OP
 	}
 
 	
-	void Graphics::createCommandBuffers()
-	{
-		m_CommandBuffers.resize(m_Framebuffers->GetFramebuffers().size());
-
-		VkCommandBufferAllocateInfo allocInfo = {};
-		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = m_CommandPool->GetCommandPool();
-		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandBufferCount = (uint32_t)m_CommandBuffers.size();
-
-		if (vkAllocateCommandBuffers(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to allocate command buffers!");
-		}
-
-		for (size_t i = 0; i < m_CommandBuffers.size(); i++)
-		{
-			VkCommandBufferBeginInfo beginInfo = {};
-			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-			if (vkBeginCommandBuffer(m_CommandBuffers[i], &beginInfo) != VK_SUCCESS) {
-				throw std::runtime_error("failed to begin recording command buffer!");
-			}
-
-			VkRenderPassBeginInfo renderPassInfo = {};
-			renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			renderPassInfo.renderPass = m_Renderpass->GetRenderPass();
-			renderPassInfo.framebuffer = m_Framebuffers->GetFramebuffers()[i];
-			renderPassInfo.renderArea.offset = { 0, 0 };
-			renderPassInfo.renderArea.extent = m_SwapChain->GetSwapChainExtent();
-
-			VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-			renderPassInfo.clearValueCount = 1;
-			renderPassInfo.pClearValues = &clearColor;
-
-			vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-			vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, *m_GraphicsPipeline.get());
-
-			vkCmdDraw(m_CommandBuffers[i], 3, 1, 0, 0);
-
-			vkCmdEndRenderPass(m_CommandBuffers[i]);
-
-			if (vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS)
-			{
-				throw std::runtime_error("failed to record command buffer!");
-			}
-		}
-
-		OP_CORE_INFO("Command Buffers created");
-	}
+	
 	
 	void Graphics::createSyncObjects()
 	{
@@ -154,8 +105,7 @@ namespace OP
 		m_Framebuffers.reset();
 
 		OP_CORE_INFO("Freeing Command buffers...");
-		vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), m_CommandPool->GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
-		m_CommandBuffers.clear();
+		m_CommandBuffers.reset();
 
 		OP_CORE_INFO("Destroying Pipeline objects...");
 		m_GraphicsPipeline.reset();
@@ -220,7 +170,7 @@ namespace OP
 		submitInfo.pWaitDstStageMask = waitStages;
 
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &m_CommandBuffers[imageIndex];
+		submitInfo.pCommandBuffers = &m_CommandBuffers->GetCommandBuffer()[imageIndex]; 
 
 		VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore[m_CurrentFrame] };
 		submitInfo.signalSemaphoreCount = 1;
