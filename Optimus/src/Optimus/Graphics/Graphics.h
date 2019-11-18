@@ -14,6 +14,7 @@ namespace OP
 	class RenderPass;
 	class Framebuffers;
 	class CommandPool;
+	class GraphicsPipeline;
 
 	class OPTIMUS_API Graphics
 	{
@@ -26,23 +27,18 @@ namespace OP
 
 		void Update();
 
-
-		const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
+		//Getters
+		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
+		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
+		const RenderPass& GetRenderPass()const { return *m_Renderpass.get(); }
 
 	private:
 		void createCommandBuffers();
-		void createGraphicsPipeline();
 		void createSyncObjects();
 		void recreateSwapchain();
 		void cleanupSwapChain();
 
-		VkShaderModule Graphics::createShaderModule(const std::vector<char>& code);
-
 		void drawFrame();
-
-		//TODO: Make this static and move it 
-		std::vector<char> Graphics::readFile(const std::string& filename);
-
 
 		std::unique_ptr<Instance> m_Instance;
 		std::unique_ptr<PhysicalDevice> m_PhysicalDevice;
@@ -53,8 +49,7 @@ namespace OP
 		std::unique_ptr<Framebuffers> m_Framebuffers;
 		std::unique_ptr<CommandPool> m_CommandPool;
 
-		VkPipelineLayout m_PipelineLayout = {};
-		VkPipeline m_GraphicsPipeline = {};
+		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
 		std::vector<VkCommandBuffer> m_CommandBuffers = {};
 
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;

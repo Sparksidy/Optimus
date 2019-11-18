@@ -45,7 +45,7 @@ namespace OP
 		{
 			for (auto framebuffer : m_Framebuffers)
 			{
-				vkDestroyFramebuffer(Application::Get().GetGraphics().GetLogicalDevice()->GetLogicalDevice(), framebuffer, nullptr);
+				vkDestroyFramebuffer(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), framebuffer, nullptr);
 			}
 		}
 		

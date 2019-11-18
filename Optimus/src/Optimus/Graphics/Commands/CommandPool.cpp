@@ -29,9 +29,8 @@ namespace OP
 	CommandPool::~CommandPool()
 	{
 		OP_CORE_INFO("Destroying command pool");
-		auto logicalDevice = Application::Get().GetGraphics().GetLogicalDevice();
 
-		vkDestroyCommandPool(logicalDevice->GetLogicalDevice(), m_CommandPool, nullptr);
+		vkDestroyCommandPool(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), m_CommandPool, nullptr);
 	}
 
 }

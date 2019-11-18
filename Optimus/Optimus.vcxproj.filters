@@ -10,8 +10,14 @@
     <Filter Include="Optimus\Graphics">
       <UniqueIdentifier>{D6C9370F-C2C2-5661-EBF4-3BE6D74C366D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Commands">
+      <UniqueIdentifier>{D7D5A068-4398-D4F2-8C48-637FF849ADD0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Graphics\Devices">
       <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Optimus\Graphics\RenderPass">
+      <UniqueIdentifier>{3C40F704-A84D-25EB-3134-21D69D40F1A1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
@@ -49,8 +55,41 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Commands\CommandBuffer.h">
+      <Filter>Optimus\Graphics\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h">
+      <Filter>Optimus\Graphics\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h">
       <Filter>Optimus\Graphics\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Graphics.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\GraphicsPipeline.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\RenderPass\Framebuffers.h">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\RenderPass\RenderPass.h">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\SwapChain.h">
+      <Filter>Optimus\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
       <Filter>Optimus\Imgui</Filter>
@@ -83,17 +122,43 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
-    <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
-    <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
-    <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Commands\CommandBuffer.cpp">
+      <Filter>Optimus\Graphics\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Commands\CommandPool.cpp">
+      <Filter>Optimus\Graphics\Commands</Filter>
+    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp">
+      <Filter>Optimus\Graphics\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Graphics.cpp">
+      <Filter>Optimus\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\GraphicsPipeline.cpp">
+      <Filter>Optimus\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\RenderPass\Framebuffers.cpp">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\RenderPass\RenderPass.cpp">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\SwapChain.cpp">
+      <Filter>Optimus\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>
@@ -117,8 +182,5 @@
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp" />
   </ItemGroup>
 </Project>

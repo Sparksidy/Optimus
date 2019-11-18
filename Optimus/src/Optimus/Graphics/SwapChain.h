@@ -26,6 +26,9 @@ namespace OP
 
 		const uint32_t GetImageCount()const { return m_ImageCount; }
 
+		//Overloading
+		operator const VkSwapchainKHR &() const { return m_Swapchain; }
+
 	private:
 		inline bool _isSwapChainAdequate() { return !m_Surface->GetAvailableFormats().empty() && !m_Surface->GetAvailablePresentModes().empty(); }
 

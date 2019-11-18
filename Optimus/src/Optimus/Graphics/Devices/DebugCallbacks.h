@@ -10,7 +10,7 @@ namespace OP
 			const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 			void* pUserData)
 		{
-			//OP_CORE_INFO("Validation layer:  {0}", pCallbackData->pMessage);
+			OP_CORE_INFO("Validation layer:  {0}", pCallbackData->pMessage);
 			return VK_FALSE;
 		}
 
