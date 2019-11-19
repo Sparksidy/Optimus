@@ -69,8 +69,6 @@ namespace OP
 	}
 
 	
-	
-	
 	void Graphics::createSyncObjects()
 	{
 		m_ImageAvailableSemaphore.resize(MAX_FRAMES_IN_FLIGHT);

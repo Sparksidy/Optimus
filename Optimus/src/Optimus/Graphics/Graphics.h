@@ -2,7 +2,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include <Optimus/Core.h>
-
+#include <Optimus/ISystem.h>
 
 namespace OP
 {
@@ -17,7 +17,7 @@ namespace OP
 	class GraphicsPipeline;
 	class CommandBuffer;
 
-	class OPTIMUS_API Graphics
+	class OPTIMUS_API Graphics : public ISystem
 	{
 	public:
 		Graphics();
@@ -27,6 +27,12 @@ namespace OP
 		void Init();
 
 		void Update();
+
+		bool Initialize() override { return false; }
+		void Updates() override {}
+		void Unload() override {}
+
+		std::string GetName()const { return "Graphics"; }
 
 		//Getters
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
@@ -47,11 +53,11 @@ namespace OP
 		std::unique_ptr<PhysicalDevice> m_PhysicalDevice;
 		std::unique_ptr<Surface> m_Surface;
 		std::unique_ptr<LogicalDevice> m_LogicalDevice;
+
 		std::unique_ptr<SwapChain> m_SwapChain;
 		std::unique_ptr<RenderPass> m_Renderpass;
 		std::unique_ptr<Framebuffers> m_Framebuffers;
 		std::unique_ptr<CommandPool> m_CommandPool;
-
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
 		std::unique_ptr<CommandBuffer> m_CommandBuffers;
 
