@@ -122,7 +122,7 @@ namespace OP
 		pipelineInfo.pMultisampleState = &multisampling;
 		pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.layout = m_PipelineLayout;
-		pipelineInfo.renderPass = graphics->GetRenderPass().GetRenderPass();
+		pipelineInfo.renderPass = graphics->GetRenderPass();
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 

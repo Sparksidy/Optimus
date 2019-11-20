@@ -59,7 +59,7 @@ namespace OP
 
 		VkSwapchainCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		createInfo.surface = m_Surface->GetSurface();
+		createInfo.surface = *m_Surface;
 		createInfo.minImageCount = m_ImageCount;
 		createInfo.imageFormat = m_Surface->GetFormat().format;
 		createInfo.imageColorSpace = m_Surface->GetFormat().colorSpace;

@@ -18,7 +18,7 @@ namespace OP
 	CommandBuffer::~CommandBuffer()
 	{
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkFreeCommandBuffers(graphics->GetLogicalDevice(), graphics->GetCommandPool().GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
+		vkFreeCommandBuffers(graphics->GetLogicalDevice(), graphics->GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
 	}
 	void CommandBuffer::createCommandBuffers()
 	{
@@ -27,7 +27,7 @@ namespace OP
 
 		VkCommandBufferAllocateInfo allocInfo = {};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = graphics->GetCommandPool().GetCommandPool();
+		allocInfo.commandPool = graphics->GetCommandPool();
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = (uint32_t)m_CommandBuffers.size();
 
@@ -47,7 +47,7 @@ namespace OP
 
 			VkRenderPassBeginInfo renderPassInfo = {};
 			renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			renderPassInfo.renderPass = graphics->GetRenderPass().GetRenderPass();
+			renderPassInfo.renderPass = graphics->GetRenderPass();
 			renderPassInfo.framebuffer = graphics->GetFramebuffers().GetFramebuffers()[i];
 			renderPassInfo.renderArea.offset = { 0, 0 };
 			renderPassInfo.renderArea.extent = graphics->GetSwapchain().GetSwapChainExtent();

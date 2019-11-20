@@ -13,9 +13,8 @@ namespace OP
 
 		~CommandPool();
 
-		operator const VkCommandPool& ()const { return m_CommandPool; }
+		inline operator const VkCommandPool& ()const { return m_CommandPool; }
 
-		inline const VkCommandPool& GetCommandPool()const { return m_CommandPool; }
 	private:
 		VkCommandPool m_CommandPool;
 	};

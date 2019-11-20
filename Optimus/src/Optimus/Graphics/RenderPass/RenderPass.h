@@ -33,7 +33,7 @@ namespace OP
 		RenderPass(const SwapChain* swapchain, const LogicalDevice* device);
 		~RenderPass();
 
-		const inline VkRenderPass GetRenderPass()const { return m_RenderPass; }
+		inline operator const VkRenderPass& () const{ return m_RenderPass; }
 
 	private:
 		VkRenderPass m_RenderPass;

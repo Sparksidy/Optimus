@@ -21,7 +21,7 @@ namespace OP
 
 			VkFramebufferCreateInfo framebufferInfo = {};
 			framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-			framebufferInfo.renderPass = renderpass->GetRenderPass();
+			framebufferInfo.renderPass = *renderpass;
 			framebufferInfo.attachmentCount = 1;
 			framebufferInfo.pAttachments = attachments;
 			framebufferInfo.width = swapchain->GetSwapChainExtent().width;
