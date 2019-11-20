@@ -22,10 +22,10 @@ namespace OP
 		OP_CORE_INFO("Destroying Image views and swapchain in destructor");
 		for (auto imageView : m_SwapChainImageViews)
 		{
-			vkDestroyImageView(m_LDevice->GetLogicalDevice(), imageView, nullptr);
+			vkDestroyImageView(*m_LDevice, imageView, nullptr);
 		}
 
-		vkDestroySwapchainKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, nullptr);
+		vkDestroySwapchainKHR(*m_LDevice, m_Swapchain, nullptr);
 	}
 
 	VkExtent2D SwapChain::_chooseSwapExtent()
@@ -85,10 +85,10 @@ namespace OP
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 
 
-		OP_VULKAN_ASSERT(vkCreateSwapchainKHR, m_LDevice->GetLogicalDevice(), &createInfo, nullptr, &m_Swapchain);
-		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
+		OP_VULKAN_ASSERT(vkCreateSwapchainKHR, *m_LDevice, &createInfo, nullptr, &m_Swapchain);
+		vkGetSwapchainImagesKHR(*m_LDevice, m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
 		m_SwapChainImages.resize(m_ImageCount);
-		vkGetSwapchainImagesKHR(m_LDevice->GetLogicalDevice(), m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
+		vkGetSwapchainImagesKHR(*m_LDevice, m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
 
 
 		m_SwapChainImageFormat = m_Surface->GetFormat().format;
@@ -121,7 +121,7 @@ namespace OP
 			createInfo.subresourceRange.baseArrayLayer = 0;
 			createInfo.subresourceRange.layerCount = 1;
 
-			OP_VULKAN_ASSERT(vkCreateImageView, m_LDevice->GetLogicalDevice(), &createInfo, nullptr, &m_SwapChainImageViews[i]);
+			OP_VULKAN_ASSERT(vkCreateImageView, *m_LDevice, &createInfo, nullptr, &m_SwapChainImageViews[i]);
 		}
 
 		OP_CORE_INFO("Image Views created");

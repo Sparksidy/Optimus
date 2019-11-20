@@ -18,8 +18,6 @@ namespace OP
 		~LogicalDevice();
 
 		operator const VkDevice& () const { return m_LogicalDevice; }
-		
-		const VkDevice& GetLogicalDevice()const { return m_LogicalDevice; }
 
 		const VkPhysicalDeviceFeatures &GetEnabledFeatures() const { return m_enabledFeatures; }
 

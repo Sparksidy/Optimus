@@ -31,9 +31,9 @@ namespace OP
 		//Destroy these in its own classes
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_RenderFinishedSemaphore[i], nullptr);
-			vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_ImageAvailableSemaphore[i], nullptr);
-			vkDestroyFence(m_LogicalDevice->GetLogicalDevice(), m_InFlightFences[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphore[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
+			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 		}
 	}
 
@@ -64,7 +64,7 @@ namespace OP
 		drawFrame();
 		
 		//Drawing operations are asynchronous, wait for logical device to finish its operation before cleanup
-		vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
+		vkDeviceWaitIdle(*m_LogicalDevice);
 	}
 
 	void Graphics::createSyncObjects()
@@ -83,9 +83,9 @@ namespace OP
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			if (vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore[i]) != VK_SUCCESS ||
-				vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore[i]) != VK_SUCCESS ||
-				vkCreateFence(m_LogicalDevice->GetLogicalDevice(), &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
+			if (vkCreateSemaphore(*m_LogicalDevice, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(*m_LogicalDevice, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore[i]) != VK_SUCCESS ||
+				vkCreateFence(*m_LogicalDevice, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
 			{
 
 				throw std::runtime_error("failed to create semaphores!");
@@ -119,7 +119,7 @@ namespace OP
 		{
 			OP_CORE_INFO("Recreating swapchain");
 
-			vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
+			vkDeviceWaitIdle(*m_LogicalDevice);
 
 			cleanupSwapChain();
 
@@ -131,10 +131,10 @@ namespace OP
 
 	void Graphics::drawFrame()
 	{
-		vkWaitForFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
+		vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
 		
 		uint32_t imageIndex;
-		VkResult result = vkAcquireNextImageKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
+		VkResult result = vkAcquireNextImageKHR(*m_LogicalDevice, m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -151,7 +151,7 @@ namespace OP
 		//Check if a previous frame is using this image
 		if (m_ImagesInFlight[imageIndex] != VK_NULL_HANDLE)
 		{
-			vkWaitForFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_ImagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+			vkWaitForFences(*m_LogicalDevice, 1, &m_ImagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
 		}
 
 		m_ImagesInFlight[imageIndex] = m_InFlightFences[m_CurrentFrame];
@@ -172,7 +172,7 @@ namespace OP
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
-		vkResetFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame]);
+		vkResetFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame]);
 
 		if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
 		{

@@ -39,7 +39,7 @@ namespace OP
 		renderPassInfo.pSubpasses = &subpass;
 
 		
-		OP_VULKAN_ASSERT(vkCreateRenderPass, device->GetLogicalDevice(), &renderPassInfo, nullptr, &m_RenderPass);
+		OP_VULKAN_ASSERT(vkCreateRenderPass, *device, &renderPassInfo, nullptr, &m_RenderPass);
 		OP_CORE_INFO("Renderpass created for a single color attachment");
 	}
 
@@ -47,7 +47,7 @@ namespace OP
 	{
 		OP_CORE_INFO("Destroying Renderpass in destructor...");
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkDestroyRenderPass(graphics->GetLogicalDevice().GetLogicalDevice(), m_RenderPass, nullptr);
+		vkDestroyRenderPass(graphics->GetLogicalDevice(), m_RenderPass, nullptr);
 	}
 
 }

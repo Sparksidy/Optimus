@@ -28,7 +28,7 @@ namespace OP
 			framebufferInfo.height = swapchain->GetSwapChainExtent().height;
 			framebufferInfo.layers = 1;
 
-			if (vkCreateFramebuffer(device->GetLogicalDevice(), &framebufferInfo, nullptr, &m_Framebuffers[i]) != VK_SUCCESS)
+			if (vkCreateFramebuffer(*device, &framebufferInfo, nullptr, &m_Framebuffers[i]) != VK_SUCCESS)
 			{
 				throw std::runtime_error("failed to create framebuffer!");
 			}
@@ -47,7 +47,7 @@ namespace OP
 		{
 			for (auto framebuffer : m_Framebuffers)
 			{
-				vkDestroyFramebuffer(graphics->GetLogicalDevice().GetLogicalDevice(), framebuffer, nullptr);
+				vkDestroyFramebuffer(graphics->GetLogicalDevice(), framebuffer, nullptr);
 			}
 		}
 		

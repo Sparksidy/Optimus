@@ -18,7 +18,7 @@ namespace OP
 		commandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 		commandPoolCreateInfo.queueFamilyIndex = graphicsFamily;
 
-		if (vkCreateCommandPool(device->GetLogicalDevice(), &commandPoolCreateInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
+		if (vkCreateCommandPool(*device, &commandPoolCreateInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
 		{
 			std::terminate();
 		}
@@ -30,7 +30,7 @@ namespace OP
 	{
 		OP_CORE_INFO("Destroying command pool");
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkDestroyCommandPool(graphics->GetLogicalDevice().GetLogicalDevice(), m_CommandPool, nullptr);
+		vkDestroyCommandPool(graphics->GetLogicalDevice(), m_CommandPool, nullptr);
 	}
 
 }

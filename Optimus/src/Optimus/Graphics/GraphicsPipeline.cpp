@@ -16,8 +16,8 @@ namespace OP
 	GraphicsPipeline::~GraphicsPipeline()
 	{
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkDestroyPipeline(graphics->GetLogicalDevice().GetLogicalDevice(), m_GraphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(graphics->GetLogicalDevice().GetLogicalDevice(), m_PipelineLayout, nullptr);
+		vkDestroyPipeline(graphics->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(graphics->GetLogicalDevice(), m_PipelineLayout, nullptr);
 	}
 	void GraphicsPipeline::createGraphicsPipeline()
 	{
@@ -107,7 +107,7 @@ namespace OP
 		pipelineLayoutInfo.setLayoutCount = 0;
 		pipelineLayoutInfo.pushConstantRangeCount = 0;
 
-		if (vkCreatePipelineLayout(graphics->GetLogicalDevice().GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
+		if (vkCreatePipelineLayout(graphics->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create pipeline layout!");
 		}
 
@@ -126,14 +126,14 @@ namespace OP
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(graphics->GetLogicalDevice().GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
+		if (vkCreateGraphicsPipelines(graphics->GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create graphics pipeline!");
 		}
 
 		OP_CORE_INFO("Graphics Pipeline created");
 
-		vkDestroyShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), fragShaderModule, nullptr);
-		vkDestroyShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), vertShaderModule, nullptr);
+		vkDestroyShaderModule(graphics->GetLogicalDevice(), fragShaderModule, nullptr);
+		vkDestroyShaderModule(graphics->GetLogicalDevice(), vertShaderModule, nullptr);
 	}
 
 	//TODO: Move to Shader Class
@@ -147,7 +147,7 @@ namespace OP
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		VkShaderModule shaderModule;
-		if (vkCreateShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+		if (vkCreateShaderModule(graphics->GetLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module!");
 		}
 

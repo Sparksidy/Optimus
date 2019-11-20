@@ -18,7 +18,7 @@ namespace OP
 	CommandBuffer::~CommandBuffer()
 	{
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkFreeCommandBuffers(graphics->GetLogicalDevice().GetLogicalDevice(), graphics->GetCommandPool().GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
+		vkFreeCommandBuffers(graphics->GetLogicalDevice(), graphics->GetCommandPool().GetCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
 	}
 	void CommandBuffer::createCommandBuffers()
 	{
@@ -31,7 +31,7 @@ namespace OP
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = (uint32_t)m_CommandBuffers.size();
 
-		if (vkAllocateCommandBuffers(graphics->GetLogicalDevice().GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
+		if (vkAllocateCommandBuffers(graphics->GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
 		{
 			throw std::runtime_error("failed to allocate command buffers!");
 		}
