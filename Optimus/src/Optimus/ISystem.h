@@ -14,12 +14,12 @@ namespace OP
 		virtual ~ISystem(){};
 
 		virtual bool Initialize() = 0;
-		virtual void Updates() = 0;
+		virtual void Update() = 0;
 		virtual void Unload() = 0;
 
 		virtual std::string GetName()const = 0;
 
-	private:
+	protected:
 		bool m_isInitialized;
 
 	};

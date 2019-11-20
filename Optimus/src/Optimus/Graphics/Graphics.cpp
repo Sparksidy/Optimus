@@ -37,7 +37,7 @@ namespace OP
 		}
 	}
 
-	void Graphics::Init()
+	bool Graphics::Initialize()
 	{
 		m_SwapChain = std::make_unique<SwapChain>(m_Surface.get(), m_LogicalDevice.get());
 
@@ -53,15 +53,14 @@ namespace OP
 
 		if(!recreatingSwapchain)
 			createSyncObjects();
+
+		m_isInitialized = true;
+
+		return m_isInitialized;
 	}
 
 	void Graphics::Update()
 	{
-		if (!m_SwapChain)
-		{
-			Init();
-		}
-
 		drawFrame();
 		
 		//Drawing operations are asynchronous, wait for logical device to finish its operation before cleanup
@@ -125,7 +124,7 @@ namespace OP
 
 			cleanupSwapChain();
 
-			Init();
+			Initialize();
 
 			recreatingSwapchain = false;
 		}

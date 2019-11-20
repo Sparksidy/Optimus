@@ -1,20 +1,21 @@
 #pragma once
-#include "Core.h"
-#include "Window.h"
+#include <Optimus/Core.h>
+#include <Optimus/Window.h>
 
-#include "Optimus/Imgui/ImguiLayer.h"
-#include "Optimus/Input/Input.h"
+#include <Optimus/Imgui/ImguiLayer.h>
+#include <Optimus/Input/Input.h>
 #include <Optimus/Graphics/Graphics.h>
 
 #include "Layer.h"
 #include "LayerStack.h"
 
-#include "Events/Event.h"
-#include "Events/KeyboardEvents.h"
-#include "Events/MouseEvents.h"
-#include "Events/ApplicationEvents.h"
+#include <Optimus/Events/Event.h>
+#include <Optimus/Events/KeyboardEvents.h>
+#include <Optimus/Events/MouseEvents.h>
+#include <Optimus/Events/ApplicationEvents.h>
 
-#include "Log.h"
+#include <Optimus/Log.h>
+
 
 namespace OP
 {
@@ -24,7 +25,15 @@ namespace OP
 		Application();
 		virtual ~Application();
 
+		void AllocateSystems();
+
+		bool Initialize();
+
 		virtual void Run();
+
+		void Unload();
+
+		void DeAllocateSystems();
 
 		void OnEvent(Event&);
 		bool OnWindowClose(Event&);
@@ -36,13 +45,20 @@ namespace OP
 		inline Window& GetWindow()const { return *m_Window; }
 
 		//TODO: Get a module and cast it to graphics / All singletons as modules.
-		inline Graphics& GetGraphics()const { return *m_Graphics; }
+		inline const Graphics& GetGraphics(){ 
+			Graphics* graphics = dynamic_cast<Graphics*>(m_Systems["Graphics"]);
+			return *graphics;
+		}
 
 	private:
+
 		std::unique_ptr<Window> m_Window;
 		std::unique_ptr<Graphics> m_Graphics;
 
+		//Stores the systems with their names
+		std::map<std::string, ISystem*> m_Systems;
 
+		//TODO: Layers: Probably Scene class should hold this.
 		ImguiLayer* m_ImguiLayer;
 		LayerStack m_LayerStack;
 

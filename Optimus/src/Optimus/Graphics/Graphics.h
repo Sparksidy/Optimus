@@ -24,15 +24,11 @@ namespace OP
 
 		~Graphics();
 
-		void Init();
-
-		void Update();
-
-		bool Initialize() override { return false; }
-		void Updates() override {}
+		bool Initialize() override;
+		void Update() override;
 		void Unload() override {}
 
-		std::string GetName()const { return "Graphics"; }
+		inline std::string GetName()const { return "Graphics"; }
 
 		//Getters
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }

@@ -9,7 +9,17 @@ int main(int argc, char** argv)
 	OP::Log::Init();
 
 	auto app = OP::CreateApplication();
-	app->Run();
+	if (app)
+	{
+		app->AllocateSystems();
+
+		if(app->Initialize())
+			app->Run();
+
+		app->Unload();
+
+		app->DeAllocateSystems();
+	}
 	delete(app);
 }
 

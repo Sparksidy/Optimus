@@ -19,13 +19,28 @@ namespace OP
 		s_Instance = this;
 
 		m_Window = std::make_unique<Window>();
-		m_Window->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
+		m_Window ->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
 
 		//m_ImguiLayer = new ImguiLayer();
 		//PushOverlay(m_ImguiLayer);
 
+		//m_Graphics = std::make_unique<Graphics>();
+	}
 
-		m_Graphics = std::make_unique<Graphics>();
+	void Application::AllocateSystems()
+	{
+		ISystem* graphics = new Graphics();
+		if (graphics)
+			m_Systems[graphics->GetName()] = graphics;
+	}
+
+	bool Application::Initialize()
+	{
+		for (auto system : m_Systems)
+			if (!system.second->Initialize())
+				return false;
+
+		return true;
 	}
 
 	Application::~Application()
@@ -37,7 +52,6 @@ namespace OP
 	{
 		while (m_isRunning)
 		{
-
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
@@ -45,9 +59,25 @@ namespace OP
 
 			m_Window->Update();
 
-			m_Graphics->Update();
+			for (auto system : m_Systems)
+				system.second->Update();
 		}
 	}
+
+	void Application::Unload()
+	{
+		for (auto system : m_Systems)
+			system.second->Unload();
+	}
+
+	void Application::DeAllocateSystems()
+	{
+		for (auto system : m_Systems)
+			delete system.second;
+
+		m_Systems.clear();
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dis(e);
