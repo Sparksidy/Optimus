@@ -67,7 +67,6 @@ namespace OP
 		vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
 	}
 
-	
 	void Graphics::createSyncObjects()
 	{
 		m_ImageAvailableSemaphore.resize(MAX_FRAMES_IN_FLIGHT);

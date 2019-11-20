@@ -40,12 +40,14 @@ namespace OP
 
 	Framebuffers::~Framebuffers()
 	{
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+
 		OP_CORE_INFO("Destroying Framebuffers in destructor...");
 		if (m_Framebuffers.size() > 0)
 		{
 			for (auto framebuffer : m_Framebuffers)
 			{
-				vkDestroyFramebuffer(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), framebuffer, nullptr);
+				vkDestroyFramebuffer(graphics->GetLogicalDevice().GetLogicalDevice(), framebuffer, nullptr);
 			}
 		}
 		

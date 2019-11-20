@@ -46,7 +46,8 @@ namespace OP
 	RenderPass::~RenderPass()
 	{
 		OP_CORE_INFO("Destroying Renderpass in destructor...");
-		vkDestroyRenderPass(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), m_RenderPass, nullptr);
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+		vkDestroyRenderPass(graphics->GetLogicalDevice().GetLogicalDevice(), m_RenderPass, nullptr);
 	}
 
 }

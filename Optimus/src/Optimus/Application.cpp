@@ -108,4 +108,12 @@ namespace OP
 		layer->OnAttach();
 	}
 
+	inline ISystem* Application::GetSystem(const std::string& system)
+	{
+		if (m_Systems.count(system))
+			return m_Systems[system];
+
+		return nullptr;
+	}
+
 }

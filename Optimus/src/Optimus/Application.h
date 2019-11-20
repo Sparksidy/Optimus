@@ -41,14 +41,10 @@ namespace OP
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
+		ISystem* GetSystem(const std::string& system);
+
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow()const { return *m_Window; }
-
-		//TODO: Get a module and cast it to graphics / All singletons as modules.
-		inline const Graphics& GetGraphics(){ 
-			Graphics* graphics = dynamic_cast<Graphics*>(m_Systems["Graphics"]);
-			return *graphics;
-		}
 
 	private:
 

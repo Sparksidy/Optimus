@@ -15,11 +15,14 @@ namespace OP
 	}
 	GraphicsPipeline::~GraphicsPipeline()
 	{
-		vkDestroyPipeline(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), m_GraphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), m_PipelineLayout, nullptr);
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+		vkDestroyPipeline(graphics->GetLogicalDevice().GetLogicalDevice(), m_GraphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(graphics->GetLogicalDevice().GetLogicalDevice(), m_PipelineLayout, nullptr);
 	}
 	void GraphicsPipeline::createGraphicsPipeline()
 	{
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+
 		auto fragShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
 		auto vertShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv");
 
@@ -53,14 +56,14 @@ namespace OP
 		VkViewport viewport = {};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
-		viewport.width = (float)Application::Get().GetGraphics().GetSwapchain().GetSwapChainExtent().width;
-		viewport.height = (float)Application::Get().GetGraphics().GetSwapchain().GetSwapChainExtent().height;
+		viewport.width = (float)graphics->GetSwapchain().GetSwapChainExtent().width;
+		viewport.height = (float)graphics->GetSwapchain().GetSwapChainExtent().height;
 		viewport.minDepth = 0.0f;
 		viewport.maxDepth = 1.0f;
 
 		VkRect2D scissor = {};
 		scissor.offset = { 0, 0 };
-		scissor.extent = Application::Get().GetGraphics().GetSwapchain().GetSwapChainExtent();
+		scissor.extent = graphics->GetSwapchain().GetSwapChainExtent();
 
 		VkPipelineViewportStateCreateInfo viewportState = {};
 		viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -104,7 +107,7 @@ namespace OP
 		pipelineLayoutInfo.setLayoutCount = 0;
 		pipelineLayoutInfo.pushConstantRangeCount = 0;
 
-		if (vkCreatePipelineLayout(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
+		if (vkCreatePipelineLayout(graphics->GetLogicalDevice().GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create pipeline layout!");
 		}
 
@@ -119,30 +122,32 @@ namespace OP
 		pipelineInfo.pMultisampleState = &multisampling;
 		pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.layout = m_PipelineLayout;
-		pipelineInfo.renderPass = Application::Get().GetGraphics().GetRenderPass().GetRenderPass();
+		pipelineInfo.renderPass = graphics->GetRenderPass().GetRenderPass();
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
+		if (vkCreateGraphicsPipelines(graphics->GetLogicalDevice().GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create graphics pipeline!");
 		}
 
 		OP_CORE_INFO("Graphics Pipeline created");
 
-		vkDestroyShaderModule(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), fragShaderModule, nullptr);
-		vkDestroyShaderModule(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), vertShaderModule, nullptr);
+		vkDestroyShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), fragShaderModule, nullptr);
+		vkDestroyShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), vertShaderModule, nullptr);
 	}
 
 	//TODO: Move to Shader Class
 	VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<char>& code)
 	{
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = code.size();
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		VkShaderModule shaderModule;
-		if (vkCreateShaderModule(Application::Get().GetGraphics().GetLogicalDevice().GetLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+		if (vkCreateShaderModule(graphics->GetLogicalDevice().GetLogicalDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module!");
 		}
 
