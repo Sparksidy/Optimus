@@ -4,7 +4,7 @@
 
 namespace OP
 {
-	
+	class VertexBuffer;
 	class OPTIMUS_API CommandBuffer
 	{
 	public:

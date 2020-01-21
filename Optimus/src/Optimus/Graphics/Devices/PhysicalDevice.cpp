@@ -9,6 +9,7 @@ namespace OP
 	PhysicalDevice::PhysicalDevice(const Instance & instance):m_Instance(&instance)
 	{
 		_pickPhysicalDevice();
+		vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &m_MemProperties);
 	}
 
 	PhysicalDevice::~PhysicalDevice()

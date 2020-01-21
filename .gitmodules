@@ -7,3 +7,6 @@
 [submodule "Optimus/ThirdParty/imgui"]
 	path = Optimus/ThirdParty/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Optimus/ThirdParty/GLM"]
+	path = Optimus/ThirdParty/GLM
+	url = https://github.com/g-truc/glm.git

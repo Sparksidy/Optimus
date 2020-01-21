@@ -3,16 +3,18 @@
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Graphics/Devices/Surface.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/RenderPass/Framebuffers.h>
 #include <Optimus/Graphics/Graphics.h>
 #include <Optimus/Graphics/Commands/CommandPool.h>
-#include <Optimus/Graphics/GraphicsPipeline.h>
+#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
+#include <Optimus/Graphics/Buffers/VertexBuffer.h>
 #include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
+
 
 namespace OP
 {
@@ -35,6 +37,10 @@ namespace OP
 			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
 			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 		}
+
+		//Clear the vertex buffer
+		m_VertexBuffer.reset();
+		OP_INFO("Clearing the vertex buffer");
 	}
 
 	bool Graphics::Initialize()
@@ -43,11 +49,21 @@ namespace OP
 
 		m_Renderpass = std::make_unique<RenderPass>(m_SwapChain.get(), m_LogicalDevice.get());
 
+		//TODO: Should be serialized and read
+		const std::vector<Vertex> vertices = {
+			{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+			{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+			{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+		};
+
 		m_GraphicsPipeline = std::make_unique<GraphicsPipeline>();
 
 		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
 
 		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
+
+		//CREATE VERTEX BUFFERS
+		m_VertexBuffer = std::make_unique<VertexBuffer>(vertices);
 
 		m_CommandBuffers = std::make_unique<CommandBuffer>();
 

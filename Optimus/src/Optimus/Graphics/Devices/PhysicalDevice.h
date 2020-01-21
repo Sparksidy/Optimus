@@ -11,11 +11,14 @@ namespace OP
 	{
 	public:
 		explicit PhysicalDevice(const Instance& instance);
+
 		~PhysicalDevice();
 
 		const VkPhysicalDeviceFeatures& GetFeatures()const;
 
 		inline operator const VkPhysicalDevice &() const { return m_PhysicalDevice; }
+
+		const VkPhysicalDeviceMemoryProperties& GetMemoryProperties() const { return m_MemProperties; }
 
 	private:
 		void _pickPhysicalDevice();
@@ -27,5 +30,6 @@ namespace OP
 		VkPhysicalDevice m_PhysicalDevice;
 		VkPhysicalDeviceProperties m_PhysicalDeviceProperties;
 		VkPhysicalDeviceFeatures m_PhysicalDeviceFeatures;
+		VkPhysicalDeviceMemoryProperties m_MemProperties = {};
 	};
 }

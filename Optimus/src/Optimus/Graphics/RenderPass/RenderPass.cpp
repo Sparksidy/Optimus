@@ -1,6 +1,6 @@
 #include <pch.h>
 #include "RenderPass.h"
-#include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Utilities/Macros.h>

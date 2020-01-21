@@ -10,11 +10,17 @@
     <Filter Include="Optimus\Graphics">
       <UniqueIdentifier>{D6C9370F-C2C2-5661-EBF4-3BE6D74C366D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Buffers">
+      <UniqueIdentifier>{52FFEBBB-3E24-3B3C-676F-20CC53F3395A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Graphics\Commands">
       <UniqueIdentifier>{D7D5A068-4398-D4F2-8C48-637FF849ADD0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Graphics\Devices">
       <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Optimus\Graphics\Pipelines">
+      <UniqueIdentifier>{8E3A8CB2-7A4A-3883-E303-9DA1CF32271C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Graphics\RenderPass">
       <UniqueIdentifier>{3C40F704-A84D-25EB-3134-21D69D40F1A1}</UniqueIdentifier>
@@ -55,6 +61,9 @@
     <ClInclude Include="src\Optimus\Events\MouseEvents.h">
       <Filter>Optimus\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Buffers\VertexBuffer.h">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandBuffer.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
@@ -79,8 +88,11 @@
     <ClInclude Include="src\Optimus\Graphics\Graphics.h">
       <Filter>Optimus\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\GraphicsPipeline.h">
-      <Filter>Optimus\Graphics</Filter>
+    <ClInclude Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.h">
+      <Filter>Optimus\Graphics\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Pipelines\Shader.h">
+      <Filter>Optimus\Graphics\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\RenderPass\Framebuffers.h">
       <Filter>Optimus\Graphics\RenderPass</Filter>
@@ -88,8 +100,11 @@
     <ClInclude Include="src\Optimus\Graphics\RenderPass\RenderPass.h">
       <Filter>Optimus\Graphics\RenderPass</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\SwapChain.h">
-      <Filter>Optimus\Graphics</Filter>
+    <ClInclude Include="src\Optimus\Graphics\RenderPass\SwapChain.h">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\ISystem.h">
+      <Filter>Optimus</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h">
       <Filter>Optimus\Imgui</Filter>
@@ -127,6 +142,9 @@
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
     </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Buffers\VertexBuffer.cpp">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandBuffer.cpp">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClCompile>
@@ -148,8 +166,8 @@
     <ClCompile Include="src\Optimus\Graphics\Graphics.cpp">
       <Filter>Optimus\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\GraphicsPipeline.cpp">
-      <Filter>Optimus\Graphics</Filter>
+    <ClCompile Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.cpp">
+      <Filter>Optimus\Graphics\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\RenderPass\Framebuffers.cpp">
       <Filter>Optimus\Graphics\RenderPass</Filter>
@@ -157,8 +175,8 @@
     <ClCompile Include="src\Optimus\Graphics\RenderPass\RenderPass.cpp">
       <Filter>Optimus\Graphics\RenderPass</Filter>
     </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\SwapChain.cpp">
-      <Filter>Optimus\Graphics</Filter>
+    <ClCompile Include="src\Optimus\Graphics\RenderPass\SwapChain.cpp">
+      <Filter>Optimus\Graphics\RenderPass</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>

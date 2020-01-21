@@ -1,26 +1,18 @@
 #include <pch.h>
-#include <Optimus/Graphics/GraphicsPipeline.h>
+#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Graphics.h>
-#include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Log.h>
 
+#include <Optimus/Graphics/Buffers/VertexBuffer.h>
+
 namespace OP
 {
 	GraphicsPipeline::GraphicsPipeline()
-	{
-		createGraphicsPipeline();
-	}
-	GraphicsPipeline::~GraphicsPipeline()
-	{
-		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
-		vkDestroyPipeline(graphics->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(graphics->GetLogicalDevice(), m_PipelineLayout, nullptr);
-	}
-	void GraphicsPipeline::createGraphicsPipeline()
-	{
+	{	
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
 
 		auto fragShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
@@ -43,10 +35,16 @@ namespace OP
 
 		VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
+		auto bindingDescription = Vertex::getBindingDescriptions();
+		auto attributeDescriptions = Vertex::getAttributeDescriptions();
+
 		VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputInfo.vertexBindingDescriptionCount = 0;
-		vertexInputInfo.vertexAttributeDescriptionCount = 0;
+
+		vertexInputInfo.vertexBindingDescriptionCount = 1;
+		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+		vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+		vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
 		VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
 		inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -135,7 +133,12 @@ namespace OP
 		vkDestroyShaderModule(graphics->GetLogicalDevice(), fragShaderModule, nullptr);
 		vkDestroyShaderModule(graphics->GetLogicalDevice(), vertShaderModule, nullptr);
 	}
-
+	GraphicsPipeline::~GraphicsPipeline()
+	{
+		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+		vkDestroyPipeline(graphics->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(graphics->GetLogicalDevice(), m_PipelineLayout, nullptr);
+	}
 	//TODO: Move to Shader Class
 	VkShaderModule GraphicsPipeline::createShaderModule(const std::vector<char>& code)
 	{

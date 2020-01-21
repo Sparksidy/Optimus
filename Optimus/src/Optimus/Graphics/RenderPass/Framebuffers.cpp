@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/RenderPass/Framebuffers.h>
-#include <Optimus/Graphics/SwapChain.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Log.h>

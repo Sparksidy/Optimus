@@ -16,6 +16,7 @@ namespace OP
 	class CommandPool;
 	class GraphicsPipeline;
 	class CommandBuffer;
+	class VertexBuffer;
 
 	class OPTIMUS_API Graphics : public ISystem
 	{
@@ -31,12 +32,14 @@ namespace OP
 		inline std::string GetName()const { return "Graphics"; }
 
 		//Getters
+		const PhysicalDevice& GetPhysicalDevice() const { return *m_PhysicalDevice.get(); }
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
 		const RenderPass& GetRenderPass()const { return *m_Renderpass.get(); }
 		const Framebuffers& GetFramebuffers()const { return *m_Framebuffers.get(); }
 		const CommandPool& GetCommandPool()const { return *m_CommandPool.get(); }
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
+		const VertexBuffer& GetVertexBuffer()const { return *m_VertexBuffer.get(); }
 
 	private:
 		void createSyncObjects();
@@ -56,6 +59,7 @@ namespace OP
 		std::unique_ptr<CommandPool> m_CommandPool;
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
 		std::unique_ptr<CommandBuffer> m_CommandBuffers;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
 
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;

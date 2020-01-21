@@ -4,9 +4,11 @@
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
-#include <Optimus/Graphics/SwapChain.h>
-#include <Optimus/Graphics/GraphicsPipeline.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
+#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
+#include <Optimus/Graphics/Buffers/VertexBuffer.h>
 #include<Optimus/Application.h>
+
 
 
 namespace OP
@@ -60,7 +62,14 @@ namespace OP
 
 			vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,graphics->GetGraphicsPipeline());
 
-			vkCmdDraw(m_CommandBuffers[i], 3, 1, 0, 0);
+			Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+
+			VkBuffer vertexBuffers[] = { graphics->GetVertexBuffer() };
+			VkDeviceSize offsets[] = { 0 };
+			vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+
+			vkCmdDraw(m_CommandBuffers[i], static_cast<uint32_t>(graphics->GetVertexBuffer().GetVertices().size()), 1, 0, 0);
 
 			vkCmdEndRenderPass(m_CommandBuffers[i]);
 
@@ -71,6 +80,6 @@ namespace OP
 		}
 
 		OP_CORE_INFO("Command Buffers created");
-		
+
 	}
 }
