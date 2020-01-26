@@ -66,10 +66,11 @@ namespace OP
 
 			VkBuffer vertexBuffers[] = { graphics->GetVertexBuffer() };
 			VkDeviceSize offsets[] = { 0 };
+
 			vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
+			vkCmdBindIndexBuffer(m_CommandBuffers[i], graphics->GetVertexBuffer().GetIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
 
-
-			vkCmdDraw(m_CommandBuffers[i], static_cast<uint32_t>(graphics->GetVertexBuffer().GetVertices().size()), 1, 0, 0);
+			vkCmdDrawIndexed(m_CommandBuffers[i], static_cast<uint32_t>(graphics->GetVertexBuffer().GetIndices().size()), 1, 0, 0, 0);
 
 			vkCmdEndRenderPass(m_CommandBuffers[i]);
 

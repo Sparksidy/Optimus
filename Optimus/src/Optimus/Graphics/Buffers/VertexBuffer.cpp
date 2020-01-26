@@ -10,9 +10,12 @@
 
 namespace OP
 {
-	VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices):m_Vertices(std::move(vertices))
+	VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices):
+		m_Vertices(std::move(vertices)),
+		m_Indices(std::move(indices))
 	{
 		createVertexBuffer();
+		createIndexBuffer();
 	}
 
 	VertexBuffer::~VertexBuffer()
@@ -22,7 +25,13 @@ namespace OP
 		OP_INFO("Vertex Buffer Destroyed");
 
 		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_vertexBufferMemory, nullptr);
-		OP_INFO("Buffer Memory Freed");
+		OP_INFO("Vertex Buffer Memory Freed");
+
+		vkDestroyBuffer(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_indexBuffer, nullptr);
+		OP_INFO("Index Buffer Destroyed");
+
+		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_indexBufferMemory, nullptr);
+		OP_INFO("Index Buffer Memory Freed");
 	}
 
 	uint32_t VertexBuffer::findMemoryType(uint32_t typeFilter, const VkMemoryPropertyFlags& properties)
@@ -94,6 +103,27 @@ namespace OP
 		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), stagingBufferMemory, nullptr);
 	}
 
+	void VertexBuffer::createIndexBuffer()
+	{
+		VkDeviceSize bufferSize = sizeof(m_Indices[0]) * m_Indices.size();
+
+		VkBuffer stagingBuffer;
+		VkDeviceMemory stagingBufferMemory;
+		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+		void* data;
+		vkMapMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+		memcpy(data, m_Indices.data(), (size_t)bufferSize);
+		vkUnmapMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), stagingBufferMemory);
+
+		createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_indexBuffer, m_indexBufferMemory);
+
+		copyBuffer(stagingBuffer, m_indexBuffer, bufferSize);
+
+		vkDestroyBuffer(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), stagingBuffer, nullptr);
+		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), stagingBufferMemory, nullptr);
+	}
+
 	void VertexBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, VkDeviceSize& size)
 	{	
 		VkCommandBufferAllocateInfo allocInfo = {};
@@ -127,7 +157,7 @@ namespace OP
 		vkQueueSubmit(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice().GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice().GetGraphicsQueue());
 
-		//TODO
 		vkFreeCommandBuffers(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetCommandPool(), 1, &commandBuffer);
 	}
+
 }
