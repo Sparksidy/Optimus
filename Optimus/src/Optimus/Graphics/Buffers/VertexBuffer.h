@@ -56,15 +56,17 @@ namespace OP
 
 		const std::vector<Vertex>& GetVertices() const { return m_Vertices; }
 
-		void MapMemory(void** data) const;
-
-		void UnmapMemory() const;
-
 	private:
 		uint32_t findMemoryType(uint32_t typeFilter, const VkMemoryPropertyFlags& properties);
 
+		void createBuffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage,
+			const VkMemoryPropertyFlags& memoryProperties,  VkBuffer& vertexBuffer,  VkDeviceMemory& m_vertexBufferMemory);
+
+		void createVertexBuffer();
+
+		void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, VkDeviceSize& size);
+
 	private:
-		VkDeviceSize m_size;
 		VkBuffer m_vertexBuffer;
 		VkDeviceMemory m_vertexBufferMemory;
 
