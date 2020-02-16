@@ -3,11 +3,9 @@
 
 #include <Optimus/Core.h>
 
-#include <Optimus/Graphics/Buffers/VertexBuffer.h>
 
 namespace OP
 {
-	class Vertex;
 	class OPTIMUS_API GraphicsPipeline
 	{	
 	public:
@@ -19,6 +17,8 @@ namespace OP
 		{
 			return m_GraphicsPipeline; 
 		}
+
+		const VkPipelineLayout& GetPipelineLayout()const { return m_PipelineLayout; }
 	private:
 
 		std::vector<char> readFile(const std::string& filename); //TODO

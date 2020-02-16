@@ -29,5 +29,6 @@ namespace OP
 		poolInfo.maxSets = static_cast<uint32_t>(swapChainImages);
 
 		OP_VULKAN_ASSERT(vkCreateDescriptorPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &poolInfo, nullptr, &m_DescriptorPool);
+		OP_CORE_INFO("Descriptor Pool is created");
 	}
 }

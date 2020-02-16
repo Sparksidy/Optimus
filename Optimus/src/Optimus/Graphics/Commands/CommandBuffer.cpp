@@ -6,7 +6,8 @@
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
-#include <Optimus/Graphics/Buffers/VertexBuffer.h>
+#include <Optimus/Graphics/Buffers/Buffer.h>
+#include <Optimus/Graphics/Descriptor/DescriptorSet.h>
 #include<Optimus/Application.h>
 
 
@@ -60,17 +61,25 @@ namespace OP
 
 			vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-			vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,graphics->GetGraphicsPipeline());
+					vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,graphics->GetGraphicsPipeline());
 
-			Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
+					VkBuffer vertexBuffers[] = { GET_GRAPHICS_SYSTEM()->GetBuffer() };
+					VkDeviceSize offsets[] = { 0 };
 
-			VkBuffer vertexBuffers[] = { graphics->GetVertexBuffer() };
-			VkDeviceSize offsets[] = { 0 };
+					vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
+					vkCmdBindIndexBuffer(m_CommandBuffers[i], GET_GRAPHICS_SYSTEM()->GetBuffer().GetIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
 
-			vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
-			vkCmdBindIndexBuffer(m_CommandBuffers[i], graphics->GetVertexBuffer().GetIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
+					//Binding the right descriptor set for each swap chain image
+					vkCmdBindDescriptorSets(m_CommandBuffers[i], 
+						VK_PIPELINE_BIND_POINT_GRAPHICS, 
+						GET_GRAPHICS_SYSTEM()->GetGraphicsPipeline().GetPipelineLayout(),
+						0, 
+						1, 
+						&GET_GRAPHICS_SYSTEM()->GetDescriptorSet().GetDescriptorSet()[i],
+						0, 
+						nullptr);
 
-			vkCmdDrawIndexed(m_CommandBuffers[i], static_cast<uint32_t>(graphics->GetVertexBuffer().GetIndices().size()), 1, 0, 0, 0);
+					vkCmdDrawIndexed(m_CommandBuffers[i], static_cast<uint32_t>(GET_GRAPHICS_SYSTEM()->GetBuffer().GetIndices().size()), 1, 0, 0, 0);
 
 			vkCmdEndRenderPass(m_CommandBuffers[i]);
 

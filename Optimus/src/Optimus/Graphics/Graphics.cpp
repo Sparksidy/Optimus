@@ -10,7 +10,10 @@
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
-#include <Optimus/Graphics/Buffers/VertexBuffer.h>
+#include <Optimus/Graphics/Buffers/Buffer.h>
+#include <Optimus/Graphics/Descriptor/DescriptorSetLayout.h>
+#include <Optimus/Graphics/Descriptor/DescriptorPool.h>
+#include <Optimus/Graphics/Descriptor/DescriptorSet.h>
 #include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
@@ -39,7 +42,7 @@ namespace OP
 		}
 
 		//Clear the vertex buffer
-		m_VertexBuffer.reset();
+		m_Buffer.reset();
 		OP_INFO("Clearing the vertex buffer");
 	}
 
@@ -60,14 +63,22 @@ namespace OP
 			0, 1, 2, 2, 3, 0
 		};
 
+		m_DescriptorSetLayout = std::make_unique<DescriptorSetLayout>();
+
 		m_GraphicsPipeline = std::make_unique<GraphicsPipeline>();
 
 		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
 
+		//TODO
+		//m_Buffer->RecreateUniformBuffers();
+
 		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
 
-		//CREATE VERTEX BUFFERS
-		m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, indices);
+		m_Buffer = std::make_unique<Buffer>(vertices, indices);
+
+		m_DescriptorPool = std::make_unique<DescriptorPool>();
+
+		m_DescriptorSets = std::make_unique<DescriptorSet>();
 
 		m_CommandBuffers = std::make_unique<CommandBuffer>();
 
@@ -117,6 +128,9 @@ namespace OP
 	
 	void Graphics::cleanupSwapChain()
 	{
+		OP_CORE_INFO("Destroying Uniform Buffers...");
+		m_Buffer->FreeAndDestroyUniformBuffers();
+
 		OP_CORE_INFO("Destroying Framebuffers...");
 		m_Framebuffers.reset();
 
@@ -132,6 +146,8 @@ namespace OP
 		OP_CORE_INFO("Destroying Image Views and swapchain...");
 		m_SwapChain.reset();
 	}
+
+	
 
 	void Graphics::recreateSwapchain()
 	{
@@ -175,6 +191,9 @@ namespace OP
 		}
 
 		m_ImagesInFlight[imageIndex] = m_InFlightFences[m_CurrentFrame];
+
+		//Updating Uniform Buffers
+		m_Buffer->UpdateUniformBuffers(imageIndex);
 
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

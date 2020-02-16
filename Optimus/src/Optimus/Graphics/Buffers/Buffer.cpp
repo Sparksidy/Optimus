@@ -26,16 +26,16 @@ namespace OP
 	{
 		//Cleanup the vertex Buffer
 		vkDestroyBuffer(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_vertexBuffer, nullptr);
-		OP_INFO("Vertex Buffer Destroyed");
+		OP_CORE_INFO("Vertex Buffer Destroyed");
 
 		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_vertexBufferMemory, nullptr);
-		OP_INFO("Vertex Buffer Memory Freed");
+		OP_CORE_INFO("Vertex Buffer Memory Freed");
 
 		vkDestroyBuffer(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_indexBuffer, nullptr);
-		OP_INFO("Index Buffer Destroyed");
+		OP_CORE_INFO("Index Buffer Destroyed");
 
 		vkFreeMemory(dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))->GetLogicalDevice(), m_indexBufferMemory, nullptr);
-		OP_INFO("Index Buffer Memory Freed");
+		OP_CORE_INFO("Index Buffer Memory Freed");
 	}
 
 	void Buffer::FreeAndDestroyUniformBuffers()
@@ -62,10 +62,8 @@ namespace OP
 
 		UniformBufferObject ubo = {};
 		ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
 		ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		ubo.proj = glm::perspective(glm::radians(45.0f), GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width / (float)GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height, 0.1f, 10.0f);
+		ubo.proj = glm::perspective(glm::radians(45.0f), GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width /(float) GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height, 0.1f, 10.0f);
 
 		ubo.proj[1][1] *= -1;
 
@@ -103,7 +101,7 @@ namespace OP
 		bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 		OP_VULKAN_ASSERT(vkCreateBuffer, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &bufferInfo, nullptr, &Buffer);
-		OP_INFO("Buffer successfully created");
+		OP_CORE_INFO("Buffer successfully created");
 
 		VkMemoryRequirements memoryRequirements;
 		vkGetBufferMemoryRequirements(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), Buffer, &memoryRequirements);
@@ -114,14 +112,15 @@ namespace OP
 		allocInfo.memoryTypeIndex = findMemoryType(memoryRequirements.memoryTypeBits, memoryProperties);
 
 		OP_VULKAN_ASSERT(vkAllocateMemory, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &allocInfo, nullptr, &BufferMemory);
-		OP_INFO("Buffer Memory successfully allocated");
+		OP_CORE_INFO("Buffer Memory successfully allocated");
 
 		OP_VULKAN_ASSERT(vkBindBufferMemory, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), Buffer, BufferMemory, 0);
-		OP_INFO("Buffer memory binded to the buffer");
+		OP_CORE_INFO("Buffer memory binded to the buffer");
 	}
 
 	void Buffer::createVertexBuffer()
 	{
+		OP_CORE_INFO("Creating Vertex Buffer");
 		VkDeviceSize bufferSize = sizeof(m_Vertices[0]) * m_Vertices.size();
 
 		VkBuffer stagingBuffer;
@@ -144,6 +143,7 @@ namespace OP
 
 	void Buffer::createIndexBuffer()
 	{
+		OP_CORE_INFO("Creating Index Buffer");
 		VkDeviceSize bufferSize = sizeof(m_Indices[0]) * m_Indices.size();
 
 		VkBuffer stagingBuffer;

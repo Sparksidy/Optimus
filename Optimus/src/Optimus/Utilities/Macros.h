@@ -10,3 +10,5 @@
 		OP_CORE_ERROR("{0} ", TO_STRING(func), "failed");\
 		std::terminate();\
 	}
+
+#define GET_GRAPHICS_SYSTEM()  dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))

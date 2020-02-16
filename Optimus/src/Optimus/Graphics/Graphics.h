@@ -16,7 +16,10 @@ namespace OP
 	class CommandPool;
 	class GraphicsPipeline;
 	class CommandBuffer;
-	class VertexBuffer;
+	class Buffer;
+	class DescriptorSetLayout;
+	class DescriptorPool;
+	class DescriptorSet;
 
 	class OPTIMUS_API Graphics : public ISystem
 	{
@@ -27,7 +30,7 @@ namespace OP
 
 		bool Initialize() override;
 		void Update() override;
-		void Unload() override {}
+		void Unload() override {} //TODO
 
 		inline std::string GetName()const { return "Graphics"; }
 
@@ -39,7 +42,11 @@ namespace OP
 		const Framebuffers& GetFramebuffers()const { return *m_Framebuffers.get(); }
 		const CommandPool& GetCommandPool()const { return *m_CommandPool.get(); }
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
-		const VertexBuffer& GetVertexBuffer()const { return *m_VertexBuffer.get(); }
+		const Buffer& GetBuffer()const { return *m_Buffer.get(); }
+		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
+		const DescriptorPool& GetDescriptorPool()const { return *m_DescriptorPool.get(); }
+		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
+
 
 	private:
 		void createSyncObjects();
@@ -59,7 +66,10 @@ namespace OP
 		std::unique_ptr<CommandPool> m_CommandPool;
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
 		std::unique_ptr<CommandBuffer> m_CommandBuffers;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<Buffer> m_Buffer;
+		std::unique_ptr<DescriptorSetLayout> m_DescriptorSetLayout;
+		std::unique_ptr<DescriptorPool> m_DescriptorPool;
+		std::unique_ptr<DescriptorSet> m_DescriptorSets;
 
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;

@@ -5,9 +5,10 @@
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
+#include <Optimus/Graphics/Buffers/Buffer.h>
+#include <Optimus/Graphics/Descriptor/DescriptorSetLayout.h>
 #include <Optimus/Log.h>
 
-#include <Optimus/Graphics/Buffers/VertexBuffer.h>
 
 namespace OP
 {
@@ -15,8 +16,12 @@ namespace OP
 	{	
 		Graphics* graphics = dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"));
 
-		auto fragShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
-		auto vertShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv");
+		//auto fragShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
+		//auto vertShaderCode = readFile("../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv");
+
+		auto fragShaderCode = readFile("C:/Users/sidys/OneDrive/Desktop/Optimus/Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv");
+		auto vertShaderCode = readFile("C:/Users/sidys/OneDrive/Desktop/Optimus/Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv");
+			
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 		VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -77,7 +82,7 @@ namespace OP
 		rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 		rasterizer.lineWidth = 1.0f;
 		rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-		rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+		rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 		rasterizer.depthBiasEnable = VK_FALSE;
 
 		VkPipelineMultisampleStateCreateInfo multisampling = {};
@@ -102,12 +107,11 @@ namespace OP
 
 		VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
 		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 0;
+		pipelineLayoutInfo.setLayoutCount =  1;
 		pipelineLayoutInfo.pushConstantRangeCount = 0;
+		pipelineLayoutInfo.pSetLayouts = &graphics->GetDescriptorSetLayout().GetDescriptorSetLayout();
 
-		if (vkCreatePipelineLayout(graphics->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
-			throw std::runtime_error("failed to create pipeline layout!");
-		}
+		OP_VULKAN_ASSERT(vkCreatePipelineLayout, graphics->GetLogicalDevice(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout);
 
 		VkGraphicsPipelineCreateInfo pipelineInfo = {};
 		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -124,9 +128,7 @@ namespace OP
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-		if (vkCreateGraphicsPipelines(graphics->GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
-			throw std::runtime_error("failed to create graphics pipeline!");
-		}
+		OP_VULKAN_ASSERT(vkCreateGraphicsPipelines, graphics->GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline);
 
 		OP_CORE_INFO("Graphics Pipeline created");
 

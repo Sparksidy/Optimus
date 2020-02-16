@@ -26,6 +26,8 @@ namespace OP
 
 		const uint32_t GetImageCount()const { return m_ImageCount; }
 
+		const size_t GetSwapChainImages()const { return m_SwapChainImages.size(); }
+
 		//Overloading
 		operator const VkSwapchainKHR &() const { return m_Swapchain; }
 

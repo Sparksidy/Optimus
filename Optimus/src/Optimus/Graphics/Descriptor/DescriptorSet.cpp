@@ -31,6 +31,8 @@ namespace OP
 		m_DescriptorSets.resize(swapChainImages);
 
 		OP_VULKAN_ASSERT(vkAllocateDescriptorSets,GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &allocInfo, m_DescriptorSets.data());
+		OP_CORE_INFO("Descriptor Sets is created");
+
 
 		for (size_t i = 0; i < swapChainImages; i++)
 		{
