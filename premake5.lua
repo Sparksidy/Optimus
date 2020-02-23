@@ -18,11 +18,12 @@ IncludeDir["imgui"] = "Optimus/ThirdParty/imgui"
 IncludeDir["Vulkan"] = "Optimus/ThirdParty/VulkanSDK/Vulkan1/Include"
 IncludeDir["GLAD"] = "Optimus/ThirdParty/GLAD/include"
 IncludeDir["GLM"] = "Optimus/ThirdParty/GLM/glm"
+IncludeDir["stb_image"] = "Optimus/ThirdParty/stb_image"
+
 
 include "Optimus/ThirdParty/GLFW"
 include "Optimus/ThirdParty/imgui"
 include "Optimus/ThirdParty/GLAD"
-
 
 
 project "Optimus"
@@ -51,7 +52,8 @@ project "Optimus"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.Vulkan}",
-		"%{IncludeDir.GLM}"
+		"%{IncludeDir.GLM}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links
