@@ -124,7 +124,7 @@ namespace OP
 			OP_VULKAN_ASSERT(vkCreateImageView, *m_LDevice, &createInfo, nullptr, &m_SwapChainImageViews[i]);
 		}
 
-		OP_CORE_INFO("Image Views created");
+		OP_CORE_INFO("Swap Chain Image Views created");
 
 	}
 }

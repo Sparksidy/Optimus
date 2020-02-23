@@ -4,6 +4,7 @@
 #include <Optimus/Core.h>
 
 #define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEFAULT_ALIGNED_GENTYPES
 #include <gtc/matrix_transform.hpp>
 #include <glm.hpp>
 
@@ -15,6 +16,7 @@ namespace OP
 
 		glm::vec2 pos;
 		glm::vec3 color;
+		glm::vec2 texCoord;
 
 		//TODO : Make it for multiple vertices
 		 static VkVertexInputBindingDescription& getBindingDescriptions()  {
@@ -26,8 +28,8 @@ namespace OP
 		}
 
 		 //TODO : Make it for multiple vertices
-		 static std::array<VkVertexInputAttributeDescription, 2> & getAttributeDescriptions() {
-			std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = {};
+		 static std::array<VkVertexInputAttributeDescription, 3> & getAttributeDescriptions() {
+			std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = {};
 
 			//Position
 			attributeDescriptions[0].binding = 0;
@@ -41,6 +43,12 @@ namespace OP
 			attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
 			attributeDescriptions[1].offset = offsetof(Vertex, color);
 
+			//TextureCoord
+			attributeDescriptions[2].binding = 0;
+			attributeDescriptions[2].location = 2;
+			attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+			attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+
 			return attributeDescriptions;
 		}
 	};
@@ -50,6 +58,10 @@ namespace OP
 	public:
 		Buffer(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices);
 		~Buffer();
+
+		const VkImageView GetTextureImageView()const { return m_TextureImageView; }
+		const VkSampler GetTextureImageSampler()const { return m_TextureSampler; }
+
 
 		inline operator const VkBuffer& () const { return m_vertexBuffer; }
 		const VkBuffer& GetIndexBuffer()const { return m_indexBuffer; }
@@ -75,13 +87,27 @@ namespace OP
 		void createBuffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage,
 			const VkMemoryPropertyFlags& memoryProperties,  VkBuffer& vertexBuffer,  VkDeviceMemory& m_vertexBufferMemory);
 
+		void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+		void createTextureImage();
+		void createTextureImageView();
+		void createTextureSampler();
+
 		void createVertexBuffer();
 		void createIndexBuffer();
 		void createUniformBuffer();
 
 		void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, VkDeviceSize& size);
+		VkCommandBuffer beginSingleTimeCommands();
+		void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+		void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+		void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
 	private:
+
+		VkImage m_TextureImage;
+		VkDeviceMemory m_TextureImageMemory;
+		VkImageView m_TextureImageView;
+		VkSampler m_TextureSampler;
 
 		std::vector<Vertex> m_Vertices;
 		VkBuffer m_vertexBuffer;
