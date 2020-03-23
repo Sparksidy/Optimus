@@ -1,11 +1,9 @@
 #include "pch.h"
 
-#include "Application.h"
-#include "Log.h"
+#include <Optimus/Application.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 
 #include <Optimus/ISystem.h>
-
 
 namespace OP
 {
@@ -21,10 +19,7 @@ namespace OP
 		m_Window = std::make_unique<Window>();
 		m_Window ->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
 
-		//m_ImguiLayer = new ImguiLayer();
-		//PushOverlay(m_ImguiLayer);
-
-		//m_Graphics = std::make_unique<Graphics>();
+		m_ImguiLayer = new ImguiLayer();
 	}
 
 	void Application::AllocateSystems()
@@ -40,6 +35,8 @@ namespace OP
 			if (!system.second->Initialize())
 				return false;
 
+		PushOverlay(m_ImguiLayer);
+
 		return true;
 	}
 
@@ -52,12 +49,12 @@ namespace OP
 	{
 		while (m_isRunning)
 		{
+			m_Window->Update();
+
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
-
-			m_Window->Update();
 
 			for (auto system : m_Systems)
 				system.second->Update();
@@ -66,6 +63,11 @@ namespace OP
 
 	void Application::Unload()
 	{
+		//Detach the layers first
+		for (auto layer : m_LayerStack)
+			layer->OnDetach();
+
+		//Unload all the systems
 		for (auto system : m_Systems)
 			system.second->Unload();
 	}

@@ -16,7 +16,6 @@
 
 #include <Optimus/Log.h>
 
-
 namespace OP
 {
 	class OPTIMUS_API Application
@@ -45,11 +44,11 @@ namespace OP
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow()const { return *m_Window; }
+		inline ImguiLayer& GetImGUILayer()const { return *m_ImguiLayer; }
 
 	private:
 
 		std::unique_ptr<Window> m_Window;
-		std::unique_ptr<Graphics> m_Graphics;
 
 		//Stores the systems with their names
 		std::map<std::string, ISystem*> m_Systems;

@@ -30,6 +30,11 @@ void OP::Window::InitWindow(const WindowProps& props)
 	m_Window = glfwCreateWindow(m_Data.width, m_Data.height, m_Data.title.c_str(), NULL, NULL);
 	glfwMakeContextCurrent(m_Window);
 
+	if (!glfwVulkanSupported())
+	{
+		OP_CORE_FATAL("GLFW: Vulkan not supported");
+	}
+
 	//Initialize the Input Manager
 	Input::s_Instance = new Input(); 
 

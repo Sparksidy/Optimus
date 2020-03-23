@@ -186,6 +186,7 @@
     <ClInclude Include="src\Optimus\Log.h" />
     <ClInclude Include="src\Optimus\Utilities\Macros.h" />
     <ClInclude Include="src\Optimus\Window.h" />
+    <ClInclude Include="src\Platforms\ImguiGLFW.h" />
     <ClInclude Include="src\Platforms\ImguiOpenGLRenderer.h" />
     <ClInclude Include="src\Platforms\ImguiVulkanRenderer.h" />
     <ClInclude Include="src\pch.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="src\Optimus\LayerStack.cpp" />
     <ClCompile Include="src\Optimus\Log.cpp" />
     <ClCompile Include="src\Optimus\Window.cpp" />
+    <ClCompile Include="src\Platforms\ImguiGLFW.cpp" />
     <ClCompile Include="src\Platforms\ImguiOpenGLRenderer.cpp" />
     <ClCompile Include="src\Platforms\ImguiVulkanRenderer.cpp" />
     <ClCompile Include="src\pch.cpp">
@@ -232,4 +234,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

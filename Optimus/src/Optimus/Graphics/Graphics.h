@@ -35,23 +35,29 @@ namespace OP
 		inline std::string GetName()const { return "Graphics"; }
 
 		//Getters
+		const Instance& GetInstance() const { return *m_Instance.get(); }
+		const Surface& GetSurface() const { return *m_Surface.get(); }
 		const PhysicalDevice& GetPhysicalDevice() const { return *m_PhysicalDevice.get(); }
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
 		const RenderPass& GetRenderPass()const { return *m_Renderpass.get(); }
 		const Framebuffers& GetFramebuffers()const { return *m_Framebuffers.get(); }
 		const CommandPool& GetCommandPool()const { return *m_CommandPool.get(); }
+		CommandBuffer& GetCommandBuffers() { return *m_CommandBuffers.get(); }
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
 		const Buffer& GetBuffer()const { return *m_Buffer.get(); }
 		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
 		const DescriptorPool& GetDescriptorPool()const { return *m_DescriptorPool.get(); }
 		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
+		const VkPipelineCache& GetPipelineCache() const { return m_pipelineCache; }
+		const size_t& GetImageIndex()const { return m_ImageIndex; }
 
 
 	private:
 		void createSyncObjects();
 		void recreateSwapchain();
 		void cleanupSwapChain();
+		void createPipelineCache();
 
 		void drawFrame();
 
@@ -71,6 +77,9 @@ namespace OP
 		std::unique_ptr<DescriptorPool> m_DescriptorPool;
 		std::unique_ptr<DescriptorSet> m_DescriptorSets;
 
+		VkPipelineCache m_pipelineCache;
+
+
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;
 		std::vector<VkFence> m_InFlightFences;
@@ -78,6 +87,7 @@ namespace OP
 
 		const int MAX_FRAMES_IN_FLIGHT = 2;
 		size_t m_CurrentFrame = 0;
+		size_t m_ImageIndex = 0;
 		bool recreatingSwapchain = false;
 		bool framebufferResized = false;
 	};

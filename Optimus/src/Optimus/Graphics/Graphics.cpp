@@ -31,6 +31,9 @@ namespace OP
 
 	Graphics::~Graphics()
 	{
+		//Destroy the pipeline Cache object
+		vkDestroyPipelineCache(GetLogicalDevice(), m_pipelineCache, nullptr);
+
 		cleanupSwapChain();
 
 		//Destroy these in its own classes
@@ -59,6 +62,7 @@ namespace OP
 				{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
 				{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 		};
+
 		const std::vector<uint16_t> indices = {
 			0, 1, 2, 2, 3, 0
 		};
@@ -69,10 +73,12 @@ namespace OP
 
 		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
 
-		//TODO
+		//TODO: Recreating when window resize
 		//m_Buffer->RecreateUniformBuffers();
 
 		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
+
+		createPipelineCache();
 
 		m_Buffer = std::make_unique<Buffer>(vertices, indices);
 
@@ -147,6 +153,14 @@ namespace OP
 		m_SwapChain.reset();
 	}
 
+	void Graphics::createPipelineCache()
+	{
+		VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
+		pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+		OP_VULKAN_ASSERT(vkCreatePipelineCache, GetLogicalDevice(), &pipelineCacheCreateInfo, nullptr, &m_pipelineCache);
+		OP_CORE_INFO("Pipeline Cache object has been created successfully");
+	}
+
 	
 
 	void Graphics::recreateSwapchain()
@@ -171,6 +185,7 @@ namespace OP
 		
 		uint32_t imageIndex;
 		VkResult result = vkAcquireNextImageKHR(*m_LogicalDevice, m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
+		m_ImageIndex = imageIndex;
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -195,6 +210,12 @@ namespace OP
 		//Updating Uniform Buffers
 		m_Buffer->UpdateUniformBuffers(imageIndex);
 
+		//Adding the IMGUI Command Buffers
+		std::array<VkCommandBuffer, 2> submitCommandBuffers = {
+			m_CommandBuffers->GetCommandBuffer()[imageIndex],
+			Application::Get().GetImGUILayer().GetImGUICommandBuffer()[imageIndex] //TODO: Make this dynamic, loop through all layers and add their command buffers.
+		};
+
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -203,9 +224,8 @@ namespace OP
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = waitStages;
-
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &m_CommandBuffers->GetCommandBuffer()[imageIndex]; 
+		submitInfo.commandBufferCount = static_cast<uint32_t>(submitCommandBuffers.size());
+		submitInfo.pCommandBuffers = submitCommandBuffers.data();
 
 		VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore[m_CurrentFrame] };
 		submitInfo.signalSemaphoreCount = 1;
@@ -233,5 +253,6 @@ namespace OP
 		result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
 
 		m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+		m_ImageIndex = (m_ImageIndex + 1) % GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size();
 	}
 }

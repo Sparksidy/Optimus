@@ -1,10 +1,10 @@
 #pragma once
-#include "Optimus/Core.h"
-#include "Optimus/Layer.h"
+#include <Optimus/Core.h>
+#include <Optimus/Layer.h>
 
-
-#include "Optimus/Events/MouseEvents.h"
-#include "Optimus/Events/KeyboardEvents.h"
+#include <vulkan/vulkan.hpp>
+#include <Optimus/Events/MouseEvents.h>
+#include <Optimus/Events/KeyboardEvents.h>
 
 namespace OP
 {
@@ -14,10 +14,10 @@ namespace OP
 		ImguiLayer();
 		~ImguiLayer();
 
-		virtual void OnAttach()override;
-		virtual void OnDetach()override;
-		virtual void OnUpdate()override;
-		virtual void OnEvent(Event&)override;
+		void OnAttach()override;
+		void OnDetach()override;
+		void OnUpdate()override;
+		void OnEvent(Event&)override;
 
 		bool OnMouseButtonPressedEvent(MouseButtonPressed&);
 		bool OnMouseButtonReleasedEvent(MouseButtonReleased&);
@@ -29,7 +29,29 @@ namespace OP
 
 		static void ShowSimpleOverlay(bool* p_open);
 
+		std::vector<VkCommandBuffer>& GetImGUICommandBuffer()  { return m_ImguiCommandBuffer; }
+
+	private:
+		//Helper functions
+		void _createIMGUIRenderPass();
+		void _createIMGUIDescriptorPool();
+		void _initIMGUIContext();
+		void _initIMGUIVulkan();
+		void _uploadFonts();
+		void _createIMGUICommandPoolsAndBuffers();
+		void _createFramebuffers();
+
+		void FrameRender();
+
 	private:
 		float m_time = 0.0f;
+
+		VkRenderPass		m_ImguiRenderPass;
+		VkCommandPool		m_ImguiCommandPool;
+		VkDescriptorPool    m_DescriptorPool = VK_NULL_HANDLE;
+
+		//As many image views
+		std::vector<VkCommandBuffer> m_ImguiCommandBuffer;
+		std::vector<VkFramebuffer> m_FrameBuffers;
 	};
 }

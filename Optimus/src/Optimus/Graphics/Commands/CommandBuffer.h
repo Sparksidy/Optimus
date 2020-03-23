@@ -4,7 +4,6 @@
 
 namespace OP
 {
-	class VertexBuffer;
 	class OPTIMUS_API CommandBuffer
 	{
 	public:
@@ -19,5 +18,7 @@ namespace OP
 
 	private:
 		std::vector<VkCommandBuffer> m_CommandBuffers = {};
+		
+		
 	};
 }

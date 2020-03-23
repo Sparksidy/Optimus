@@ -140,7 +140,7 @@ namespace OP
 	void Buffer::createTextureImage()
 	{
 		int texWidth, texHeight, texChannels;
-		stbi_uc* pixels = stbi_load("../Optimus/src/Optimus/Graphics/Textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+		stbi_uc* pixels = stbi_load("C:/Users/sidys/OneDrive/Desktop/Optimus/Optimus/src/Optimus/Graphics/Textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 		VkDeviceSize imageSize =  texWidth * texHeight * 4;
 
 		if (!pixels) {
