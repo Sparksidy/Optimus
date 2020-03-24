@@ -40,6 +40,9 @@ namespace OP
 		void _uploadFonts();
 		void _createIMGUICommandPoolsAndBuffers();
 		void _createFramebuffers();
+		void _createCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags);
+		void _createCommandBuffers(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount, VkCommandPool& commandPool);
+
 
 		void FrameRender();
 

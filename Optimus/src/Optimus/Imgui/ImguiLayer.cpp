@@ -35,54 +35,6 @@ namespace OP
 
 	}
 
-	void ImguiLayer::FrameRender()
-	{
-		size_t img = GET_GRAPHICS_SYSTEM()->GetImageIndex();
-		if (GET_GRAPHICS_SYSTEM()->SwapchainRebuild())
-		{
-			GET_GRAPHICS_SYSTEM()->SetRecreateSwapchain(false);
-
-			for (auto framebuffer : m_ImguiFrameBuffers)
-			{
-				vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
-			}
-
-			_createFramebuffers();
-			img = 0;
-		}
-
-		
-		{
-			OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
-			VkCommandBufferBeginInfo info = {};
-			info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-			info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[img], &info);
-		}
-		{
-			VkRenderPassBeginInfo info = {};
-			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			info.renderPass = m_ImguiRenderPass;
-			info.framebuffer = m_ImguiFrameBuffers[img];
-			info.renderArea.extent.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
-			info.renderArea.extent.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
-			info.clearValueCount = 1;
-			VkClearValue col;
-			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-			memcpy(&col.color.float32[0], &clear_color, 4 * sizeof(float));
-			info.pClearValues = &col;
-			vkCmdBeginRenderPass(m_ImguiCommandBuffer[img], &info, VK_SUBPASS_CONTENTS_INLINE);
-		}
-
-		// Record Imgui Draw Data and draw funcs into command buffer
-		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[img]);
-
-		
-		vkCmdEndRenderPass(m_ImguiCommandBuffer[img]);
-		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[img]);
-	}
-
-
 #define OP_BIND_FN(x) std::bind(&ImguiLayer::x, this, std::placeholders::_1)
 
 	ImguiLayer::ImguiLayer() :Layer("ImGui Layer")
@@ -116,7 +68,28 @@ namespace OP
 		//Load the Fonts
 		_uploadFonts();
 
-		OP_CORE_INFO("Imgui layer initialized successfully");
+		OP_CORE_INFO("Imgui: Initialized successfully");
+	}
+
+	void ImguiLayer::OnDetach()
+	{
+		for (auto framebuffer : m_ImguiFrameBuffers)
+		{
+			vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
+		}
+
+		vkDestroyRenderPass(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiRenderPass, nullptr);
+
+		vkFreeCommandBuffers(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, static_cast<uint32_t>(m_ImguiCommandBuffer.size()), m_ImguiCommandBuffer.data());
+		vkDestroyCommandPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, nullptr);
+
+		vkDestroyDescriptorPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiDescriptorPool, nullptr);
+
+		// Resources to destroy when the program ends
+		ImGui_ImplVulkan_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+		OP_CORE_INFO("Imgui: Cleared Imgui resources! ");
 	}
 
 	void ImguiLayer::_createIMGUIRenderPass()
@@ -266,7 +239,7 @@ namespace OP
 		}
 	}
 
-	void createCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags)
+	void ImguiLayer::_createCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags)
 	{
 		VkCommandPoolCreateInfo commandPoolCreateInfo = {};
 		commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -276,7 +249,7 @@ namespace OP
 		OP_VULKAN_ASSERT(vkCreateCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &commandPoolCreateInfo, nullptr, commandPool);
 	}
 
-	void createCommandBuffers(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount, VkCommandPool& commandPool)
+	void ImguiLayer::_createCommandBuffers(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount, VkCommandPool& commandPool)
 	{
 		VkCommandBufferAllocateInfo commandBufferAllocateInfo = {};
 		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -288,11 +261,11 @@ namespace OP
 
 	void ImguiLayer::_createIMGUICommandPoolsAndBuffers()
 	{
-		createCommandPool(&m_ImguiCommandPool, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+		_createCommandPool(&m_ImguiCommandPool, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
 
 		m_ImguiCommandBuffer.resize(GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size());
 
-		createCommandBuffers(m_ImguiCommandBuffer.data(), static_cast<uint32_t>(m_ImguiCommandBuffer.size()), m_ImguiCommandPool);
+		_createCommandBuffers(m_ImguiCommandBuffer.data(), static_cast<uint32_t>(m_ImguiCommandBuffer.size()), m_ImguiCommandPool);
 
 		OP_CORE_INFO("Imgui: Command Buffers and Command Pools have been created");
 	}
@@ -320,28 +293,6 @@ namespace OP
 
 	}
 
-	void ImguiLayer::OnDetach()
-	{
-		OP_CORE_INFO("Imgui: Clearing up Imgui resources! ");
-		for (auto framebuffer : m_ImguiFrameBuffers)
-		{
-			vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
-		}
-
-		vkDestroyRenderPass(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiRenderPass, nullptr);
-
-		vkFreeCommandBuffers(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, static_cast<uint32_t>(m_ImguiCommandBuffer.size()), m_ImguiCommandBuffer.data());
-		vkDestroyCommandPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, nullptr);
-
-		vkDestroyDescriptorPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiDescriptorPool, nullptr);
-
-		// Resources to destroy when the program ends
-		ImGui_ImplVulkan_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
-
-	}
-
 	void ImguiLayer::OnUpdate()
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -360,6 +311,53 @@ namespace OP
 		ImGui::Render();
 
 		FrameRender();
+	}
+
+	void ImguiLayer::FrameRender()
+	{
+		size_t img = GET_GRAPHICS_SYSTEM()->GetImageIndex();
+		if (GET_GRAPHICS_SYSTEM()->SwapchainRebuild())
+		{
+			GET_GRAPHICS_SYSTEM()->SetRecreateSwapchain(false);
+
+			for (auto framebuffer : m_ImguiFrameBuffers)
+			{
+				vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
+			}
+
+			_createFramebuffers();
+			img = 0;
+		}
+
+
+		{
+			OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
+			VkCommandBufferBeginInfo info = {};
+			info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+			info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[img], &info);
+		}
+		{
+			VkRenderPassBeginInfo info = {};
+			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+			info.renderPass = m_ImguiRenderPass;
+			info.framebuffer = m_ImguiFrameBuffers[img];
+			info.renderArea.extent.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
+			info.renderArea.extent.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
+			info.clearValueCount = 1;
+			VkClearValue col;
+			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+			memcpy(&col.color.float32[0], &clear_color, 4 * sizeof(float));
+			info.pClearValues = &col;
+			vkCmdBeginRenderPass(m_ImguiCommandBuffer[img], &info, VK_SUBPASS_CONTENTS_INLINE);
+		}
+
+		// Record Imgui Draw Data and draw funcs into command buffer
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[img]);
+
+
+		vkCmdEndRenderPass(m_ImguiCommandBuffer[img]);
+		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[img]);
 	}
 
 	void ImguiLayer::OnEvent(Event& e)
@@ -475,7 +473,6 @@ namespace OP
 		}
 		ImGui::End();
 	}
-
 }
 
 
