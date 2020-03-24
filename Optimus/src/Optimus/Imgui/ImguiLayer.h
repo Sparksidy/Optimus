@@ -29,7 +29,7 @@ namespace OP
 
 		static void ShowSimpleOverlay(bool* p_open);
 
-		std::vector<VkCommandBuffer>& GetImGUICommandBuffer()  { return m_ImguiCommandBuffer; }
+		std::vector<VkCommandBuffer>& GetImGUICommandBuffer()  { return m_ImguiCommandBuffer; } //Used to add to the main command buffers
 
 	private:
 		//Helper functions
@@ -46,12 +46,11 @@ namespace OP
 	private:
 		float m_time = 0.0f;
 
-		VkRenderPass		m_ImguiRenderPass;
-		VkCommandPool		m_ImguiCommandPool;
-		VkDescriptorPool    m_DescriptorPool = VK_NULL_HANDLE;
+		VkRenderPass						m_ImguiRenderPass;
+		VkCommandPool						m_ImguiCommandPool;
+		VkDescriptorPool					m_ImguiDescriptorPool;
 
-		//As many image views
-		std::vector<VkCommandBuffer> m_ImguiCommandBuffer;
-		std::vector<VkFramebuffer> m_FrameBuffers;
+		std::vector<VkCommandBuffer>		m_ImguiCommandBuffer;
+		std::vector<VkFramebuffer>			m_ImguiFrameBuffers;
 	};
 }

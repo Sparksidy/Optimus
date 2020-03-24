@@ -7,7 +7,6 @@
 
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
-//	--Temporary Headers
 #include <GLFW/glfw3.h>
 
 #include <Optimus/Application.h>
@@ -35,37 +34,52 @@ namespace OP
 		}
 
 	}
+
 	void ImguiLayer::FrameRender()
 	{
 		size_t img = GET_GRAPHICS_SYSTEM()->GetImageIndex();
+		if (GET_GRAPHICS_SYSTEM()->SwapchainRebuild())
+		{
+			GET_GRAPHICS_SYSTEM()->SetRecreateSwapchain(false);
+
+			for (auto framebuffer : m_ImguiFrameBuffers)
+			{
+				vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
+			}
+
+			_createFramebuffers();
+			img = 0;
+		}
+
+		
 		{
 			OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
 			VkCommandBufferBeginInfo info = {};
 			info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 			info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()], &info);
+			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[img], &info);
 		}
 		{
 			VkRenderPassBeginInfo info = {};
 			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 			info.renderPass = m_ImguiRenderPass;
-			info.framebuffer = m_FrameBuffers[GET_GRAPHICS_SYSTEM()->GetImageIndex()];
-			info.renderArea.extent.width = Application::Get().GetWindow().GetWindowWidth();
-			info.renderArea.extent.height = Application::Get().GetWindow().GetWindowHeight();
+			info.framebuffer = m_ImguiFrameBuffers[img];
+			info.renderArea.extent.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
+			info.renderArea.extent.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
 			info.clearValueCount = 1;
 			VkClearValue col;
 			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 			memcpy(&col.color.float32[0], &clear_color, 4 * sizeof(float));
 			info.pClearValues = &col;
-			vkCmdBeginRenderPass(m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()], &info, VK_SUBPASS_CONTENTS_INLINE);
+			vkCmdBeginRenderPass(m_ImguiCommandBuffer[img], &info, VK_SUBPASS_CONTENTS_INLINE);
 		}
 
 		// Record Imgui Draw Data and draw funcs into command buffer
-		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()]);
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[img]);
 
 		
-		vkCmdEndRenderPass(m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()]);
-		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()]);
+		vkCmdEndRenderPass(m_ImguiCommandBuffer[img]);
+		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[img]);
 	}
 
 
@@ -77,7 +91,6 @@ namespace OP
 
 	ImguiLayer::~ImguiLayer()
 	{
-		
 	}
 
 	void ImguiLayer::OnAttach()
@@ -170,7 +183,7 @@ namespace OP
 		pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
 		pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
 		pool_info.pPoolSizes = pool_sizes;
-		OP_VULKAN_ASSERT(vkCreateDescriptorPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &pool_info, nullptr, &m_DescriptorPool);
+		OP_VULKAN_ASSERT(vkCreateDescriptorPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &pool_info, nullptr, &m_ImguiDescriptorPool);
 
 		OP_CORE_INFO("Imgui: Descriptor Pool Created");
 	}
@@ -221,8 +234,8 @@ namespace OP
 		init_info.Device = GET_GRAPHICS_SYSTEM()->GetLogicalDevice();
 		init_info.QueueFamily = GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsFamily();
 		init_info.Queue = GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue();
-		init_info.PipelineCache = GET_GRAPHICS_SYSTEM()->GetPipelineCache();
-		init_info.DescriptorPool = m_DescriptorPool;
+		init_info.PipelineCache = VK_NULL_HANDLE;
+		init_info.DescriptorPool = m_ImguiDescriptorPool;
 		init_info.Allocator = nullptr;
 		init_info.CheckVkResultFn = check_vk_result;
 		ImGui_ImplVulkan_Init(&init_info, m_ImguiRenderPass);
@@ -286,7 +299,7 @@ namespace OP
 
 	void ImguiLayer::_createFramebuffers()
 	{
-		m_FrameBuffers.resize(GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size());
+		m_ImguiFrameBuffers.resize(GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size());
 		{
 			VkImageView attachment[1];
 			VkFramebufferCreateInfo info = {};
@@ -294,14 +307,14 @@ namespace OP
 			info.renderPass = m_ImguiRenderPass;
 			info.attachmentCount = 1;
 			info.pAttachments = attachment;
-			info.width = Application::Get().GetWindow().GetWindowWidth();
-			info.height = Application::Get().GetWindow().GetWindowHeight();
+			info.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
+			info.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
 			info.layers = 1;
 
 			for (uint32_t i = 0; i < GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size(); i++)
 			{
 				attachment[0] = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews()[i];
-				OP_VULKAN_ASSERT(vkCreateFramebuffer, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &info, nullptr, &m_FrameBuffers[i]);
+				OP_VULKAN_ASSERT(vkCreateFramebuffer, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &info, nullptr, &m_ImguiFrameBuffers[i]);
 			}
 		}
 
@@ -310,7 +323,7 @@ namespace OP
 	void ImguiLayer::OnDetach()
 	{
 		OP_CORE_INFO("Imgui: Clearing up Imgui resources! ");
-		for (auto framebuffer : m_FrameBuffers)
+		for (auto framebuffer : m_ImguiFrameBuffers)
 		{
 			vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
 		}
@@ -320,11 +333,13 @@ namespace OP
 		vkFreeCommandBuffers(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, static_cast<uint32_t>(m_ImguiCommandBuffer.size()), m_ImguiCommandBuffer.data());
 		vkDestroyCommandPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, nullptr);
 
+		vkDestroyDescriptorPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiDescriptorPool, nullptr);
+
 		// Resources to destroy when the program ends
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-		vkDestroyDescriptorPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorPool, nullptr);
+
 	}
 
 	void ImguiLayer::OnUpdate()

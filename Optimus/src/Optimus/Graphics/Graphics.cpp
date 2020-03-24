@@ -32,7 +32,9 @@ namespace OP
 	Graphics::~Graphics()
 	{
 		//Destroy the pipeline Cache object
-		vkDestroyPipelineCache(GetLogicalDevice(), m_pipelineCache, nullptr);
+		//vkDestroyPipelineCache(GetLogicalDevice(), m_pipelineCache, nullptr);
+
+		OP_CORE_INFO("Destroying pipeline Cache");
 
 		cleanupSwapChain();
 
@@ -78,7 +80,7 @@ namespace OP
 
 		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
 
-		createPipelineCache();
+		//TODO: PipelineCache
 
 		m_Buffer = std::make_unique<Buffer>(vertices, indices);
 
@@ -153,16 +155,6 @@ namespace OP
 		m_SwapChain.reset();
 	}
 
-	void Graphics::createPipelineCache()
-	{
-		VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
-		pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-		OP_VULKAN_ASSERT(vkCreatePipelineCache, GetLogicalDevice(), &pipelineCacheCreateInfo, nullptr, &m_pipelineCache);
-		OP_CORE_INFO("Pipeline Cache object has been created successfully");
-	}
-
-	
-
 	void Graphics::recreateSwapchain()
 	{
 		if (recreatingSwapchain)
@@ -175,7 +167,7 @@ namespace OP
 
 			Initialize();
 
-			recreatingSwapchain = false;
+			//recreatingSwapchain = false;
 		}
 	}
 

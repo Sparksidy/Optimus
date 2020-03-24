@@ -49,15 +49,15 @@ namespace OP
 		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
 		const DescriptorPool& GetDescriptorPool()const { return *m_DescriptorPool.get(); }
 		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
-		const VkPipelineCache& GetPipelineCache() const { return m_pipelineCache; }
 		const size_t& GetImageIndex()const { return m_ImageIndex; }
+		const bool SwapchainRebuild() { return recreatingSwapchain;  }
+		void SetRecreateSwapchain(bool result) { recreatingSwapchain = result; }
 
 
 	private:
 		void createSyncObjects();
 		void recreateSwapchain();
 		void cleanupSwapChain();
-		void createPipelineCache();
 
 		void drawFrame();
 
@@ -77,15 +77,17 @@ namespace OP
 		std::unique_ptr<DescriptorPool> m_DescriptorPool;
 		std::unique_ptr<DescriptorSet> m_DescriptorSets;
 
-		VkPipelineCache m_pipelineCache;
-
-
+		//Synchronisations primitives
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;
 		std::vector<VkFence> m_InFlightFences;
 		std::vector<VkFence> m_ImagesInFlight;
 
+
+
 		const int MAX_FRAMES_IN_FLIGHT = 2;
+
+
 		size_t m_CurrentFrame = 0;
 		size_t m_ImageIndex = 0;
 		bool recreatingSwapchain = false;
