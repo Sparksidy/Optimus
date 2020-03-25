@@ -301,13 +301,17 @@ namespace OP
 
 		float time = (float)glfwGetTime();
 		io.DeltaTime = m_time > 0.0f ? time - m_time : (1.0f / 60.0f);
-		m_time = time;
+		m_time = time; //Elapsed Time
 
-		bool show_demo_window = true;
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGui::ShowDemoWindow(&show_demo_window);
+
+		ImGui::Begin("ImGUI Debug");
+		ImGui::Text("Frame Time   : %.3f ms (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+		ImGui::Text("Elapsed Time : %.1f seconds", m_time);
+		ImGui::End();
+
 		ImGui::Render();
 
 		FrameRender();
