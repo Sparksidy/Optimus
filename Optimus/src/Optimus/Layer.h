@@ -1,10 +1,9 @@
 #pragma once
-#include "pch.h"
 #include "Optimus/Core.h"
-#include "Events/Event.h"
 
 namespace OP
 {
+	class Event;
 	class OPTIMUS_API Layer
 	{
 	public:

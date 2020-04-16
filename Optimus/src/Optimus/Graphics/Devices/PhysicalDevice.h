@@ -20,6 +20,8 @@ namespace OP
 
 		const VkPhysicalDeviceMemoryProperties& GetMemoryProperties() const { return m_MemProperties; }
 
+		const VkSampleCountFlagBits& GetMsaaSamples() const { return m_MSAASamples; }
+
 	private:
 		void _pickPhysicalDevice();
 		int  _rateDeviceSuitability(const VkPhysicalDevice& device);
@@ -31,5 +33,6 @@ namespace OP
 		VkPhysicalDeviceProperties m_PhysicalDeviceProperties;
 		VkPhysicalDeviceFeatures m_PhysicalDeviceFeatures;
 		VkPhysicalDeviceMemoryProperties m_MemProperties = {};
+		VkSampleCountFlagBits m_MSAASamples = VK_SAMPLE_COUNT_1_BIT;
 	};
 }

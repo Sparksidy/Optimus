@@ -1,4 +1,5 @@
 #pragma once
+#include <pch.h>
 #include <vulkan/vulkan.hpp>
 
 #include <Optimus/Core.h>
@@ -11,8 +12,6 @@ namespace OP
 	class Surface;
 	class LogicalDevice;
 	class SwapChain;
-	class RenderPass;
-	class Framebuffers;
 	class CommandPool;
 	class GraphicsPipeline;
 	class CommandBuffer;
@@ -20,6 +19,7 @@ namespace OP
 	class DescriptorSetLayout;
 	class DescriptorPool;
 	class DescriptorSet;
+	class Renderer;
 
 	class OPTIMUS_API Graphics : public ISystem
 	{
@@ -40,10 +40,8 @@ namespace OP
 		const PhysicalDevice& GetPhysicalDevice() const { return *m_PhysicalDevice.get(); }
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
-		const RenderPass& GetRenderPass()const { return *m_Renderpass.get(); }
-		const Framebuffers& GetFramebuffers()const { return *m_Framebuffers.get(); }
-		const CommandPool& GetCommandPool()const { return *m_CommandPool.get(); }
-		CommandBuffer& GetCommandBuffers() { return *m_CommandBuffers.get(); }
+		const std::shared_ptr<CommandPool>& GetCommandPool(const std::thread::id& threadId = std::this_thread::get_id());
+		
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
 		const Buffer& GetBuffer()const { return *m_Buffer.get(); }
 		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
@@ -51,14 +49,23 @@ namespace OP
 		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
 		const size_t& GetImageIndex()const { return m_ImageIndex; }
 		const bool SwapchainRebuild() { return recreatingSwapchain;  }
+
+
 		void SetRecreateSwapchain(bool result) { recreatingSwapchain = result; }
 
+		Renderer* GetRenderer()const { return m_Renderer.get(); }
+		void SetRenderer(std::unique_ptr<Renderer>&& renderer) { m_Renderer = std::move(renderer); }\
+		RenderStage* GetRenderStage(uint32_t index);
 
 	private:
+		void resetRenderStages();
 		void createSyncObjects();
 		void recreateSwapchain();
 		void cleanupSwapChain();
 
+
+		void RecreateSwapChain();
+		void RecreateCommandBuffers();
 		void drawFrame();
 
 		std::unique_ptr<Instance> m_Instance;
@@ -67,23 +74,22 @@ namespace OP
 		std::unique_ptr<LogicalDevice> m_LogicalDevice;
 
 		std::unique_ptr<SwapChain> m_SwapChain;
-		std::unique_ptr<RenderPass> m_Renderpass;
-		std::unique_ptr<Framebuffers> m_Framebuffers;
-		std::unique_ptr<CommandPool> m_CommandPool;
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
-		std::unique_ptr<CommandBuffer> m_CommandBuffers;
+		
 		std::unique_ptr<Buffer> m_Buffer;
 		std::unique_ptr<DescriptorSetLayout> m_DescriptorSetLayout;
 		std::unique_ptr<DescriptorPool> m_DescriptorPool;
 		std::unique_ptr<DescriptorSet> m_DescriptorSets;
+
+		std::unique_ptr<Renderer> m_Renderer;
+		std::vector<std::unique_ptr<CommandBuffer>> m_CommandBuffers;
+		std::map<std::thread::id, std::shared_ptr<CommandPool>> m_CommandPools;
 
 		//Synchronisations primitives
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;
 		std::vector<VkFence> m_InFlightFences;
 		std::vector<VkFence> m_ImagesInFlight;
-
-
 
 		const int MAX_FRAMES_IN_FLIGHT = 2;
 

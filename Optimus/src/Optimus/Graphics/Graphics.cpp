@@ -1,11 +1,8 @@
-#include "pch.h"
 #include <Optimus/Graphics/Devices/Instance.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Graphics/Devices/Surface.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/RenderPass/RenderPass.h>
-#include <Optimus/Graphics/RenderPass/Framebuffers.h>
 #include <Optimus/Graphics/Graphics.h>
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
@@ -14,6 +11,8 @@
 #include <Optimus/Graphics/Descriptor/DescriptorSetLayout.h>
 #include <Optimus/Graphics/Descriptor/DescriptorPool.h>
 #include <Optimus/Graphics/Descriptor/DescriptorSet.h>
+#include <Optimus/Graphics/Renderer.h>
+#include <Optimus/Graphics/RenderStage.h>
 #include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
@@ -31,11 +30,6 @@ namespace OP
 
 	Graphics::~Graphics()
 	{
-		//Destroy the pipeline Cache object
-		//vkDestroyPipelineCache(GetLogicalDevice(), m_pipelineCache, nullptr);
-
-		OP_CORE_INFO("Destroying pipeline Cache");
-
 		cleanupSwapChain();
 
 		//Destroy these in its own classes
@@ -53,11 +47,7 @@ namespace OP
 
 	bool Graphics::Initialize()
 	{
-		m_SwapChain = std::make_unique<SwapChain>(m_Surface.get(), m_LogicalDevice.get());
-
-		m_Renderpass = std::make_unique<RenderPass>(m_SwapChain.get(), m_LogicalDevice.get());
-
-		//TODO: Should be serialized and read
+		//TODO:  Quad Vertices,  TODO in Renderer
 		const std::vector<Vertex> vertices = {
 			    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
 				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
@@ -69,32 +59,16 @@ namespace OP
 			0, 1, 2, 2, 3, 0
 		};
 
-		m_DescriptorSetLayout = std::make_unique<DescriptorSetLayout>();
-
-		m_GraphicsPipeline = std::make_unique<GraphicsPipeline>();
-
-		m_Framebuffers = std::make_unique<Framebuffers>(m_LogicalDevice.get(), m_SwapChain.get(), m_Renderpass.get());
-
 		//TODO: Recreating when window resize
 		//m_Buffer->RecreateUniformBuffers();
 
-		m_CommandPool = std::make_unique<CommandPool>(m_LogicalDevice.get());
-
-		//TODO: PipelineCache
-
 		m_Buffer = std::make_unique<Buffer>(vertices, indices);
-
-		m_DescriptorPool = std::make_unique<DescriptorPool>();
-
 		m_DescriptorSets = std::make_unique<DescriptorSet>();
-
-		m_CommandBuffers = std::make_unique<CommandBuffer>();
 
 		if(!recreatingSwapchain)
 			createSyncObjects();
 
 		m_isInitialized = true;
-
 		return m_isInitialized;
 	}
 
@@ -104,6 +78,42 @@ namespace OP
 		
 		//Drawing operations are asynchronous, wait for logical device to finish its operation before cleanup
 		vkDeviceWaitIdle(*m_LogicalDevice);
+	}
+
+	const std::shared_ptr<CommandPool>& Graphics::GetCommandPool(const std::thread::id& threadId)
+	{
+		auto it = m_CommandPools.find(threadId);
+
+		if (it != m_CommandPools.end())
+		{
+			return it->second;
+		}
+
+		return m_CommandPools.emplace(threadId, std::make_unique<CommandPool>(threadId)).first->second;
+	}
+
+	RenderStage* Graphics::GetRenderStage(uint32_t index)
+	{
+		if (!m_Renderer)
+			return nullptr;
+
+		return m_Renderer->GetRenderStage(index);
+	}
+
+	void Graphics::resetRenderStages()
+	{
+		//Swapchain , Command Buffers and Command Pool
+		RecreateSwapChain();
+		
+		//Command Buffers and Command Pool
+		if(m_InFlightFences.size() != m_SwapChain->GetImageCount())
+			RecreateCommandBuffers();
+
+		//Renderstages(Renderpass & Framebuffers)
+		for (const auto& renderStage : m_Renderer->m_RenderStages)
+			renderStage->Rebuild(*m_SwapChain);
+
+		//Attachments map(Descriptors)
 	}
 
 	void Graphics::createSyncObjects()
@@ -139,17 +149,8 @@ namespace OP
 		OP_CORE_INFO("Destroying Uniform Buffers...");
 		m_Buffer->FreeAndDestroyUniformBuffers();
 
-		OP_CORE_INFO("Destroying Framebuffers...");
-		m_Framebuffers.reset();
-
-		OP_CORE_INFO("Freeing Command buffers...");
-		m_CommandBuffers.reset();
-
 		OP_CORE_INFO("Destroying Pipeline objects...");
 		m_GraphicsPipeline.reset();
-
-		OP_CORE_INFO("Destroying RenderPasses...");
-		m_Renderpass.reset();
 
 		OP_CORE_INFO("Destroying Image Views and swapchain...");
 		m_SwapChain.reset();
@@ -167,37 +168,86 @@ namespace OP
 
 			Initialize();
 
-			//recreatingSwapchain = false;
+			//recreatingSwapchain = false; //This is getting toggled in IMGUI Layer: TODO: Change this dependency
+		}
+	}
+
+	void Graphics::RecreateSwapChain()
+	{
+		vkDeviceWaitIdle(*m_LogicalDevice);
+
+		VkExtent2D display = { Application::Get().GetWindow().GetWindowWidth(), Application::Get().GetWindow().GetWindowHeight() };
+
+		//Recreate swapchain if already exists
+		if (m_SwapChain)
+		{
+			OP_CORE_INFO("Recreating old swapchain");
+		}
+
+		m_SwapChain = std::make_unique<SwapChain>(display, m_SwapChain.get());
+
+		RecreateCommandBuffers();
+	}
+
+	void Graphics::RecreateCommandBuffers()
+	{
+		for (std::size_t i = 0; i < m_InFlightFences.size(); i++)
+		{
+			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphore[i], nullptr);
+		}
+
+		m_ImageAvailableSemaphore.resize(m_SwapChain->GetImageCount());
+		m_RenderFinishedSemaphore.resize(m_SwapChain->GetImageCount());
+		m_InFlightFences.resize(m_SwapChain->GetImageCount());
+		m_CommandBuffers.resize(m_SwapChain->GetImageCount());
+
+		VkSemaphoreCreateInfo semaphoreCreateInfo = {};
+		semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+		VkFenceCreateInfo fenceCreateInfo = {};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+		for (std::size_t i = 0; i < m_InFlightFences.size(); i++)
+		{
+			OP_VULKAN_ASSERT(vkCreateSemaphore, *m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_ImageAvailableSemaphore[i]);
+
+			OP_VULKAN_ASSERT(vkCreateSemaphore, *m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_RenderFinishedSemaphore[i]);
+
+			OP_VULKAN_ASSERT(vkCreateFence, *m_LogicalDevice, &fenceCreateInfo, nullptr, &m_InFlightFences[i]);
+
+			m_CommandBuffers[i] = std::make_unique<CommandBuffer>(false);
 		}
 	}
 
 	void Graphics::drawFrame()
 	{
-		vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
-		
-		uint32_t imageIndex;
-		VkResult result = vkAcquireNextImageKHR(*m_LogicalDevice, m_SwapChain->GetSwapchain(), UINT64_MAX, m_ImageAvailableSemaphore[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
-		m_ImageIndex = imageIndex;
+		if (!m_Renderer)
+			return;
+
+		if (!m_Renderer->m_Started)
+		{
+			resetRenderStages();
+			m_Renderer->Start();
+			m_Renderer->m_Started = true;
+		}
+
+		m_Renderer->Update();
+
+		auto result = m_SwapChain->AcquireNextImage(m_ImageAvailableSemaphore[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
-			//recreate swapchain
-			recreatingSwapchain = true; //For sync objects
-			recreateSwapchain();
+			RecreateSwapChain();
 			return;
 		}
-		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+		
+		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 		{
-			throw std::runtime_error("failed to acquire swap chain image!");
+			OP_CORE_FATAL("Failed to acquire swapchain Image");
 		}
-
-		//Check if a previous frame is using this image
-		if (m_ImagesInFlight[imageIndex] != VK_NULL_HANDLE)
-		{
-			vkWaitForFences(*m_LogicalDevice, 1, &m_ImagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
-		}
-
-		m_ImagesInFlight[imageIndex] = m_InFlightFences[m_CurrentFrame];
 
 		//Updating Uniform Buffers
 		m_Buffer->UpdateUniformBuffers(imageIndex);
@@ -232,7 +282,6 @@ namespace OP
 
 		VkPresentInfoKHR presentInfo = {};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores = signalSemaphores;
 

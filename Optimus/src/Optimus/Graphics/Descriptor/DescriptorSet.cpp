@@ -3,7 +3,6 @@
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Graphics.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/Descriptor/DescriptorSetLayout.h>
 #include <Optimus/Graphics/Descriptor/DescriptorPool.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/Buffers/Buffer.h>

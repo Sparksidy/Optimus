@@ -4,21 +4,30 @@
 
 namespace OP
 {
+	class CommandPool;
 	class OPTIMUS_API CommandBuffer
 	{
 	public:
 
-		CommandBuffer();
+		explicit CommandBuffer(bool begin = true, VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT, VkCommandBufferLevel bufferLevel = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
 		~CommandBuffer();
 
-		const std::vector<VkCommandBuffer>& GetCommandBuffer()const { return m_CommandBuffers; }
+		void Begin(VkCommandBufferUsageFlags usage = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
+		void End();
+
+		void Submit(const VkSemaphore& waitSemaphore = VK_NULL_HANDLE, const VkSemaphore& signalSemaphore = VK_NULL_HANDLE, VkFence fence = VK_NULL_HANDLE);
+
+		VkQueue GetQueue()const;
+		operator const VkCommandBuffer& ()const { return m_CommandBuffer; }
+		const VkCommandBuffer& GetCommandBuffer()const { return m_CommandBuffer; }
+		bool IsRunning()const { return m_Running; }
 
 	private:
-		void createCommandBuffers();
+		std::shared_ptr<CommandPool> m_CommandPool;
 
-	private:
-		std::vector<VkCommandBuffer> m_CommandBuffers = {};
-		
-		
+		VkCommandBuffer m_CommandBuffer = VK_NULL_HANDLE;
+		VkQueueFlagBits m_QueueType;
+		bool m_Running = false;
 	};
 }

@@ -142,6 +142,8 @@ void OP::Window::InitWindow(const WindowProps& props)
 
 void OP::Window::Update()
 {
+	glfwGetWindowSize(m_Window, &m_Data.width, &m_Data.height);
+
 	glfwPollEvents();
 	glfwSwapBuffers(m_Window);
 }
