@@ -84,6 +84,31 @@ namespace OP
 		VkQueue queue = GetQueue();
 		OP_VULKAN_ASSERT(vkQueueSubmit, queue, 1, &submitInfo, fence);
 	}
+
+	void CommandBuffer::SubmitIdle()
+	{
+		if (m_Running)
+			End();
+
+		VkSubmitInfo submitInfo = {};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &m_CommandBuffer;
+
+		VkFenceCreateInfo fenceCreateInfo = {};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+		VkFence fence;
+		OP_VULKAN_ASSERT(vkCreateFence, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &fenceCreateInfo, nullptr, &fence);
+
+		OP_VULKAN_ASSERT(vkResetFences, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), 1, &fence);
+
+		OP_VULKAN_ASSERT(vkQueueSubmit, GetQueue(), 1, &submitInfo, fence);
+
+		OP_VULKAN_ASSERT(vkWaitForFences, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+		vkDestroyFence(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), fence, nullptr);
+	}
 	VkQueue CommandBuffer::GetQueue() const
 	{
 		switch (m_QueueType)

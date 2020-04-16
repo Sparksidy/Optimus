@@ -8,11 +8,11 @@
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
 #include <Optimus/Graphics/Buffers/Buffer.h>
-#include <Optimus/Graphics/Descriptor/DescriptorSetLayout.h>
 #include <Optimus/Graphics/Descriptor/DescriptorPool.h>
 #include <Optimus/Graphics/Descriptor/DescriptorSet.h>
 #include <Optimus/Graphics/Renderer.h>
 #include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Models/QuadModel.h>
 #include <Optimus/Application.h>
 
 #include <Optimus/Log.h>
@@ -26,6 +26,8 @@ namespace OP
 		m_Surface(std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get())),
 		m_LogicalDevice(std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get()))
 	{
+		//Testing: Since 2D renderer for now so we initialize the quad here;
+		m_Quad = std::make_unique<QuadModel>();
 	}
 
 	Graphics::~Graphics()
@@ -47,24 +49,6 @@ namespace OP
 
 	bool Graphics::Initialize()
 	{
-		//TODO:  Quad Vertices,  TODO in Renderer
-		const std::vector<Vertex> vertices = {
-			    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-				{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-				{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-				{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
-		};
-
-		const std::vector<uint16_t> indices = {
-			0, 1, 2, 2, 3, 0
-		};
-
-		//TODO: Recreating when window resize
-		//m_Buffer->RecreateUniformBuffers();
-
-		m_Buffer = std::make_unique<Buffer>(vertices, indices);
-		m_DescriptorSets = std::make_unique<DescriptorSet>();
-
 		if(!recreatingSwapchain)
 			createSyncObjects();
 
@@ -80,18 +64,6 @@ namespace OP
 		vkDeviceWaitIdle(*m_LogicalDevice);
 	}
 
-	const std::shared_ptr<CommandPool>& Graphics::GetCommandPool(const std::thread::id& threadId)
-	{
-		auto it = m_CommandPools.find(threadId);
-
-		if (it != m_CommandPools.end())
-		{
-			return it->second;
-		}
-
-		return m_CommandPools.emplace(threadId, std::make_unique<CommandPool>(threadId)).first->second;
-	}
-
 	RenderStage* Graphics::GetRenderStage(uint32_t index)
 	{
 		if (!m_Renderer)
@@ -105,7 +77,7 @@ namespace OP
 		//Swapchain , Command Buffers and Command Pool
 		RecreateSwapChain();
 		
-		//Command Buffers and Command Pool
+		//Recreate Command Buffers and Command Pool if new swapchain
 		if(m_InFlightFences.size() != m_SwapChain->GetImageCount())
 			RecreateCommandBuffers();
 
@@ -146,14 +118,7 @@ namespace OP
 	
 	void Graphics::cleanupSwapChain()
 	{
-		OP_CORE_INFO("Destroying Uniform Buffers...");
-		m_Buffer->FreeAndDestroyUniformBuffers();
-
-		OP_CORE_INFO("Destroying Pipeline objects...");
-		m_GraphicsPipeline.reset();
-
-		OP_CORE_INFO("Destroying Image Views and swapchain...");
-		m_SwapChain.reset();
+		
 	}
 
 	void Graphics::recreateSwapchain()
@@ -249,8 +214,6 @@ namespace OP
 			OP_CORE_FATAL("Failed to acquire swapchain Image");
 		}
 
-		//Updating Uniform Buffers
-		m_Buffer->UpdateUniformBuffers(imageIndex);
 
 		//Adding the IMGUI Command Buffers
 		std::array<VkCommandBuffer, 2> submitCommandBuffers = {

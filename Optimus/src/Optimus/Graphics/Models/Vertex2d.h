@@ -11,8 +11,9 @@ namespace OP
 	class OPTIMUS_API Vertex2d
 	{
 	public:
-		Vertex2d(const glm::vec2& position, const glm::vec2& texCoords) :
+		Vertex2d(const glm::vec2& position, const glm::vec3& color, const glm::vec2& texCoords) :
 			m_Position(position),
+			m_Color(color),
 			m_TexCoord(texCoords) {}
 
 		static Shader::VertexInput GetVertexInput(uint32_t baseBinding = 0)
@@ -33,11 +34,17 @@ namespace OP
 				attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
 				attributeDescriptions[0].offset = offsetof(Vertex2d, m_Position);
 
-				//UV
+				//Color
 				attributeDescriptions[1].binding = baseBinding;
 				attributeDescriptions[1].location = 1;
-				attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-				attributeDescriptions[1].offset = offsetof(Vertex2d, m_TexCoord);
+				attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+				attributeDescriptions[1].offset = offsetof(Vertex2d, m_Color);
+
+				//UV
+				attributeDescriptions[2].binding = baseBinding;
+				attributeDescriptions[2].location = 2;
+				attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+				attributeDescriptions[2].offset = offsetof(Vertex2d, m_TexCoord);
 			}
 
 			return { bindingDescriptions, attributeDescriptions };
@@ -45,6 +52,7 @@ namespace OP
 
 	public:
 		glm::vec2 m_Position;
+		glm::vec3 m_Color;
 		glm::vec2 m_TexCoord;
 	};
 }

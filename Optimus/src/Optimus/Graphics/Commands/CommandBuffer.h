@@ -18,6 +18,12 @@ namespace OP
 
 		void Submit(const VkSemaphore& waitSemaphore = VK_NULL_HANDLE, const VkSemaphore& signalSemaphore = VK_NULL_HANDLE, VkFence fence = VK_NULL_HANDLE);
 
+		/*
+			Submits the command buffer to the queue and will hold the current 
+			thread idle until it has finished
+		*/
+		void SubmitIdle();
+
 		VkQueue GetQueue()const;
 		operator const VkCommandBuffer& ()const { return m_CommandBuffer; }
 		const VkCommandBuffer& GetCommandBuffer()const { return m_CommandBuffer; }

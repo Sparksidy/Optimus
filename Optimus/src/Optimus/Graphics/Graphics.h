@@ -20,6 +20,7 @@ namespace OP
 	class DescriptorPool;
 	class DescriptorSet;
 	class Renderer;
+	class QuadModel;
 
 	class OPTIMUS_API Graphics : public ISystem
 	{
@@ -98,5 +99,7 @@ namespace OP
 		size_t m_ImageIndex = 0;
 		bool recreatingSwapchain = false;
 		bool framebufferResized = false;
+
+		std::unique_ptr<QuadModel> m_Quad;
 	};
 }
