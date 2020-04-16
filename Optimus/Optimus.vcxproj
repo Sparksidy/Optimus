@@ -165,18 +165,22 @@
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h" />
     <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h" />
     <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorSet.h" />
-    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorSetLayout.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h" />
     <ClInclude Include="src\Optimus\Graphics\Graphics.h" />
+    <ClInclude Include="src\Optimus\Graphics\Models\QuadModel.h" />
+    <ClInclude Include="src\Optimus\Graphics\Models\Vertex2d.h" />
     <ClInclude Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.h" />
+    <ClInclude Include="src\Optimus\Graphics\Pipelines\Pipeline.h" />
     <ClInclude Include="src\Optimus\Graphics\Pipelines\Shader.h" />
+    <ClInclude Include="src\Optimus\Graphics\Renderer.h" />
     <ClInclude Include="src\Optimus\Graphics\RenderPass\Framebuffers.h" />
     <ClInclude Include="src\Optimus\Graphics\RenderPass\RenderPass.h" />
     <ClInclude Include="src\Optimus\Graphics\RenderPass\SwapChain.h" />
+    <ClInclude Include="src\Optimus\Graphics\RenderStage.h" />
     <ClInclude Include="src\Optimus\ISystem.h" />
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\Optimus\Input\Input.h" />
@@ -198,16 +202,18 @@
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandPool.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorPool.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorSet.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorSetLayout.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Graphics.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Models\QuadModel.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Pipelines\Shader.cpp" />
     <ClCompile Include="src\Optimus\Graphics\RenderPass\Framebuffers.cpp" />
     <ClCompile Include="src\Optimus\Graphics\RenderPass\RenderPass.cpp" />
     <ClCompile Include="src\Optimus\Graphics\RenderPass\SwapChain.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp" />
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\Optimus\Input\Input.cpp" />
     <ClCompile Include="src\Optimus\LayerStack.cpp" />
@@ -234,4 +240,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project> 
+</Project>
