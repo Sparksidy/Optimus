@@ -131,12 +131,14 @@ namespace OP
 
 		const RenderPass* GetRenderPass() const { return m_RenderPass.get(); }
 		const Framebuffers* GetFramebuffers() const { return m_FrameBuffers.get(); }
+		const VkFramebuffer& GetActiveFrameBuffer(uint32_t swapChainImage)const;
 
 		Viewport& GetViewport() { return m_Viewport; }
 		void SetViewport(const Viewport& viewport) { m_Viewport = viewport; }
 
 		bool IsOutOfDate() const { return m_outOfDate; }
 		const RenderArea& GetRenderArea() const { return m_RenderArea; }
+		bool HasSwapChain()const { return m_SwapchainAttachment.has_value(); }
 
 	private:
 		std::vector<Attachment>			m_Attachments;

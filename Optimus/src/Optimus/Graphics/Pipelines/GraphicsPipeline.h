@@ -47,6 +47,10 @@ namespace OP
 		}
 		const VkPipelineLayout& GetPipelineLayout()const { return m_PipelineLayout; }
 
+		const VkDescriptorSetLayout& GetDescriptorSetLayout() const override { return m_DescriptorSetLayout; }
+		const VkPipeline& GetPipeline() const override { return m_GraphicsPipeline; }
+		const VkPipelineBindPoint& GetPipelineBindPoint() const override { return m_PipelineBindPoint; }
+		const VkDescriptorSet& GetDescriptorSet() const = 0;
 
 	private:
 		void createShaderProgram();

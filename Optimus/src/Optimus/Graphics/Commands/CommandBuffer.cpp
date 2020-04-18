@@ -81,8 +81,7 @@ namespace OP
 		if(fence != VK_NULL_HANDLE)
 			OP_VULKAN_ASSERT(vkResetFences, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), 1, &fence);
 
-		VkQueue queue = GetQueue();
-		OP_VULKAN_ASSERT(vkQueueSubmit, queue, 1, &submitInfo, fence);
+		OP_VULKAN_ASSERT(vkQueueSubmit, GetQueue(), 1, &submitInfo, fence);
 	}
 
 	void CommandBuffer::SubmitIdle()

@@ -1,17 +1,17 @@
+#include <Optimus/Graphics/Graphics.h>
 #include <Optimus/Graphics/Devices/Instance.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Graphics/Devices/Surface.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/Graphics.h>
-#include <Optimus/Graphics/Commands/CommandPool.h>
-#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
+#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Graphics/Buffers/Buffer.h>
 #include <Optimus/Graphics/Descriptor/DescriptorPool.h>
 #include <Optimus/Graphics/Descriptor/DescriptorSet.h>
 #include <Optimus/Graphics/Renderer.h>
 #include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Models/QuadModel.h>
 #include <Optimus/Application.h>
 
@@ -26,14 +26,10 @@ namespace OP
 		m_Surface(std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get())),
 		m_LogicalDevice(std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get()))
 	{
-		//Testing: Since 2D renderer for now so we initialize the quad here;
-		m_Quad = std::make_unique<QuadModel>();
 	}
 
 	Graphics::~Graphics()
 	{
-		cleanupSwapChain();
-
 		//Destroy these in its own classes
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
@@ -41,27 +37,11 @@ namespace OP
 			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
 			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 		}
-
-		//Clear the vertex buffer
-		m_Buffer.reset();
-		OP_INFO("Clearing the vertex buffer");
-	}
-
-	bool Graphics::Initialize()
-	{
-		if(!recreatingSwapchain)
-			createSyncObjects();
-
-		m_isInitialized = true;
-		return m_isInitialized;
 	}
 
 	void Graphics::Update()
 	{
-		drawFrame();
-		
-		//Drawing operations are asynchronous, wait for logical device to finish its operation before cleanup
-		vkDeviceWaitIdle(*m_LogicalDevice);
+		DrawFrame();
 	}
 
 	RenderStage* Graphics::GetRenderStage(uint32_t index)
@@ -72,7 +52,62 @@ namespace OP
 		return m_Renderer->GetRenderStage(index);
 	}
 
-	void Graphics::resetRenderStages()
+	bool Graphics::StartRenderPass(RenderStage& renderStage)
+	{
+		if (renderStage.IsOutOfDate())
+		{
+			//TODO
+			OP_CORE_INFO("Render Stage is out of date");
+		}
+
+		auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
+		if (!commandBuffer->IsRunning())
+			commandBuffer->Begin();
+
+		VkRenderPassBeginInfo renderPassInfo = {};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = *renderStage.GetRenderPass();
+		renderPassInfo.framebuffer = renderStage.GetActiveFrameBuffer(m_SwapChain->GetActiveImageIndex());
+		renderPassInfo.renderArea.offset = { 0, 0 };
+		renderPassInfo.renderArea.extent = m_SwapChain->GetSwapChainExtent();
+
+		VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+		renderPassInfo.clearValueCount = 1;
+		renderPassInfo.pClearValues = &clearColor;
+
+		vkCmdBeginRenderPass(*m_CommandBuffers[m_SwapChain->GetActiveImageIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+		return true;
+	}
+
+	bool Graphics::EndRenderPass(RenderStage& renderStage)
+	{
+		auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
+
+		vkCmdEndRenderPass(*commandBuffer);
+
+		if (!renderStage.HasSwapChain())
+		{
+			return;
+		}
+
+		commandBuffer->End();
+		commandBuffer->Submit(m_ImageAvailableSemaphore[m_CurrentFrame],
+			m_RenderFinishedSemaphore[m_CurrentFrame],
+			m_InFlightFences[m_CurrentFrame]);
+
+		auto presentQueue = m_LogicalDevice->GetPresentQueue();
+		auto result = m_SwapChain->QueuePresent(presentQueue, m_RenderFinishedSemaphore[m_CurrentFrame]);
+
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+		{
+			//TODO: Recreate Stuff
+		}
+
+		m_CurrentFrame = (m_CurrentFrame + 1) % m_SwapChain->GetImageCount();
+	}
+
+	void Graphics::ResetRenderStages()
 	{
 		//Swapchain , Command Buffers and Command Pool
 		RecreateSwapChain();
@@ -85,56 +120,21 @@ namespace OP
 		for (const auto& renderStage : m_Renderer->m_RenderStages)
 			renderStage->Rebuild(*m_SwapChain);
 
+		//TODO: Temporary (Move creating graphics pipelines to the instantiation of a subrender)
+		//Graphics pipeline should be a member of subrender
+		Pipeline::Stage stage = { 0,0 };
+		std::string frag = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv";
+		std::string vert = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv";
+
+		std::vector<std::string> shaderpaths = { frag, vert };
+		std::vector<Shader::VertexInput> inputs= { Vertex2d::GetVertexInput() };
+		m_GraphicsPipeline = std::make_unique<GraphicsPipeline>(stage, shaderpaths, inputs);
+
+		//Testing: Since 2D renderer for now so we initialize the quad here;
+		m_Quad = std::make_unique<QuadModel>();
+
+
 		//Attachments map(Descriptors)
-	}
-
-	void Graphics::createSyncObjects()
-	{
-		m_ImageAvailableSemaphore.resize(MAX_FRAMES_IN_FLIGHT);
-		m_RenderFinishedSemaphore.resize(MAX_FRAMES_IN_FLIGHT);
-		m_InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-		m_ImagesInFlight.resize(m_SwapChain->GetSwapChainImageViews().size(), VK_NULL_HANDLE); //TODO: Get Swapchain images
-
-		VkSemaphoreCreateInfo semaphoreInfo = {};
-		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-		VkFenceCreateInfo fenceInfo = {};
-		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-		{
-			if (vkCreateSemaphore(*m_LogicalDevice, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphore[i]) != VK_SUCCESS ||
-				vkCreateSemaphore(*m_LogicalDevice, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphore[i]) != VK_SUCCESS ||
-				vkCreateFence(*m_LogicalDevice, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
-			{
-
-				throw std::runtime_error("failed to create semaphores!");
-			}
-		}
-
-		OP_CORE_INFO("Sync objects created");
-	}
-	
-	void Graphics::cleanupSwapChain()
-	{
-		
-	}
-
-	void Graphics::recreateSwapchain()
-	{
-		if (recreatingSwapchain)
-		{
-			OP_CORE_INFO("Recreating swapchain");
-
-			vkDeviceWaitIdle(*m_LogicalDevice);
-
-			cleanupSwapChain();
-
-			Initialize();
-
-			//recreatingSwapchain = false; //This is getting toggled in IMGUI Layer: TODO: Change this dependency
-		}
 	}
 
 	void Graphics::RecreateSwapChain()
@@ -187,14 +187,17 @@ namespace OP
 		}
 	}
 
-	void Graphics::drawFrame()
+	void Graphics::DrawFrame()
 	{
 		if (!m_Renderer)
+		{
+			OP_CORE_INFO("Renderer is not set!");
 			return;
+		}
 
 		if (!m_Renderer->m_Started)
 		{
-			resetRenderStages();
+			ResetRenderStages();
 			m_Renderer->Start();
 			m_Renderer->m_Started = true;
 		}
@@ -214,49 +217,25 @@ namespace OP
 			OP_CORE_FATAL("Failed to acquire swapchain Image");
 		}
 
-
-		//Adding the IMGUI Command Buffers
-		std::array<VkCommandBuffer, 2> submitCommandBuffers = {
-			m_CommandBuffers->GetCommandBuffer()[imageIndex],
-			Application::Get().GetImGUILayer().GetImGUICommandBuffer()[imageIndex] //TODO: Make this dynamic, loop through all layers and add their command buffers.
-		};
-
-		VkSubmitInfo submitInfo = {};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-		VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphore[m_CurrentFrame] };
-		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-		submitInfo.waitSemaphoreCount = 1;
-		submitInfo.pWaitSemaphores = waitSemaphores;
-		submitInfo.pWaitDstStageMask = waitStages;
-		submitInfo.commandBufferCount = static_cast<uint32_t>(submitCommandBuffers.size());
-		submitInfo.pCommandBuffers = submitCommandBuffers.data();
-
-		VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphore[m_CurrentFrame] };
-		submitInfo.signalSemaphoreCount = 1;
-		submitInfo.pSignalSemaphores = signalSemaphores;
-
-		vkResetFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame]);
-
-		if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
+		Pipeline::Stage Stage;
+		for (auto& renderstage : m_Renderer->m_RenderStages)
 		{
-			throw std::runtime_error("failed to submit draw command buffer!");
+			renderstage->Update();
+
+			if (!StartRenderPass(*renderstage))
+				return;
+
+			//TODO
+			//Render Subpass subrender pipelines
+			
+			//TODO: Add this to a subrender named 2d Render
+			auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
+			m_GraphicsPipeline->BindPipeline(*commandBuffer);
+			m_Quad->CmdRender(*commandBuffer);
+
+			EndRenderPass(*renderstage);
+			Stage.first++;
 		}
-
-		VkPresentInfoKHR presentInfo = {};
-		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = signalSemaphores;
-
-		VkSwapchainKHR swapChains[] = { m_SwapChain->GetSwapchain() };
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = swapChains;
-
-		presentInfo.pImageIndices = &imageIndex;
-
-		result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
-
-		m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-		m_ImageIndex = (m_ImageIndex + 1) % GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImageViews().size();
 	}
-}
+
+}//namespace OP

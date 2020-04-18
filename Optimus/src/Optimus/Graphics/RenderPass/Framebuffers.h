@@ -15,6 +15,7 @@ namespace OP
 		~Framebuffers();
 
 		const inline std::vector<VkFramebuffer>& GetFramebuffers()const { return m_Framebuffers; }
+		const VkFramebuffer GetActiveFrameBuffer(uint32_t index)const { return m_Framebuffers[index]; }
 
 	private:
 		//TODO: Image2D Attachments

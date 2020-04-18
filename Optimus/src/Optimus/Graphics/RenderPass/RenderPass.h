@@ -39,7 +39,8 @@ namespace OP
 		RenderPass(const RenderStage& renderStage, VkFormat depthFormat, VkFormat surfaceFormat, VkSampleCountFlagBits samples = VK_SAMPLE_COUNT_1_BIT);
 		~RenderPass();
 
-		inline operator const VkRenderPass& () const{ return m_RenderPass; }
+		operator const VkRenderPass& () const { return m_RenderPass; }
+		const VkRenderPass& GetRenderpass() const { return m_RenderPass; }
 
 	private:
 		VkRenderPass m_RenderPass;

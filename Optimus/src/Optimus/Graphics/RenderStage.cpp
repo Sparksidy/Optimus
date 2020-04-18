@@ -5,6 +5,7 @@
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
+#include <Optimus/Graphics/RenderPass/Framebuffers.h>
 
 namespace OP
 {
@@ -72,5 +73,14 @@ namespace OP
 			return std::nullopt;
 
 		return *it;
+	}
+	const VkFramebuffer& RenderStage::GetActiveFrameBuffer(uint32_t activeswapChainImage) const
+	{
+		if (activeswapChainImage > m_FrameBuffers->GetFramebuffers().size())
+		{
+			return m_FrameBuffers->GetFramebuffers().at(0);
+		}
+
+		return m_FrameBuffers->GetFramebuffers().at(activeswapChainImage);
 	}
 }

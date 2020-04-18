@@ -9,8 +9,7 @@ namespace OP
 	class OPTIMUS_API Pipeline
 	{
 	public:
-
-								
+					
 		using Stage = std::pair<uint32_t, uint32_t>; //(renderpass, subpass)
 
 		Pipeline() = default;
@@ -26,6 +25,7 @@ namespace OP
 		virtual const VkPipeline& GetPipeline() const = 0;
 		virtual const VkPipelineLayout& GetPipelineLayout() const = 0;
 		virtual const VkDescriptorSetLayout& GetDescriptorSetLayout() const = 0;
-		virtual const VkDescriptorSet& GetDescriptorSet() const = 0;
+
+		//TODO: DescriptorSet
 	};
 }

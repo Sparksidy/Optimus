@@ -12,7 +12,6 @@ namespace OP
 	class Surface;
 	class LogicalDevice;
 	class SwapChain;
-	class CommandPool;
 	class GraphicsPipeline;
 	class CommandBuffer;
 	class Buffer;
@@ -29,9 +28,9 @@ namespace OP
 
 		~Graphics();
 
-		bool Initialize() override;
+		bool Initialize() override {}
 		void Update() override;
-		void Unload() override {} //TODO
+		void Unload() override {}
 
 		inline std::string GetName()const { return "Graphics"; }
 
@@ -41,33 +40,24 @@ namespace OP
 		const PhysicalDevice& GetPhysicalDevice() const { return *m_PhysicalDevice.get(); }
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
-		const std::shared_ptr<CommandPool>& GetCommandPool(const std::thread::id& threadId = std::this_thread::get_id());
-		
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
 		const Buffer& GetBuffer()const { return *m_Buffer.get(); }
 		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
 		const DescriptorPool& GetDescriptorPool()const { return *m_DescriptorPool.get(); }
 		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
-		const size_t& GetImageIndex()const { return m_ImageIndex; }
-		const bool SwapchainRebuild() { return recreatingSwapchain;  }
-
-
-		void SetRecreateSwapchain(bool result) { recreatingSwapchain = result; }
-
 		Renderer* GetRenderer()const { return m_Renderer.get(); }
-		void SetRenderer(std::unique_ptr<Renderer>&& renderer) { m_Renderer = std::move(renderer); }\
 		RenderStage* GetRenderStage(uint32_t index);
 
+	
+		void SetRenderer(std::unique_ptr<Renderer>&& renderer) { m_Renderer = std::move(renderer); }
+
 	private:
-		void resetRenderStages();
-		void createSyncObjects();
-		void recreateSwapchain();
-		void cleanupSwapChain();
-
-
+		void ResetRenderStages();
 		void RecreateSwapChain();
 		void RecreateCommandBuffers();
-		void drawFrame();
+		bool StartRenderPass(RenderStage& renderStage);
+		bool EndRenderPass(RenderStage& renderStage);
+		void DrawFrame();
 
 		std::unique_ptr<Instance> m_Instance;
 		std::unique_ptr<PhysicalDevice> m_PhysicalDevice;
@@ -92,14 +82,12 @@ namespace OP
 		std::vector<VkFence> m_InFlightFences;
 		std::vector<VkFence> m_ImagesInFlight;
 
+		//TODO: Remove this from here
+		std::unique_ptr<QuadModel> m_Quad;
+
 		const int MAX_FRAMES_IN_FLIGHT = 2;
-
-
 		size_t m_CurrentFrame = 0;
 		size_t m_ImageIndex = 0;
-		bool recreatingSwapchain = false;
-		bool framebufferResized = false;
 
-		std::unique_ptr<QuadModel> m_Quad;
 	};
 }

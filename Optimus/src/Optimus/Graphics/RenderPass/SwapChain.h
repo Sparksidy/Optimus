@@ -28,6 +28,7 @@ namespace OP
 		const std::vector<VkImageView> GetSwapChainImageViews()const { return m_SwapChainImageViews; }
 		const uint32_t GetImageCount()const { return m_ImageCount; }
 		const size_t GetSwapChainImages()const { return m_SwapChainImages.size(); }
+		uint32_t GetActiveImageIndex()const { return m_ActiveImageIndex; }
 
 
 	private:
