@@ -1,14 +1,14 @@
 #pragma once
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
+#include <Optimus/Graphics/RenderPass/Framebuffers.h> 
+#include <Optimus/Graphics/RenderPass/RenderPass.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
+
+#include <optional>
 
 namespace OP
 {
-	class SwapChain;
-	class RenderPass;
-	class Framebuffers;
-	class Descriptor;
-
 	/*Represents an attachment in Render Pass*/
 	class OPTIMUS_API Attachment
 	{
@@ -53,21 +53,22 @@ namespace OP
 	private:
 		uint32_t m_Binding;
 		std::vector<uint32_t> m_AttachmentBindings;
-	};
+	}; 
 
 	class OPTIMUS_API RenderArea
 	{
 	public:
 		explicit RenderArea(const glm::vec2& extent = {}, const glm::vec2& offset = {}) :
-			m_Extent(extent),
-			m_Offset(offset) {
+			m_Extent(extent),m_Offset(offset) {
 		}
 
-		bool operator==(const RenderArea& other) const {
+		bool operator==(const RenderArea& other) const
+		{
 			return m_Extent == other.m_Extent && m_Offset == other.m_Offset;
 		}
 
-		bool operator!=(const RenderArea& other) const {
+		bool operator!=(const RenderArea& other) const
+		{
 			return !operator==(other);
 		}
 
@@ -119,6 +120,7 @@ namespace OP
 		friend class Graphics;
 	public:
 		explicit RenderStage(std::vector<Attachment> images = {}, std::vector<SubpassType> subpasses = {}, const Viewport& viewport = Viewport());
+		~RenderStage() {}
 
 		void Update();
 		void Rebuild(const SwapChain& swapchain);
@@ -146,8 +148,8 @@ namespace OP
 
 		Viewport						m_Viewport;
 
-		std::unique_ptr<RenderPass>		m_RenderPass;	
-		std::unique_ptr<Framebuffers>	m_FrameBuffers;
+		std::unique_ptr<OP::RenderPass>		m_RenderPass;	
+		std::unique_ptr<OP::Framebuffers>	m_FrameBuffers;
 
 		std::optional<Attachment>		m_SwapchainAttachment;
 

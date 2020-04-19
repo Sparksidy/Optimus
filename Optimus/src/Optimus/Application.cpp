@@ -19,7 +19,7 @@ namespace OP
 		m_Window = std::make_unique<Window>();
 		m_Window ->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
 
-		m_ImguiLayer = new ImguiLayer();
+		//m_ImguiLayer = new ImguiLayer();
 	}
 
 	void Application::AllocateSystems()
@@ -35,7 +35,7 @@ namespace OP
 			if (!system.second->Initialize())
 				return false;
 
-		PushOverlay(m_ImguiLayer);
+		//PushOverlay(m_ImguiLayer);
 
 		return true;
 	}

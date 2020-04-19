@@ -14,7 +14,7 @@ namespace OP
 	QuadModel::~QuadModel()
 	{
 	}
-	bool QuadModel::CmdRender(const CommandBuffer& commandBuffer, uint32_t instances = 1) const
+	bool QuadModel::CmdRender(const CommandBuffer& commandBuffer, uint32_t instances) const
 	{
 		if (m_VertexBuffer && m_IndexBuffer)
 		{

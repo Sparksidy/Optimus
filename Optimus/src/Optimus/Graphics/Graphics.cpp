@@ -1,20 +1,6 @@
+#include <pch.h>
 #include <Optimus/Graphics/Graphics.h>
-#include <Optimus/Graphics/Devices/Instance.h>
-#include <Optimus/Graphics/Devices/PhysicalDevice.h>
-#include <Optimus/Graphics/Devices/Surface.h>
-#include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/Commands/CommandBuffer.h>
-#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
-#include <Optimus/Graphics/Buffers/Buffer.h>
-#include <Optimus/Graphics/Descriptor/DescriptorPool.h>
-#include <Optimus/Graphics/Descriptor/DescriptorSet.h>
-#include <Optimus/Graphics/Renderer.h>
-#include <Optimus/Graphics/RenderStage.h>
-#include <Optimus/Graphics/RenderPass/RenderPass.h>
-#include <Optimus/Graphics/Models/QuadModel.h>
 #include <Optimus/Application.h>
-
 #include <Optimus/Log.h>
 
 
@@ -30,13 +16,7 @@ namespace OP
 
 	Graphics::~Graphics()
 	{
-		//Destroy these in its own classes
-		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-		{
-			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphore[i], nullptr);
-			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
-			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
-		}
+		//TODO
 	}
 
 	void Graphics::Update()
@@ -50,6 +30,17 @@ namespace OP
 			return nullptr;
 
 		return m_Renderer->GetRenderStage(index);
+	}
+
+	const std::shared_ptr<CommandPool>& Graphics::GetCommandPool(const std::thread::id& id)
+	{
+		auto it = m_CommandPools.find(id);
+
+		if (it != m_CommandPools.end()) {
+			return it->second;
+		}
+		
+		return m_CommandPools.emplace(id, std::make_shared<CommandPool>(id)).first->second;
 	}
 
 	bool Graphics::StartRenderPass(RenderStage& renderStage)
@@ -88,7 +79,8 @@ namespace OP
 
 		if (!renderStage.HasSwapChain())
 		{
-			return;
+			OP_CORE_INFO("No swapchain for the renderstage");
+			return false;
 		}
 
 		commandBuffer->End();

@@ -2,10 +2,10 @@
 
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
+#include <Optimus/Graphics/RenderStage.h>
 
 namespace OP
 {
-	class RenderStage;
 	class OPTIMUS_API Renderer
 	{
 		friend class Graphics;
@@ -23,16 +23,16 @@ namespace OP
 			if (m_RenderStages.empty() || m_RenderStages.size() < index)
 				return nullptr;
 
-			return m_RenderStages.at(index).get();
+			return m_RenderStages.at(index);
 		}
-
-		void AddRenderStage(std::unique_ptr<RenderStage>&& renderstage)
+	protected:
+		void AddRenderStage(std::vector<Attachment> renderpassAttachment, std::vector<SubpassType> renderpassSubpasses)
 		{
-			m_RenderStages.emplace_back(std::move(renderstage));
+			m_RenderStages.emplace_back(new RenderStage(renderpassAttachment, renderpassSubpasses));
 		}
 
 	private:
 		bool m_Started = false;
-		std::vector<std::unique_ptr<RenderStage>> m_RenderStages;
+		std::vector<RenderStage*> m_RenderStages;
 	};
 }

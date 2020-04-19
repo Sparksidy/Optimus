@@ -22,6 +22,9 @@
     <Filter Include="Optimus\Graphics\Devices">
       <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Models">
+      <UniqueIdentifier>{C92E23F8-3566-6B8F-3E70-CFB2AA269288}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Graphics\Pipelines">
       <UniqueIdentifier>{8E3A8CB2-7A4A-3883-E303-9DA1CF32271C}</UniqueIdentifier>
     </Filter>
@@ -39,12 +42,6 @@
     </Filter>
     <Filter Include="Platforms">
       <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Optimus\Graphics\Models">
-      <UniqueIdentifier>{43cfd498-b87e-4853-aa71-3513122c2d46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Optimus\Graphics\Core">
-      <UniqueIdentifier>{379959ce-1920-4a14-ad18-bccbdc49e490}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,12 +76,6 @@
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h">
-      <Filter>Optimus\Graphics\Descriptor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorSet.h">
-      <Filter>Optimus\Graphics\Descriptor</Filter>
-    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>
@@ -100,7 +91,19 @@
     <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Graphics.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Models\QuadModel.h">
+      <Filter>Optimus\Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Models\Vertex2d.h">
+      <Filter>Optimus\Graphics\Models</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.h">
+      <Filter>Optimus\Graphics\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Pipelines\Pipeline.h">
       <Filter>Optimus\Graphics\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Pipelines\Shader.h">
@@ -114,6 +117,12 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\RenderPass\SwapChain.h">
       <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\RenderStage.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Renderer.h">
+      <Filter>Optimus\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\ISystem.h">
       <Filter>Optimus</Filter>
@@ -152,24 +161,6 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Optimus\Graphics\Pipelines\Pipeline.h">
-      <Filter>Optimus\Graphics\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\RenderStage.h">
-      <Filter>Optimus\Graphics\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Models\Vertex2d.h">
-      <Filter>Optimus\Graphics\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Renderer.h">
-      <Filter>Optimus\Graphics\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Graphics.h">
-      <Filter>Optimus\Graphics\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Models\QuadModel.h">
-      <Filter>Optimus\Graphics\Models</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
@@ -187,9 +178,6 @@
     <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorPool.cpp">
       <Filter>Optimus\Graphics\Descriptor</Filter>
     </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorSet.cpp">
-      <Filter>Optimus\Graphics\Descriptor</Filter>
-    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClCompile>
@@ -202,7 +190,16 @@
     <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Graphics.cpp">
+      <Filter>Optimus\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Models\QuadModel.cpp">
+      <Filter>Optimus\Graphics\Models</Filter>
+    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.cpp">
+      <Filter>Optimus\Graphics\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Pipelines\Shader.cpp">
       <Filter>Optimus\Graphics\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\RenderPass\Framebuffers.cpp">
@@ -213,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\RenderPass\SwapChain.cpp">
       <Filter>Optimus\Graphics\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp">
+      <Filter>Optimus\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>
@@ -239,17 +239,5 @@
       <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp">
-      <Filter>Optimus\Graphics\RenderPass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Graphics.cpp">
-      <Filter>Optimus\Graphics\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Pipelines\Shader.cpp">
-      <Filter>Optimus\Graphics\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Models\QuadModel.cpp">
-      <Filter>Optimus\Graphics\Models</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

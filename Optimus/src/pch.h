@@ -2,10 +2,8 @@
 //STL
 #include <iostream>
 #include <utility>
-#include <algorithm>
 #include <functional>
 #include <memory>
-
 #include <string>
 #include <sstream>
 #include <vector>
@@ -15,6 +13,7 @@
 #include <fstream>
 #include <optional>
 #include <filesystem>
+#include <thread>
 
 //GLM
 #define GLM_FORCE_RADIANS

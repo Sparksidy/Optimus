@@ -2,11 +2,6 @@
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Graphics.h>
-#include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/RenderPass/RenderPass.h>
-#include <Optimus/Graphics/RenderStage.h>
-#include <Optimus/Graphics/Buffers/Buffer.h>
 #include <Optimus/Log.h>
 
 namespace OP
@@ -17,13 +12,13 @@ namespace OP
 		Stage stage,
 		std::vector<std::string> shaderStages,
 		std::vector<Shader::VertexInput> vertexInputs,
-		Mode mode = Mode::Polygon,
-		Depth depth = Depth::ReadWrite,
-		VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-		VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL,
-		VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT,
-		VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE,
-		bool pushDescriptors = false):
+		Mode mode,
+		Depth depth,
+		VkPrimitiveTopology topology,
+		VkPolygonMode polygonMode,
+		VkCullModeFlags cullMode,
+		VkFrontFace frontFace,
+		bool pushDescriptors):
 		m_Stage(std::move(stage)),
 		m_ShaderPaths(std::move(shaderStages)),
 		m_VertexInputs(std::move(vertexInputs)),

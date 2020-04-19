@@ -21,6 +21,11 @@ namespace OP
 
 			const std::vector<VkVertexInputBindingDescription>& GetBindingDescriptions()const { return m_BindingDescriptions; }
 			const std::vector<VkVertexInputAttributeDescription>& GetAttributeDescriptions()const { return m_AttributeDescriptions; }
+
+			bool operator<(const VertexInput& other) const
+			{
+				return m_BindingDescriptions.front().binding < other.m_BindingDescriptions.front().binding;
+			}
 		private:
 			uint32_t m_Binding = 0;
 			std::vector<VkVertexInputBindingDescription> m_BindingDescriptions;
@@ -47,7 +52,5 @@ namespace OP
 	private:
 		std::vector<VkDescriptorSetLayoutBinding> m_DescriptorSetLayouts;
 		std::vector<VkDescriptorPoolSize> m_DescriptorPools;
-
-		
 	};
 }

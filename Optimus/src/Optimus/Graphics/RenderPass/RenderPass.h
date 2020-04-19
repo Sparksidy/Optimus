@@ -3,6 +3,8 @@
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
 
+#include <optional>
+
 namespace OP
 {
 	class RenderStage;

@@ -32,8 +32,7 @@ namespace OP
 
 
 	private:
-		inline bool _isSwapChainAdequate() { return !GET_GRAPHICS_SYSTEM()->GetSurface().GetAvailableFormats().empty() && !GET_GRAPHICS_SYSTEM()->GetSurface().GetAvailablePresentModes().empty(); }
-
+		
 		VkExtent2D ChooseSwapChainExtent();
 
 		void _createImageViews(); //TODO: Create an Image representation for this resource

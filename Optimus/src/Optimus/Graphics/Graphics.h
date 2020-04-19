@@ -1,26 +1,23 @@
 #pragma once
-#include <pch.h>
 #include <vulkan/vulkan.hpp>
 
 #include <Optimus/Core.h>
 #include <Optimus/ISystem.h>
 
+#include <Optimus/Graphics/Devices/Instance.h>
+#include <Optimus/Graphics/Devices/PhysicalDevice.h>
+#include <Optimus/Graphics/Devices/Surface.h>
+#include <Optimus/Graphics/Devices/LogicalDevice.h>
+#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
+#include <Optimus/Graphics/Commands/CommandBuffer.h>
+#include <Optimus/Graphics/Commands/CommandPool.h>
+#include <Optimus/Graphics/Models/QuadModel.h>
+
+#include <Optimus/Graphics/Renderer.h>
+
+
 namespace OP
 {
-	class Instance;
-	class PhysicalDevice;
-	class Surface;
-	class LogicalDevice;
-	class SwapChain;
-	class GraphicsPipeline;
-	class CommandBuffer;
-	class Buffer;
-	class DescriptorSetLayout;
-	class DescriptorPool;
-	class DescriptorSet;
-	class Renderer;
-	class QuadModel;
-
 	class OPTIMUS_API Graphics : public ISystem
 	{
 	public:
@@ -28,7 +25,7 @@ namespace OP
 
 		~Graphics();
 
-		bool Initialize() override {}
+		bool Initialize() override { return true; }
 		void Update() override;
 		void Unload() override {}
 
@@ -41,12 +38,9 @@ namespace OP
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
 		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
-		const Buffer& GetBuffer()const { return *m_Buffer.get(); }
-		const DescriptorSetLayout& GetDescriptorSetLayout()const { return *m_DescriptorSetLayout.get(); }
-		const DescriptorPool& GetDescriptorPool()const { return *m_DescriptorPool.get(); }
-		const DescriptorSet& GetDescriptorSet()const { return *m_DescriptorSets.get(); }
 		Renderer* GetRenderer()const { return m_Renderer.get(); }
 		RenderStage* GetRenderStage(uint32_t index);
+		const std::shared_ptr<CommandPool>& GetCommandPool(const std::thread::id& id = std::this_thread::get_id());
 
 	
 		void SetRenderer(std::unique_ptr<Renderer>&& renderer) { m_Renderer = std::move(renderer); }
@@ -66,11 +60,6 @@ namespace OP
 
 		std::unique_ptr<SwapChain> m_SwapChain;
 		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
-		
-		std::unique_ptr<Buffer> m_Buffer;
-		std::unique_ptr<DescriptorSetLayout> m_DescriptorSetLayout;
-		std::unique_ptr<DescriptorPool> m_DescriptorPool;
-		std::unique_ptr<DescriptorSet> m_DescriptorSets;
 
 		std::unique_ptr<Renderer> m_Renderer;
 		std::vector<std::unique_ptr<CommandBuffer>> m_CommandBuffers;

@@ -1,4 +1,5 @@
 #pragma once
+#include <pch.h>
 #include <vulkan/vulkan.h>
 #include <Optimus/Core.h>
 
@@ -9,7 +10,7 @@ namespace OP
 	{
 	public:
 		
-		CommandPool(const std::thread::id& id = std::this_thread::get_id());
+		explicit CommandPool(const std::thread::id &id = std::this_thread::get_id());
 		~CommandPool();
 		
 		inline operator const VkCommandPool& ()const { return m_CommandPool; }

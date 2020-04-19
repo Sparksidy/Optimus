@@ -1,10 +1,10 @@
 #pragma once
 #include<vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
+#include <Optimus/Graphics/Commands/CommandPool.h>
 
 namespace OP
 {
-	class CommandPool;
 	class OPTIMUS_API CommandBuffer
 	{
 	public:

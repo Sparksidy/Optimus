@@ -2,11 +2,10 @@
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
 
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 namespace OP
 {
 	class RenderStage;
-	class SwapChain;
-
 	class OPTIMUS_API Framebuffers
 	{
 	public:

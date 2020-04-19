@@ -1,21 +1,13 @@
 #include <pch.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
-#include <Optimus/Graphics/Commands/CommandPool.h>
-#include <Optimus/Graphics/RenderPass/Framebuffers.h>
-#include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/RenderPass/RenderPass.h>
-#include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
-#include <Optimus/Graphics/Buffers/Buffer.h>
-#include <Optimus/Graphics/Descriptor/DescriptorSet.h>
 #include<Optimus/Application.h>
 
 
 
 namespace OP
 {
-	CommandBuffer::CommandBuffer(bool begin = true, VkQueueFlagBits queueType = VK_QUEUE_GRAPHICS_BIT, VkCommandBufferLevel bufferLevel = VK_COMMAND_BUFFER_LEVEL_PRIMARY):
+	CommandBuffer::CommandBuffer(bool begin, VkQueueFlagBits queueType, VkCommandBufferLevel bufferLevel):
 		m_QueueType(queueType)
 	{
 		m_CommandPool = GET_GRAPHICS_SYSTEM()->GetCommandPool();

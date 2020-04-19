@@ -10,7 +10,7 @@
 
 namespace OP
 {
-	SwapChain::SwapChain(const VkExtent2D& displayExtent, const SwapChain* oldSwapChain = nullptr):
+	SwapChain::SwapChain(const VkExtent2D& displayExtent, const SwapChain* oldSwapChain):
 		m_SwapChainExtent(displayExtent),
 		m_PresentMode(VK_PRESENT_MODE_FIFO_KHR),
 		m_ActiveImageIndex(std::numeric_limits<uint32_t>::max())
@@ -20,8 +20,7 @@ namespace OP
 
 		//Image Count
 		m_ImageCount = GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().minImageCount + 1;
-		if (GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().maxImageCount > 0 &&
-			m_ImageCount > GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().maxImageCount)
+		if (GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().maxImageCount > 0 && m_ImageCount > GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().maxImageCount)
 		{
 			m_ImageCount = GET_GRAPHICS_SYSTEM()->GetSurface().GetCapabilities().maxImageCount;
 		}
@@ -84,10 +83,10 @@ namespace OP
 	{
 		if (fence != VK_NULL_HANDLE)
 		{
-			OP_VULKAN_ASSERT(vkWaitForFences, GET_GRAPHICS_SYSTEM()->GetLogicalDevice, 1, &fence, VK_TRUE, UINT64_MAX);
+			OP_VULKAN_ASSERT(vkWaitForFences, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
 		}
 
-		return vkAcquireNextImageKHR(GET_GRAPHICS_SYSTEM()->GetLogicalDevice, m_Swapchain, UINT64_MAX, presentCompleteSemaphore, VK_NULL_HANDLE, &m_ActiveImageIndex);
+		return vkAcquireNextImageKHR(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_Swapchain, UINT64_MAX, presentCompleteSemaphore, VK_NULL_HANDLE, &m_ActiveImageIndex);
 	}
 
 	VkResult SwapChain::QueuePresent(const VkQueue& presentQueue, const VkSemaphore& waitSemaphore)

@@ -1,6 +1,6 @@
 #include <pch.h>
 #include <Optimus.h>
-#include<Optimus/Graphics/Graphics.h>
+
 #include "MainRenderer.h"
 
 class Sandbox : public OP::Application

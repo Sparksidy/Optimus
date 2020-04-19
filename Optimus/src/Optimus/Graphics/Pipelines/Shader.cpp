@@ -6,10 +6,6 @@
 
 namespace OP
 {
-	Shader::Shader()
-	{
-	}
-
 	VkShaderModule Shader::CreateShaderModule(const std::vector<char>& code)
 	{
 		createDescriptorSetLayoutBindings();

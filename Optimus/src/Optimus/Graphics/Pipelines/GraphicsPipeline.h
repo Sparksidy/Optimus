@@ -4,6 +4,7 @@
 #include <Optimus/Graphics/Pipelines/Pipeline.h>
 #include <Optimus/Graphics/Pipelines/Shader.h>
 
+#include <Optimus/Graphics/RenderStage.h>
 
 namespace OP
 {
@@ -50,7 +51,6 @@ namespace OP
 		const VkDescriptorSetLayout& GetDescriptorSetLayout() const override { return m_DescriptorSetLayout; }
 		const VkPipeline& GetPipeline() const override { return m_GraphicsPipeline; }
 		const VkPipelineBindPoint& GetPipelineBindPoint() const override { return m_PipelineBindPoint; }
-		const VkDescriptorSet& GetDescriptorSet() const = 0;
 
 	private:
 		void createShaderProgram();

@@ -2,10 +2,7 @@
 #include <Optimus/Graphics/RenderStage.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Graphics.h>
-#include <Optimus/Graphics/RenderPass/SwapChain.h>
-#include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
-#include <Optimus/Graphics/RenderPass/Framebuffers.h>
 
 namespace OP
 {
@@ -41,7 +38,7 @@ namespace OP
 
 		if (!m_RenderPass)
 		{
-			m_RenderPass = std::make_unique<RenderPass>(*this, VK_FORMAT_UNDEFINED, GET_GRAPHICS_SYSTEM()->GetSurface().GetFormat(), GET_GRAPHICS_SYSTEM()->GetPhysicalDevice().GetMsaaSamples());
+			m_RenderPass = std::make_unique<RenderPass>(*this, VK_FORMAT_UNDEFINED, GET_GRAPHICS_SYSTEM()->GetSurface().GetFormat().format, GET_GRAPHICS_SYSTEM()->GetPhysicalDevice().GetMsaaSamples());
 		}
 
 		m_FrameBuffers = std::make_unique<Framebuffers>(*this, GET_GRAPHICS_SYSTEM()->GetSwapchain());
@@ -66,7 +63,7 @@ namespace OP
 	std::optional<Attachment> RenderStage::GetAttachment(uint32_t binding) const
 	{
 		auto it = std::find_if(m_Attachments.begin(), m_Attachments.end(), [binding](const Attachment& ref) {
-			ref.GetBinding() == binding;
+			return ref.GetBinding() == binding;
 			});
 
 		if (it == m_Attachments.end())

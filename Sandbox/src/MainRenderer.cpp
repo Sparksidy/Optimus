@@ -1,7 +1,7 @@
-
+#include <pch.h>
 #include "MainRenderer.h"
-#include <Optimus/Graphics/RenderStage.h>
 
+#include <Optimus/Graphics/RenderStage.h>
 
 MainRenderer::MainRenderer()
 {
@@ -14,10 +14,10 @@ MainRenderer::MainRenderer()
 		{0, {0, 1}}
 	};
 
-	AddRenderStage(std::make_unique<OP::RenderStage>(renderpassAttachment, renderpassSubpasses));
+	OP::Renderer::AddRenderStage(renderpassAttachment, renderpassSubpasses);
 }
 void MainRenderer::Start()
-{	
+{
 }
 void MainRenderer::Update()
 {

@@ -117,7 +117,8 @@ project "Sandbox"
 		"Optimus/ThirdParty/spdlog/include",
 		"Optimus/src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Vulkan}"
+		"%{IncludeDir.Vulkan}",
+		"%{IncludeDir.GLM}"
 	}
 
 	links

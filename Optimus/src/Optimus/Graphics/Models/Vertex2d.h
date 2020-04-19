@@ -11,6 +11,7 @@ namespace OP
 	class OPTIMUS_API Vertex2d
 	{
 	public:
+		Vertex2d() = default;
 		Vertex2d(const glm::vec2& position, const glm::vec3& color, const glm::vec2& texCoords) :
 			m_Position(position),
 			m_Color(color),
@@ -48,6 +49,18 @@ namespace OP
 			}
 
 			return { bindingDescriptions, attributeDescriptions };
+		}
+		
+		~Vertex2d() {}
+
+		bool operator==(const Vertex2d& other) const
+		{
+			return (m_Position == other.m_Position && m_TexCoord == other.m_TexCoord && m_Color == other.m_Color);
+		}
+
+		bool operator!=(const Vertex2d& other) const
+		{
+			return !operator==(other);
 		}
 
 	public:

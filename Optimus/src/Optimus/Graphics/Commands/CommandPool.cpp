@@ -1,15 +1,13 @@
-#include "pch.h"
+#include <pch.h>
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Log.h>
-#include <Optimus/Utilities/Macros.h>
 
 
 namespace OP
 {
-	CommandPool::CommandPool(const std::thread::id& id) :
-		m_ThreadID(id)
+	CommandPool::CommandPool(const std::thread::id& id) :m_ThreadID(id)
 	{
 		auto graphicsFamily = GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsFamily();
 
