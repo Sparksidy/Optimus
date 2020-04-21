@@ -22,6 +22,7 @@ namespace OP
 				m_subPassDescription.colorAttachmentCount = static_cast<uint32_t>(m_ColorAttachmentReferences.size());
 				m_subPassDescription.pColorAttachments = m_ColorAttachmentReferences.data();
 
+
 				if (depthAttachment)
 				{
 					m_depthStencilAttachment.attachment = *depthAttachment;
@@ -30,11 +31,11 @@ namespace OP
 				}
 			}
 
-			const inline VkSubpassDescription& GetSubpassDescription() const { return m_subPassDescription; }
+			const VkSubpassDescription& GetSubpassDescription() const { return m_subPassDescription; }
 			
 		private:
 			std::vector<VkAttachmentReference> m_ColorAttachmentReferences;
-			VkSubpassDescription m_subPassDescription;
+			VkSubpassDescription m_subPassDescription = {};
 			VkAttachmentReference m_depthStencilAttachment = {};
 		};
 		

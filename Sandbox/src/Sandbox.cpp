@@ -8,20 +8,29 @@ class Sandbox : public OP::Application
 public:
 	Sandbox()
 	{
-		Start();
 	}
 	
-	void Start()
+	void Run() override
 	{
-		//Set the Renderer for the application
-		auto graphics = dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"));
-		graphics->SetRenderer(std::make_unique<MainRenderer>());
+		if (!isInitialized)
+		{
+			//Set the Renderer for the application
+			dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
+
+			isInitialized = true;
+		}
+		
+		OP::Application::Run();
+		
 	}
 
 	virtual ~Sandbox()
 	{
 
 	}
+
+private:
+	bool isInitialized = false;
 };
 
 OP::Application* OP::CreateApplication()

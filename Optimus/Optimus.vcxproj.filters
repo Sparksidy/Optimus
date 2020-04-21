@@ -76,6 +76,9 @@
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h">
+      <Filter>Optimus\Graphics\Descriptor</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>

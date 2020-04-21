@@ -8,9 +8,9 @@ namespace OP
 {
 	VkShaderModule Shader::CreateShaderModule(const std::vector<char>& code)
 	{
-		createDescriptorSetLayoutBindings();
-
-		createDescriptorPools();
+		//TODO: When doing uniform buffers
+		//createDescriptorSetLayoutBindings();
+		//createDescriptorPools();
 		
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -27,11 +27,12 @@ namespace OP
 
 	VkShaderStageFlagBits Shader::GetShaderStage(const std::filesystem::path& path)
 	{
-		auto fileExt = path.extension();
+		auto fileName = path.filename();
 
-		if (fileExt == ".vert")
+		//TODO remove hardcoding
+		if (fileName == "Triangle_vert.spv")
 			return VK_SHADER_STAGE_VERTEX_BIT;
-		if (fileExt == ".frag")
+		if (fileName == "Triangle_frag.spv")
 			return VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		return VK_SHADER_STAGE_ALL;

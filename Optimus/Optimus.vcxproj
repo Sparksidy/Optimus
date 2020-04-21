@@ -163,6 +163,7 @@
     <ClInclude Include="src\Optimus\Graphics\Buffers\Buffer.h" />
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandBuffer.h" />
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h" />
+    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />

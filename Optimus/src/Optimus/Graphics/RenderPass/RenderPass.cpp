@@ -65,6 +65,7 @@ namespace OP
 				if (attachment->GetType() == Attachment::Type::Depth)
 				{
 					depthAttachment = attachment->GetBinding();
+					continue;
 				}
 
 				VkAttachmentReference attachmentReference = {};

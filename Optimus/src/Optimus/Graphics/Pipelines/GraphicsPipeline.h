@@ -102,6 +102,11 @@ namespace OP
 		VkPipelineMultisampleStateCreateInfo				m_MultisampleState				= {};
 		VkPipelineDynamicStateCreateInfo					m_DynamicState					= {};	//TODO
 		VkPipelineTessellationStateCreateInfo				m_TessellationState				= {};	//TODO
+
+		VkViewport											m_Viewport						= {};
+		VkRect2D											m_Scissor						= {};
+
+
 	};
 }
 

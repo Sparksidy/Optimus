@@ -34,8 +34,8 @@ namespace OP
 	{	
 		std::sort(m_VertexInputs.begin(), m_VertexInputs.end());
 		createShaderProgram();
-		createDescriptorSetLayout();
-		createDescriptorPool();
+		//createDescriptorSetLayout();
+		//createDescriptorPool();
 		createPipelineLayout();
 		createAttributes();
 
@@ -129,9 +129,9 @@ namespace OP
 
 		VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
 		pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutCreateInfo.setLayoutCount = 1;
+		pipelineLayoutCreateInfo.setLayoutCount = 0;
 		pipelineLayoutCreateInfo.pushConstantRangeCount = 0;
-		pipelineLayoutCreateInfo.pSetLayouts = &m_DescriptorSetLayout;
+		//pipelineLayoutCreateInfo.pSetLayouts = &m_DescriptorSetLayout; //TODO
 		OP_VULKAN_ASSERT(vkCreatePipelineLayout, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &pipelineLayoutCreateInfo, nullptr, &m_PipelineLayout);
 	}
 
@@ -163,23 +163,21 @@ namespace OP
 		m_ColourBlendState.blendConstants[2] = 0.0f;
 		m_ColourBlendState.blendConstants[3] = 0.0f;
 
-		VkViewport viewport = {};
-		viewport.x = 0.0f;
-		viewport.y = 0.0f;
-		viewport.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
-		viewport.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
-		viewport.minDepth = 0.0f;
-		viewport.maxDepth = 1.0f;
+		m_Viewport.x = 0.0f;
+		m_Viewport.y = 0.0f;
+		m_Viewport.width = (float)GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
+		m_Viewport.height = (float)GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
+		m_Viewport.minDepth = 0.0f;
+		m_Viewport.maxDepth = 1.0f;
 
-		VkRect2D scissor = {};
-		scissor.offset = { 0, 0 };
-		scissor.extent = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent();
+		m_Scissor.offset = { 0, 0 };
+		m_Scissor.extent = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent();
 
 		m_ViewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		m_ViewportState.viewportCount = 1;
-		m_ViewportState.pViewports = &viewport;
+		m_ViewportState.pViewports = &m_Viewport;
 		m_ViewportState.scissorCount = 1;
-		m_ViewportState.pScissors = &scissor;
+		m_ViewportState.pScissors = &m_Scissor;
 
 		m_MultisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		m_MultisampleState.sampleShadingEnable = VK_FALSE;

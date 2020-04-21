@@ -11,6 +11,22 @@ namespace OP
 		m_Subpasses(std::move(subpasses)),
 		m_Viewport(viewport)
 	{
+
+		for (const auto& image : m_Attachments)
+		{
+			switch (image.GetType())
+			{
+			case Attachment::Type::Image:
+				//TODO
+				break;
+			case Attachment::Type::Depth:
+				//TODO
+				break;
+			case Attachment::Type::Swapchain:
+				m_SwapchainAttachment = image;
+				break;
+			}
+		}
 	}
 
 	void RenderStage::Update()
