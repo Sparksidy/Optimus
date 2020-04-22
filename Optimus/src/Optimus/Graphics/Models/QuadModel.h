@@ -25,10 +25,9 @@ namespace OP
 
 	private:
 		const std::vector<Vertex2d> m_Vertices = {
-			//pos			//Color				
-		   {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+			 {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-			{{0.5f, 0.5f},  {0.0f, 0.0f, 1.0f}},
+			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
 			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
 		};
 

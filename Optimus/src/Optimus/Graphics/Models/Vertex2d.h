@@ -18,10 +18,16 @@ namespace OP
 
 		static Shader::VertexInput GetVertexInput(uint32_t baseBinding = 0)
 		{
-			std::vector<VkVertexInputBindingDescription> bindingDescriptions =
-			{
+			std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+			VkVertexInputBindingDescription bindingDescription{};
+			bindingDescription.binding = 0;
+			bindingDescription.stride = sizeof(Vertex2d);
+			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+			bindingDescriptions.emplace_back(bindingDescription);
+
+			/*{
 				{baseBinding,sizeof(Vertex2d),VK_VERTEX_INPUT_RATE_VERTEX}
-			};
+			};*/
 
 			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {
 			{0, baseBinding, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex2d, m_Position)},
@@ -46,7 +52,5 @@ namespace OP
 	public:
 		glm::vec2 m_Position;
 		glm::vec3 m_Color;
-
-		static const int NUMBER_OF_ATTRIBUTES = 2; //Change this if removing/adding attributes
 	};
 }

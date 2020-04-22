@@ -21,7 +21,7 @@ namespace OP
 			VkBuffer vertexBuffers[1] = { m_VertexBuffer->GetBuffer() };
 			VkDeviceSize offsets[1] = { 0 } ;
 			vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-			vkCmdBindIndexBuffer(commandBuffer, m_IndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
+			vkCmdBindIndexBuffer(commandBuffer, m_IndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT16);
 			vkCmdDrawIndexed(commandBuffer, m_IndexCount, instances, 0, 0, 0);
 		}
 		else if (m_VertexBuffer && !m_IndexBuffer)
@@ -43,9 +43,10 @@ namespace OP
 	{
 		m_VertexBuffer = nullptr;
 		m_VerticesCount = static_cast<uint32_t>(m_Vertices.size());
+		uint32_t s = sizeof(m_Vertices[0]) * m_Vertices.size();
 
 		//Create a staging buffer
-		Buffer vertexStaging(sizeof(Vertex2d) * m_Vertices.size(),
+		Buffer vertexStaging(sizeof(m_Vertices[0]) * m_Vertices.size(),
 							 VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 							 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 							 m_Vertices.data());
@@ -54,6 +55,8 @@ namespace OP
 		m_VertexBuffer = std::make_unique<Buffer>(vertexStaging.GetSize(),
 												VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 												VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+		OP_CORE_INFO("Vertex Buffer Created");
 
 		//Submit the command to copy staging to vertex buffer
 		CommandBuffer commandBuffer;
@@ -78,6 +81,8 @@ namespace OP
 		m_IndexBuffer = std::make_unique<Buffer>(indexStaging.GetSize(),
 												VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 												VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+		OP_CORE_INFO("Index Buffer Created");
 
 
 		//Submit the command to copy staging to index buffer

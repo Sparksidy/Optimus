@@ -113,10 +113,12 @@ namespace OP
 			renderStage->Rebuild(*m_SwapChain);
 
 		//TODO: Temporary (Move creating graphics pipelines to the instantiation of a subrender)
-		//Graphics pipeline should be a member of subrender
+		//Graphics pipeline should be a member of subrender(Say 2DRender)
 		Pipeline::Stage stage = { 0,0 };
-		std::string frag = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_frag.spv";
-		std::string vert = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv";
+		std::string frag = "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Triangle_frag.spv";
+		//std::string vert = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv";
+		std::string vert = "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Triangle_vert.spv";
+
 
 		std::vector<std::string> shaderpaths = { frag, vert };
 		std::vector<Shader::VertexInput> inputs= { Vertex2d::GetVertexInput() };
@@ -126,7 +128,7 @@ namespace OP
 		m_Quad = std::make_unique<QuadModel>();
 
 
-		//Attachments map(Descriptors)
+		//TODO: Attachments map(Descriptors)
 	}
 
 	void Graphics::RecreateSwapChain()
