@@ -149,7 +149,8 @@ namespace OP
 		m_RasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
 		m_RasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 		m_RasterizationState.depthBiasEnable = VK_FALSE;
-
+		
+		m_BlendAttachmentStates[0] = {};
 		m_BlendAttachmentStates[0].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 		m_BlendAttachmentStates[0].blendEnable = VK_FALSE;
 
@@ -228,6 +229,8 @@ namespace OP
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
 		OP_VULKAN_ASSERT(vkCreateGraphicsPipelines, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline);
+
+		OP_CORE_INFO("Graphics Pipeline created");
 	}
 
 	void GraphicsPipeline::createPolygonPipeline()

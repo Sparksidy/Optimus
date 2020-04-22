@@ -44,6 +44,7 @@ namespace OP
 			return;
 
 		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_CommandBuffer);
+		m_Running = false;
 	}
 	void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 	{
