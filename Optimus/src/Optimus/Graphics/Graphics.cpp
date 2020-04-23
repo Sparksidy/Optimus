@@ -93,7 +93,7 @@ namespace OP
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 		{
-			//TODO: Recreate Stuff
+			//TODO: Recreate Swapchain
 		}
 
 		m_CurrentFrame = (m_CurrentFrame + 1) % m_SwapChain->GetImageCount();
