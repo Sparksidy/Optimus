@@ -21,7 +21,6 @@ public:
 		}
 		
 		OP::Application::Run();
-		
 	}
 
 	virtual ~Sandbox()

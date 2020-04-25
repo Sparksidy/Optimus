@@ -55,6 +55,7 @@ namespace OP
 	}
 	Buffer::~Buffer()
 	{
+		OP_CORE_TRACE("Destroying Buffers");
 		vkDestroyBuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_Buffer, nullptr);
 		vkFreeMemory(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_BufferMemory, nullptr);
 	}

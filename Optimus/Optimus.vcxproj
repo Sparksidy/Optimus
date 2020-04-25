@@ -180,6 +180,9 @@
     <ClInclude Include="src\Optimus\Graphics\RenderPass\SwapChain.h" />
     <ClInclude Include="src\Optimus\Graphics\RenderStage.h" />
     <ClInclude Include="src\Optimus\Graphics\Renderer.h" />
+    <ClInclude Include="src\Optimus\Graphics\SubRender.h" />
+    <ClInclude Include="src\Optimus\Graphics\SubRenderHolder.h" />
+    <ClInclude Include="src\Optimus\Graphics\Subrenders\SubRender2D.h" />
     <ClInclude Include="src\Optimus\ISystem.h" />
     <ClInclude Include="src\Optimus\Imgui\ImguiLayer.h" />
     <ClInclude Include="src\Optimus\Input\Input.h" />
@@ -188,6 +191,8 @@
     <ClInclude Include="src\Optimus\LayerStack.h" />
     <ClInclude Include="src\Optimus\Log.h" />
     <ClInclude Include="src\Optimus\Utilities\Macros.h" />
+    <ClInclude Include="src\Optimus\Utilities\NonCopyable.h" />
+    <ClInclude Include="src\Optimus\Utilities\TypeInfo.h" />
     <ClInclude Include="src\Optimus\Window.h" />
     <ClInclude Include="src\Platforms\ImguiGLFW.h" />
     <ClInclude Include="src\Platforms\ImguiOpenGLRenderer.h" />
@@ -212,6 +217,8 @@
     <ClCompile Include="src\Optimus\Graphics\RenderPass\RenderPass.cpp" />
     <ClCompile Include="src\Optimus\Graphics\RenderPass\SwapChain.cpp" />
     <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\SubRenderHolder.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Subrenders\SubRender2D.cpp" />
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp" />
     <ClCompile Include="src\Optimus\Input\Input.cpp" />
     <ClCompile Include="src\Optimus\LayerStack.cpp" />

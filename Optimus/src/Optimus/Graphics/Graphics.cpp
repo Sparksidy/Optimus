@@ -112,22 +112,6 @@ namespace OP
 		for (const auto& renderStage : m_Renderer->m_RenderStages)
 			renderStage->Rebuild(*m_SwapChain);
 
-		//TODO: Temporary (Move creating graphics pipelines to the instantiation of a subrender)
-		//Graphics pipeline should be a member of subrender(Say 2DRender)
-		Pipeline::Stage stage = { 0,0 };
-		std::string frag = "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Triangle_frag.spv";
-		//std::string vert = "../Optimus/src/Optimus/Graphics/Shaders/SPIR-V/Triangle_vert.spv";
-		std::string vert = "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Triangle_vert.spv";
-
-
-		std::vector<std::string> shaderpaths = { frag, vert };
-		std::vector<Shader::VertexInput> inputs= { Vertex2d::GetVertexInput() };
-		m_GraphicsPipeline = std::make_unique<GraphicsPipeline>(stage, shaderpaths, inputs);
-
-		//Testing: Since 2D renderer for now so we initialize the quad here;
-		m_Quad = std::make_unique<QuadModel>();
-
-
 		//TODO: Attachments map(Descriptors)
 	}
 
@@ -219,14 +203,20 @@ namespace OP
 			if (!StartRenderPass(*renderstage))
 				return;
 
-			//TODO
-			//Render Subpass subrender pipelines
-			
-			//TODO: Add this to a subrender named 2d Render
 			auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
-			m_GraphicsPipeline->BindPipeline(*commandBuffer);
-			m_Quad->CmdRender(*commandBuffer);
 
+			for (const auto& subpass : renderstage->GetSubpasses())
+			{
+				Stage.second = subpass.GetBinding();
+
+				m_Renderer->m_SubRenderHolder.RenderStage(Stage, *commandBuffer);
+
+				if (subpass.GetBinding() != renderstage->GetSubpasses().back().GetBinding())
+				{
+					vkCmdNextSubpass(*commandBuffer, VK_SUBPASS_CONTENTS_INLINE);
+				}
+			}
+			
 			EndRenderPass(*renderstage);
 			Stage.first++;
 		}

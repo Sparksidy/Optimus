@@ -37,7 +37,6 @@ namespace OP
 		const PhysicalDevice& GetPhysicalDevice() const { return *m_PhysicalDevice.get(); }
 		const LogicalDevice& GetLogicalDevice() const { return *m_LogicalDevice.get(); }
 		const SwapChain& GetSwapchain()const { return *m_SwapChain.get(); }
-		const GraphicsPipeline& GetGraphicsPipeline()const { return *m_GraphicsPipeline.get(); }
 		Renderer* GetRenderer()const { return m_Renderer.get(); }
 		RenderStage* GetRenderStage(uint32_t index);
 		const std::shared_ptr<CommandPool>& GetCommandPool(const std::thread::id& id = std::this_thread::get_id());
@@ -59,7 +58,6 @@ namespace OP
 		std::unique_ptr<LogicalDevice> m_LogicalDevice;
 
 		std::unique_ptr<SwapChain> m_SwapChain;
-		std::unique_ptr<GraphicsPipeline> m_GraphicsPipeline;
 
 		std::unique_ptr<Renderer> m_Renderer;
 		std::vector<std::unique_ptr<CommandBuffer>> m_CommandBuffers;
@@ -71,8 +69,6 @@ namespace OP
 		std::vector<VkFence> m_InFlightFences;
 		std::vector<VkFence> m_ImagesInFlight;
 
-		//TODO: Remove this from here
-		std::unique_ptr<QuadModel> m_Quad;
 
 		const int MAX_FRAMES_IN_FLIGHT = 2;
 		size_t m_CurrentFrame = 0;

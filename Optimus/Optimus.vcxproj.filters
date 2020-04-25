@@ -31,6 +31,9 @@
     <Filter Include="Optimus\Graphics\RenderPass">
       <UniqueIdentifier>{3C40F704-A84D-25EB-3134-21D69D40F1A1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Subrenders">
+      <UniqueIdentifier>{E2DF2473-4EED-5259-D7D3-4E4443E01E10}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Imgui">
       <UniqueIdentifier>{A076A406-0C37-203D-D571-69BA41F16419}</UniqueIdentifier>
     </Filter>
@@ -127,6 +130,15 @@
     <ClInclude Include="src\Optimus\Graphics\Renderer.h">
       <Filter>Optimus\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\SubRender.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\SubRenderHolder.h">
+      <Filter>Optimus\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Subrenders\SubRender2D.h">
+      <Filter>Optimus\Graphics\Subrenders</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\ISystem.h">
       <Filter>Optimus</Filter>
     </ClInclude>
@@ -149,6 +161,12 @@
       <Filter>Optimus</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Utilities\Macros.h">
+      <Filter>Optimus\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Utilities\NonCopyable.h">
+      <Filter>Optimus\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Utilities\TypeInfo.h">
       <Filter>Optimus\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Window.h">
@@ -216,6 +234,12 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp">
       <Filter>Optimus\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\SubRenderHolder.cpp">
+      <Filter>Optimus\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Subrenders\SubRender2D.cpp">
+      <Filter>Optimus\Graphics\Subrenders</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Imgui\ImguiLayer.cpp">
       <Filter>Optimus\Imgui</Filter>
