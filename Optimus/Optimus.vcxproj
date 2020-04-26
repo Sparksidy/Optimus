@@ -163,7 +163,6 @@
     <ClInclude Include="src\Optimus\Graphics\Buffers\Buffer.h" />
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandBuffer.h" />
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h" />
-    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Instance.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
@@ -204,7 +203,6 @@
     <ClCompile Include="src\Optimus\Graphics\Buffers\Buffer.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandBuffer.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandPool.cpp" />
-    <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorPool.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />

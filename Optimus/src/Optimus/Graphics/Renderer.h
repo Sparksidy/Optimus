@@ -33,7 +33,7 @@ namespace OP
 			if (m_RenderStages.empty() || m_RenderStages.size() < index)
 				return nullptr;
 
-			return m_RenderStages.at(index);
+			return m_RenderStages.at(index).get();
 		}
 	protected:
 
@@ -56,15 +56,14 @@ namespace OP
 			m_SubRenderHolder.Clear();
 		}
 
-
-		void AddRenderStage(std::vector<Attachment> renderpassAttachment, std::vector<SubpassType> renderpassSubpasses)
+		void AddRenderStage(std::unique_ptr<RenderStage>&& renderStage)
 		{
-			m_RenderStages.emplace_back(new RenderStage(renderpassAttachment, renderpassSubpasses));
+			m_RenderStages.emplace_back(std::move(renderStage));
 		}
 
 	private:
 		bool m_Started = false;
-		std::vector<RenderStage*> m_RenderStages;
+		std::vector<std::unique_ptr<RenderStage>> m_RenderStages;
 
 		SubrenderHolder m_SubRenderHolder;
 	};

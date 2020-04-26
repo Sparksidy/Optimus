@@ -79,9 +79,6 @@
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Descriptor\DescriptorPool.h">
-      <Filter>Optimus\Graphics\Descriptor</Filter>
-    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>
@@ -195,9 +192,6 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandPool.cpp">
       <Filter>Optimus\Graphics\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Descriptor\DescriptorPool.cpp">
-      <Filter>Optimus\Graphics\Descriptor</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>

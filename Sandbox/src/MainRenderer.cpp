@@ -14,7 +14,7 @@ MainRenderer::MainRenderer()
 		{0, {0}}
 	};
 
-	OP::Renderer::AddRenderStage(renderpassAttachment, renderpassSubpasses);
+	OP::Renderer::AddRenderStage(std::make_unique<RenderStage>(renderpassAttachment, renderpassSubpasses));
 }
 void MainRenderer::Start()
 {

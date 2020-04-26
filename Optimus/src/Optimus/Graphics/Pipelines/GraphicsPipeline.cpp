@@ -56,17 +56,17 @@ namespace OP
 	
 	GraphicsPipeline::~GraphicsPipeline()
 	{
-		auto logicalDevice = GET_GRAPHICS_SYSTEM()->GetLogicalDevice();
+		//auto& logicalDevice = GET_GRAPHICS_SYSTEM()->GetLogicalDevice();
 
 		for (const auto& shaderModule : m_ShaderModules)
 		{
-			vkDestroyShaderModule(logicalDevice, shaderModule, nullptr);
+			vkDestroyShaderModule(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), shaderModule, nullptr);
 		}
 
-		vkDestroyDescriptorPool(logicalDevice, m_DescriptorPool, nullptr);
-		vkDestroyPipeline(logicalDevice, m_GraphicsPipeline, nullptr);
-		vkDestroyPipelineLayout(logicalDevice, m_PipelineLayout, nullptr);
-		vkDestroyDescriptorSetLayout(logicalDevice, m_DescriptorSetLayout, nullptr);
+		vkDestroyDescriptorPool(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorPool, nullptr);
+		vkDestroyPipeline(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
+		vkDestroyPipelineLayout(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_PipelineLayout, nullptr);
+		vkDestroyDescriptorSetLayout(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorSetLayout, nullptr);
 	}
 	
 

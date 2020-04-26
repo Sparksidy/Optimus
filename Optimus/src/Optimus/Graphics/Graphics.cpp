@@ -12,16 +12,31 @@ namespace OP
 		m_Surface(std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get())),
 		m_LogicalDevice(std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get()))
 	{
+		CreatePipelineCache();
 	}
 
 	Graphics::~Graphics()
 	{
 		//TODO
+		OP_VULKAN_ASSERT(vkQueueWaitIdle, m_LogicalDevice->GetGraphicsQueue());
+
+		vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
+
+		for (std::size_t i = 0; i < m_InFlightFences.size(); i++)
+		{
+			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphore[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
+		}
 	}
 
 	void Graphics::Update()
 	{
 		DrawFrame();
+	}
+
+	void Graphics::Unload()
+	{
 	}
 
 	RenderStage* Graphics::GetRenderStage(uint32_t index)
@@ -97,6 +112,15 @@ namespace OP
 		}
 
 		m_CurrentFrame = (m_CurrentFrame + 1) % m_SwapChain->GetImageCount();
+	}
+
+	void Graphics::CreatePipelineCache()
+	{
+		VkPipelineCacheCreateInfo info = {};
+		info.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+		OP_VULKAN_ASSERT(vkCreatePipelineCache, *m_LogicalDevice, &info, nullptr, &m_PipelineCache);
+
+		OP_CORE_INFO("Pipeline Cache Created");
 	}
 
 	void Graphics::ResetRenderStages()

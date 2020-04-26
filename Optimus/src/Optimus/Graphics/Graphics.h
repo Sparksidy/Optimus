@@ -27,7 +27,7 @@ namespace OP
 
 		bool Initialize() override { return true; }
 		void Update() override;
-		void Unload() override {}
+		void Unload() override; 
 
 		inline std::string GetName()const { return "Graphics"; }
 
@@ -41,10 +41,11 @@ namespace OP
 		RenderStage* GetRenderStage(uint32_t index);
 		const std::shared_ptr<CommandPool>& GetCommandPool(const std::thread::id& id = std::this_thread::get_id());
 
-	
+		//Setters
 		void SetRenderer(std::unique_ptr<Renderer>&& renderer) { m_Renderer = std::move(renderer); }
 
 	private:
+		void CreatePipelineCache();
 		void ResetRenderStages();
 		void RecreateSwapChain();
 		void RecreateCommandBuffers();
@@ -62,12 +63,12 @@ namespace OP
 		std::unique_ptr<Renderer> m_Renderer;
 		std::vector<std::unique_ptr<CommandBuffer>> m_CommandBuffers;
 		std::map<std::thread::id, std::shared_ptr<CommandPool>> m_CommandPools;
+		VkPipelineCache m_PipelineCache = VK_NULL_HANDLE;
 
 		//Synchronisations primitives
 		std::vector<VkSemaphore> m_ImageAvailableSemaphore;
 		std::vector<VkSemaphore> m_RenderFinishedSemaphore;
 		std::vector<VkFence> m_InFlightFences;
-		std::vector<VkFence> m_ImagesInFlight;
 
 
 		const int MAX_FRAMES_IN_FLIGHT = 2;

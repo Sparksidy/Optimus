@@ -1,5 +1,6 @@
 #pragma once
 #include <Optimus/Graphics/Renderer.h>
+#include <Optimus/Log.h>
 
 using namespace OP;
 

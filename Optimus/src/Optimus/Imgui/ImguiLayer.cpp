@@ -14,7 +14,7 @@
 #include <Optimus/Graphics/Devices/Instance.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/Descriptor/DescriptorPool.h>
+//#include <Optimus/Graphics/Descriptor/DescriptorPool.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
 #include <Optimus/Graphics/Commands/CommandPool.h>
