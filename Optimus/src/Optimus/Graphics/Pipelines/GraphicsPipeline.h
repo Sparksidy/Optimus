@@ -4,7 +4,7 @@
 #include <Optimus/Graphics/Pipelines/Pipeline.h>
 #include <Optimus/Graphics/Pipelines/Shader.h>
 
-#include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
 
 namespace OP
 {

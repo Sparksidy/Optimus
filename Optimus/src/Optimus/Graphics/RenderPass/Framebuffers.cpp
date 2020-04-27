@@ -3,7 +3,7 @@
 #include <Optimus/Graphics/RenderPass/Framebuffers.h>
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
 #include <Optimus/Log.h>
 
 namespace OP

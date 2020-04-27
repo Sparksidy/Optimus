@@ -2,8 +2,8 @@
 
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
-#include <Optimus/Graphics/RenderStage.h>
-#include <Optimus/Graphics/SubRenderHolder.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
+#include <Optimus/Graphics/Core/SubRenderHolder.h>
 
 namespace OP
 {

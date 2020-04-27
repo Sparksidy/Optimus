@@ -6,7 +6,7 @@
 #include <Optimus/Utilities/NonCopyable.h>
 #include <Optimus/Graphics/Pipelines/Pipeline.h>
 #include <Optimus/Utilities/TypeInfo.h>
-#include <Optimus/Graphics/SubRender.h>
+#include <Optimus/Graphics/Core/SubRender.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
 
 namespace OP

@@ -1,7 +1,7 @@
 #include <pch.h>
-#include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
 #include <Optimus/Application.h>
-#include <Optimus/Graphics/Graphics.h>
+#include <Optimus/Graphics/Core/Graphics.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 
 namespace OP

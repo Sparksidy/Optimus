@@ -16,8 +16,8 @@
     <Filter Include="Optimus\Graphics\Commands">
       <UniqueIdentifier>{D7D5A068-4398-D4F2-8C48-637FF849ADD0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Optimus\Graphics\Descriptor">
-      <UniqueIdentifier>{244C743A-9059-A220-1940-9E0B854C6ED7}</UniqueIdentifier>
+    <Filter Include="Optimus\Graphics\Core">
+      <UniqueIdentifier>{EE8326FD-5AF0-E1F7-23E4-79558F0F0460}</UniqueIdentifier>
     </Filter>
     <Filter Include="Optimus\Graphics\Devices">
       <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
@@ -79,6 +79,21 @@
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandPool.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Core\Graphics.h">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Core\RenderStage.h">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Core\Renderer.h">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Core\SubRender.h">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Core\SubRenderHolder.h">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClInclude>
@@ -93,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h">
       <Filter>Optimus\Graphics\Devices</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Graphics.h">
-      <Filter>Optimus\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Models\QuadModel.h">
       <Filter>Optimus\Graphics\Models</Filter>
@@ -120,18 +132,6 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\RenderPass\SwapChain.h">
       <Filter>Optimus\Graphics\RenderPass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\RenderStage.h">
-      <Filter>Optimus\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\Renderer.h">
-      <Filter>Optimus\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\SubRender.h">
-      <Filter>Optimus\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Optimus\Graphics\SubRenderHolder.h">
-      <Filter>Optimus\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Subrenders\SubRender2D.h">
       <Filter>Optimus\Graphics\Subrenders</Filter>
@@ -193,6 +193,15 @@
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandPool.cpp">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Core\Graphics.cpp">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Core\RenderStage.cpp">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Core\SubRenderHolder.cpp">
+      <Filter>Optimus\Graphics\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>
     </ClCompile>
@@ -204,9 +213,6 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\Graphics.cpp">
-      <Filter>Optimus\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Models\QuadModel.cpp">
       <Filter>Optimus\Graphics\Models</Filter>
@@ -225,12 +231,6 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\RenderPass\SwapChain.cpp">
       <Filter>Optimus\Graphics\RenderPass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\RenderStage.cpp">
-      <Filter>Optimus\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Optimus\Graphics\SubRenderHolder.cpp">
-      <Filter>Optimus\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Subrenders\SubRender2D.cpp">
       <Filter>Optimus\Graphics\Subrenders</Filter>

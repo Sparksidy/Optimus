@@ -13,7 +13,7 @@
 #include <Optimus/Graphics/Commands/CommandPool.h>
 #include <Optimus/Graphics/Models/QuadModel.h>
 
-#include <Optimus/Graphics/Renderer.h>
+#include <Optimus/Graphics/Core/Renderer.h>
 
 
 namespace OP

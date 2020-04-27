@@ -2,7 +2,7 @@
 
 #include <Optimus/Graphics/Buffers/Buffer.h>
 #include <Optimus/Application.h>
-#include <Optimus/Graphics/Graphics.h>
+#include <Optimus/Graphics/Core/Graphics.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/Devices/PhysicalDevice.h>
 #include <Optimus/Log.h>

@@ -3,7 +3,7 @@
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 #include <Optimus/Application.h>
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
-#include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
 #include <Optimus/Log.h>
 
 namespace OP

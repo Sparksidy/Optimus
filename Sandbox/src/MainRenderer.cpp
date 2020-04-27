@@ -1,7 +1,7 @@
 #include <pch.h>
 #include "MainRenderer.h"
 
-#include <Optimus/Graphics/RenderStage.h>
+#include <Optimus/Graphics/Core/RenderStage.h>
 #include <Optimus/Graphics/Subrenders/SubRender2D.h>
 
 MainRenderer::MainRenderer()

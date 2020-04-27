@@ -1,7 +1,7 @@
 #include <pch.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 #include <Optimus/Application.h>
-#include <Optimus/Graphics/Graphics.h>
+#include <Optimus/Graphics/Core/Graphics.h>
 #include <Optimus/Log.h>
 
 namespace OP
