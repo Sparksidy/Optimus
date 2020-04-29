@@ -165,13 +165,14 @@ namespace OP
 
 		m_Viewport.x = 0.0f;
 		m_Viewport.y = 0.0f;
-		m_Viewport.width = (float)GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
-		m_Viewport.height = (float)GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
+		m_Viewport.width = (float)Application::Get().GetWindow().GetWindowWidth();
+		m_Viewport.height = (float)Application::Get().GetWindow().GetWindowHeight();
 		m_Viewport.minDepth = 0.0f;
 		m_Viewport.maxDepth = 1.0f;
 
+		VkExtent2D extents = { Application::Get().GetWindow().GetWindowWidth() , Application::Get().GetWindow().GetWindowHeight() };
 		m_Scissor.offset = { 0, 0 };
-		m_Scissor.extent = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent();
+		m_Scissor.extent = extents;
 
 		m_ViewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		m_ViewportState.viewportCount = 1;

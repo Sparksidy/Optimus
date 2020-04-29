@@ -36,8 +36,6 @@ namespace OP
 		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-		if (oldSwapChain)
-			createInfo.oldSwapchain = oldSwapChain->m_Swapchain;
 
 		auto graphicsFamily{ GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsFamily() };
 		auto presentFamily{ GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetPresentFamily() };
@@ -55,6 +53,9 @@ namespace OP
 		createInfo.clipped = VK_TRUE;
 		createInfo.oldSwapchain = VK_NULL_HANDLE;
 
+		if (oldSwapChain)
+			createInfo.oldSwapchain = oldSwapChain->m_Swapchain;
+
 
 		OP_VULKAN_ASSERT(vkCreateSwapchainKHR, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &createInfo, nullptr, &m_Swapchain);
 		vkGetSwapchainImagesKHR(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_Swapchain, &m_ImageCount, m_SwapChainImages.data());
@@ -65,6 +66,10 @@ namespace OP
 		m_SwapChainImageFormat = GET_GRAPHICS_SYSTEM()->GetSurface().GetFormat().format;
 		
 		_createImageViews();
+
+		VkFenceCreateInfo fenceCreateInfo = {};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		vkCreateFence(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &fenceCreateInfo, nullptr, &m_ImageFence);
 	}
 
 	SwapChain::~SwapChain()
@@ -75,6 +80,8 @@ namespace OP
 		{
 			vkDestroyImageView(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), imageView, nullptr);
 		}
+
+		vkDestroyFence(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImageFence, nullptr);
 
 		vkDestroySwapchainKHR(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_Swapchain, nullptr);
 	}

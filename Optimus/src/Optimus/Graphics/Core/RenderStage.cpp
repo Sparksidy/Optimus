@@ -39,7 +39,7 @@ namespace OP
 		if (m_Viewport.GetSize())
 			m_RenderArea.SetExtent(m_Viewport.GetScale() * *m_Viewport.GetSize());
 		else
-			m_RenderArea.SetExtent(m_Viewport.GetScale() * glm::vec2(GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width, GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height));
+			m_RenderArea.SetExtent(m_Viewport.GetScale() * glm::vec2(Application::Get().GetWindow().GetWindowWidth(), Application::Get().GetWindow().GetWindowHeight()));
 
 		m_RenderArea.SetAspectRatio(static_cast<float>(m_RenderArea.GetExtent().x) / static_cast<float>(m_RenderArea.GetExtent().y));
 		m_RenderArea.SetExtent(m_RenderArea.GetExtent() + m_RenderArea.GetOffset());

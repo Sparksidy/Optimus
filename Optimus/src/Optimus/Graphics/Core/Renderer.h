@@ -50,8 +50,7 @@ namespace OP
 			m_SubRenderHolder.Remove();
 		}
 
-		template <typename T>
-		void Clear()
+		void ClearSubRenders()
 		{
 			m_SubRenderHolder.Clear();
 		}

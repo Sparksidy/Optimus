@@ -29,6 +29,8 @@ namespace OP
 		const uint32_t GetImageCount()const { return m_ImageCount; }
 		const size_t GetSwapChainImages()const { return m_SwapChainImages.size(); }
 		uint32_t GetActiveImageIndex()const { return m_ActiveImageIndex; }
+		bool IsSameExtent(const VkExtent2D& other) { return m_SwapChainExtent.width == other.width && m_SwapChainExtent.height == other.height; }
+		
 
 
 	private:
@@ -48,6 +50,8 @@ namespace OP
 		std::vector<VkImageView>	m_SwapChainImageViews;
 		std::vector<VkImage>		m_SwapChainImages;
 		uint32_t					m_ActiveImageIndex;
+
+		VkFence						m_ImageFence = VK_NULL_HANDLE;
 
 	};
 

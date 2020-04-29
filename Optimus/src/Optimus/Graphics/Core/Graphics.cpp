@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <Optimus/Graphics/Graphics.h>
+#include <Optimus/Graphics/Core/Graphics.h>
 #include <Optimus/Application.h>
 #include <Optimus/Log.h>
 
@@ -63,7 +63,9 @@ namespace OP
 		if (renderStage.IsOutOfDate())
 		{
 			//TODO
+			RecreatePass(renderStage);
 			OP_CORE_INFO("Render Stage is out of date");
+			return false;
 		}
 
 		auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
@@ -86,7 +88,7 @@ namespace OP
 		return true;
 	}
 
-	bool Graphics::EndRenderPass(RenderStage& renderStage)
+	void Graphics::EndRenderPass(RenderStage& renderStage)
 	{
 		auto& commandBuffer = m_CommandBuffers[m_SwapChain->GetActiveImageIndex()];
 
@@ -95,7 +97,7 @@ namespace OP
 		if (!renderStage.HasSwapChain())
 		{
 			OP_CORE_INFO("No swapchain for the renderstage");
-			return false;
+			return;
 		}
 
 		commandBuffer->End();
@@ -108,7 +110,7 @@ namespace OP
 
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
 		{
-			//TODO: Recreate Swapchain
+			m_FramebufferResized = true; //This will recreate swapchain
 		}
 
 		m_CurrentFrame = (m_CurrentFrame + 1) % m_SwapChain->GetImageCount();
@@ -121,6 +123,21 @@ namespace OP
 		OP_VULKAN_ASSERT(vkCreatePipelineCache, *m_LogicalDevice, &info, nullptr, &m_PipelineCache);
 
 		OP_CORE_INFO("Pipeline Cache Created");
+	}
+
+	void Graphics::RecreatePass(RenderStage& renderstage)
+	{
+		VkExtent2D currExtent = { Application::Get().GetWindow().GetWindowWidth(), Application::Get().GetWindow().GetWindowHeight() };
+
+		OP_VULKAN_ASSERT(vkQueueWaitIdle, m_LogicalDevice->GetGraphicsQueue());
+
+		if (renderstage.HasSwapChain() && (m_FramebufferResized || !m_SwapChain->IsSameExtent(currExtent)))
+		{
+			RecreateSwapChain();
+		}
+
+		renderstage.Rebuild(*m_SwapChain);
+		//TODO Attachments Map recreate
 	}
 
 	void Graphics::ResetRenderStages()
@@ -144,12 +161,6 @@ namespace OP
 		vkDeviceWaitIdle(*m_LogicalDevice);
 
 		VkExtent2D display = { Application::Get().GetWindow().GetWindowWidth(), Application::Get().GetWindow().GetWindowHeight() };
-
-		//Recreate swapchain if already exists
-		if (m_SwapChain)
-		{
-			OP_CORE_INFO("Recreating old swapchain");
-		}
 
 		m_SwapChain = std::make_unique<SwapChain>(display, m_SwapChain.get());
 

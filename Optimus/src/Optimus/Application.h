@@ -36,6 +36,7 @@ namespace OP
 
 		void OnEvent(Event&);
 		bool OnWindowClose(Event&);
+		bool OnWindowResize(Event& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
@@ -45,6 +46,9 @@ namespace OP
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow()const { return *m_Window; }
 		inline ImguiLayer& GetImGUILayer()const { return *m_ImguiLayer; }
+		inline bool IsWindowResized()const { return m_windowResized; }
+
+		inline void ResetWindowResize() { m_windowResized = !m_windowResized; } //TODO:Looks like a hack. Should not be a public Interface
 
 	private:
 
@@ -58,6 +62,7 @@ namespace OP
 		LayerStack m_LayerStack;
 
 		bool m_isRunning = true;
+		bool m_windowResized = false;
 		static Application* s_Instance;
 	};
 

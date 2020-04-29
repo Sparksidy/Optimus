@@ -46,11 +46,12 @@ namespace OP
 
 	private:
 		void CreatePipelineCache();
+		void RecreatePass(RenderStage& renderstage);
 		void ResetRenderStages();
 		void RecreateSwapChain();
 		void RecreateCommandBuffers();
 		bool StartRenderPass(RenderStage& renderStage);
-		bool EndRenderPass(RenderStage& renderStage);
+		void EndRenderPass(RenderStage& renderStage);
 		void DrawFrame();
 
 		std::unique_ptr<Instance> m_Instance;
@@ -74,6 +75,7 @@ namespace OP
 		const int MAX_FRAMES_IN_FLIGHT = 2;
 		size_t m_CurrentFrame = 0;
 		size_t m_ImageIndex = 0;
+		bool m_FramebufferResized = false;
 
 	};
 }

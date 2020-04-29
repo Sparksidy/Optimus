@@ -83,7 +83,9 @@ namespace OP
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dis(e);
+
 		dis.Dispatch<WindowCloseEvent>(OP_BIND_FN(OnWindowClose));
+		dis.Dispatch<WindowResizeEvent>(OP_BIND_FN(OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
@@ -98,6 +100,13 @@ namespace OP
 		m_isRunning = false;
 		return true;
 	}
+
+	bool Application::OnWindowResize(Event& e)
+	{
+		m_windowResized = true;
+		return true;
+	}
+
 	void Application::PushLayer(Layer * layer)
 	{
 		m_LayerStack.PushLayer(layer);
