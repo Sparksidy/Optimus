@@ -32,8 +32,8 @@ namespace OP
 			std::vector<VkVertexInputAttributeDescription> m_AttributeDescriptions;
 		};
 
-		Shader() {}
-		~Shader() {}
+		Shader();
+		~Shader();
 
 		const std::vector<VkDescriptorSetLayoutBinding>& GetDescriptorSetLayouts()const { return m_DescriptorSetLayouts; }
 		const std::vector<VkDescriptorPoolSize>& GetDescriptorPools()const { return m_DescriptorPools; }

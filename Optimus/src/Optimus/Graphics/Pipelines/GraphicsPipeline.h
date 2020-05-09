@@ -51,6 +51,8 @@ namespace OP
 		const VkDescriptorSetLayout& GetDescriptorSetLayout() const override { return m_DescriptorSetLayout; }
 		const VkPipeline& GetPipeline() const override { return m_GraphicsPipeline; }
 		const VkPipelineBindPoint& GetPipelineBindPoint() const override { return m_PipelineBindPoint; }
+		const VkDescriptorPool& GetDescriptorPool()const override { return m_DescriptorPool; }
+		
 
 	private:
 		void createShaderProgram();
@@ -100,7 +102,7 @@ namespace OP
 		VkPipelineDepthStencilStateCreateInfo				m_DepthStencilState				= {};   //TODO
 		VkPipelineViewportStateCreateInfo					m_ViewportState					= {};
 		VkPipelineMultisampleStateCreateInfo				m_MultisampleState				= {};
-		VkPipelineDynamicStateCreateInfo					m_DynamicState					= {};	//TODO
+		VkPipelineDynamicStateCreateInfo					m_DynamicState					= {};	//TODO (Automatic Window resize without Pipeline recreation)
 		VkPipelineTessellationStateCreateInfo				m_TessellationState				= {};	//TODO
 
 		VkViewport											m_Viewport						= {};

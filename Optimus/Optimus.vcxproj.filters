@@ -19,6 +19,9 @@
     <Filter Include="Optimus\Graphics\Core">
       <UniqueIdentifier>{EE8326FD-5AF0-E1F7-23E4-79558F0F0460}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Graphics\Descriptors">
+      <UniqueIdentifier>{17D1FD88-038C-ED34-AC43-667F98DD37C5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Graphics\Devices">
       <UniqueIdentifier>{C811B131-B436-00B2-DD81-E541C905FFCF}</UniqueIdentifier>
     </Filter>
@@ -73,6 +76,12 @@
     <ClInclude Include="src\Optimus\Graphics\Buffers\Buffer.h">
       <Filter>Optimus\Graphics\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Buffers\UniformBuffer.h">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Buffers\UniformHandler.h">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Commands\CommandBuffer.h">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClInclude>
@@ -93,6 +102,15 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Core\SubRenderHolder.h">
       <Filter>Optimus\Graphics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Descriptors\Descriptor.h">
+      <Filter>Optimus\Graphics\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Descriptors\DescriptorHandler.h">
+      <Filter>Optimus\Graphics\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Graphics\Descriptors\DescriptorSet.h">
+      <Filter>Optimus\Graphics\Descriptors</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Graphics\Devices\DebugCallbacks.h">
       <Filter>Optimus\Graphics\Devices</Filter>
@@ -187,6 +205,12 @@
     <ClCompile Include="src\Optimus\Graphics\Buffers\Buffer.cpp">
       <Filter>Optimus\Graphics\Buffers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Buffers\UniformBuffer.cpp">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Buffers\UniformHandler.cpp">
+      <Filter>Optimus\Graphics\Buffers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Commands\CommandBuffer.cpp">
       <Filter>Optimus\Graphics\Commands</Filter>
     </ClCompile>
@@ -201,6 +225,12 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Core\SubRenderHolder.cpp">
       <Filter>Optimus\Graphics\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Descriptors\DescriptorHandler.cpp">
+      <Filter>Optimus\Graphics\Descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Graphics\Descriptors\DescriptorSet.cpp">
+      <Filter>Optimus\Graphics\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Devices\Instance.cpp">
       <Filter>Optimus\Graphics\Devices</Filter>

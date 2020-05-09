@@ -25,6 +25,7 @@ namespace OP
 		virtual const VkPipeline& GetPipeline() const = 0;
 		virtual const VkPipelineLayout& GetPipelineLayout() const = 0;
 		virtual const VkDescriptorSetLayout& GetDescriptorSetLayout() const = 0;
+		virtual const VkDescriptorPool& GetDescriptorPool()const = 0;
 
 		//TODO: DescriptorSet
 	};

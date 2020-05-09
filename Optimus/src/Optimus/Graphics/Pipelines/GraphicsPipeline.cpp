@@ -34,8 +34,8 @@ namespace OP
 	{	
 		std::sort(m_VertexInputs.begin(), m_VertexInputs.end());
 		createShaderProgram();
-		//createDescriptorSetLayout();
-		//createDescriptorPool();
+		createDescriptorSetLayout();
+		createDescriptorPool();
 		createPipelineLayout();
 		createAttributes();
 
@@ -89,6 +89,8 @@ namespace OP
 			m_ShaderStages.emplace_back(info);
 			m_ShaderModules.emplace_back(shaderModule);
 		}
+
+		OP_CORE_INFO("Shader Porgrams Created");
 	}
 
 	void GraphicsPipeline::createDescriptorSetLayout()
@@ -105,6 +107,8 @@ namespace OP
 						&layoutInfo,
 						nullptr,
 						&m_DescriptorSetLayout);
+
+		OP_CORE_INFO("Descriptor Sets layout created");
 	}
 
 	void GraphicsPipeline::createDescriptorPool()
@@ -115,23 +119,26 @@ namespace OP
 
 		VkDescriptorPoolCreateInfo info = {};
 		info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-		//info.flags = TODO
+		info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
 		info.maxSets = static_cast<uint32_t>(swapChainImages);
 		info.poolSizeCount = static_cast<uint32_t>(descriptorPools.size());
 		info.pPoolSizes = descriptorPools.data();
 
 		OP_VULKAN_ASSERT(vkCreateDescriptorPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &info, nullptr, &m_DescriptorPool);
+
+		OP_CORE_INFO("Descriptor Pool Created");
 	}
 
 	void GraphicsPipeline::createPipelineLayout()
 	{
-		//TODO for Push constants
 		VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
 		pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutCreateInfo.setLayoutCount = 0;
-		pipelineLayoutCreateInfo.pushConstantRangeCount = 0;
-		//pipelineLayoutCreateInfo.pSetLayouts = &m_DescriptorSetLayout; //TODO
+		pipelineLayoutCreateInfo.setLayoutCount = 1;
+		pipelineLayoutCreateInfo.pSetLayouts = &m_DescriptorSetLayout;
+		pipelineLayoutCreateInfo.pushConstantRangeCount = 0; //TODO for Push constants
 		OP_VULKAN_ASSERT(vkCreatePipelineLayout, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &pipelineLayoutCreateInfo, nullptr, &m_PipelineLayout);
+
+		OP_CORE_INFO("Pipeline Layout Created");
 	}
 
 	void GraphicsPipeline::createAttributes()
@@ -146,7 +153,7 @@ namespace OP
 		m_RasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
 		m_RasterizationState.lineWidth = 1.0f;
 		m_RasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-		m_RasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+		m_RasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 		m_RasterizationState.depthBiasEnable = VK_FALSE;
 		
 		m_BlendAttachmentStates[0] = {};
@@ -183,6 +190,8 @@ namespace OP
 		m_MultisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		m_MultisampleState.sampleShadingEnable = VK_FALSE;
 		m_MultisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+
+
 	}
 
 	void GraphicsPipeline::createPipeline()

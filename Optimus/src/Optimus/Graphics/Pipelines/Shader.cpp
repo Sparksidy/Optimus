@@ -6,12 +6,16 @@
 
 namespace OP
 {
+	Shader::Shader()
+	{
+		createDescriptorSetLayoutBindings();
+		createDescriptorPools();
+	}
+	Shader::~Shader()
+	{
+	}
 	VkShaderModule Shader::CreateShaderModule(const std::vector<char>& code)
 	{
-		//TODO: When doing uniform buffers
-		//createDescriptorSetLayoutBindings();
-		//createDescriptorPools();
-		
 		VkShaderModuleCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = code.size();
@@ -30,9 +34,9 @@ namespace OP
 		auto fileName = path.filename();
 
 		//TODO remove hardcoding
-		if (fileName == "Triangle_vert.spv")
+		if (fileName == "Generic_vert.spv")
 			return VK_SHADER_STAGE_VERTEX_BIT;
-		if (fileName == "Triangle_frag.spv")
+		if (fileName == "Generic_frag.spv")
 			return VK_SHADER_STAGE_FRAGMENT_BIT;
 
 		return VK_SHADER_STAGE_ALL;
@@ -50,14 +54,14 @@ namespace OP
 
 		m_DescriptorSetLayouts.emplace_back(uboLayoutBinding);
 
-		VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
+		/*VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
 		samplerLayoutBinding.binding = 1;
 		samplerLayoutBinding.descriptorCount = 1;
 		samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		samplerLayoutBinding.pImmutableSamplers = nullptr;
 		samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		m_DescriptorSetLayouts.emplace_back(samplerLayoutBinding);
+		m_DescriptorSetLayouts.emplace_back(samplerLayoutBinding);*/
 	}
 
 	void Shader::createDescriptorPools()
@@ -71,11 +75,11 @@ namespace OP
 
 		m_DescriptorPools.emplace_back(pool_1);
 
-		VkDescriptorPoolSize pool_2;
-		pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages);
+		//VkDescriptorPoolSize pool_2;
+		//pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		//pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages);
 
-		m_DescriptorPools.emplace_back(pool_2);
+		//m_DescriptorPools.emplace_back(pool_2);
 	}
 
 	std::vector<char> Shader::readFile(const std::string& filename)
