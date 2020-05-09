@@ -64,6 +64,8 @@ namespace OP
 		bool m_isRunning = true;
 		bool m_windowResized = false;
 		static Application* s_Instance;
+
+		float currTime = 0.0f;
 	};
 
 	Application* CreateApplication();

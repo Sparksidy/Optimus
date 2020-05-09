@@ -5,6 +5,7 @@
 
 #include <Optimus/ISystem.h>
 
+
 namespace OP
 {
 #define OP_BIND_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -47,8 +48,15 @@ namespace OP
 
 	void Application::Run()
 	{
+		
 		while (m_isRunning)
 		{
+			float time = (float)glfwGetTime();
+			float deltaTime = currTime > 0.0f ? time - currTime : (1.0f / 60.0f);
+			currTime = time;
+
+			OP_CORE_INFO("Time: {0}", deltaTime);
+
 			m_Window->Update();
 
 			for (Layer* layer : m_LayerStack)
@@ -58,6 +66,7 @@ namespace OP
 
 			for (auto system : m_Systems)
 				system.second->Update();
+
 		}
 	}
 
