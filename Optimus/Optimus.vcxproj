@@ -178,6 +178,8 @@
     <ClInclude Include="src\Optimus\Graphics\Devices\LogicalDevice.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\PhysicalDevice.h" />
     <ClInclude Include="src\Optimus\Graphics\Devices\Surface.h" />
+    <ClInclude Include="src\Optimus\Graphics\Images\Image.h" />
+    <ClInclude Include="src\Optimus\Graphics\Images\Image2D.h" />
     <ClInclude Include="src\Optimus\Graphics\Models\QuadModel.h" />
     <ClInclude Include="src\Optimus\Graphics\Models\Vertex2d.h" />
     <ClInclude Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.h" />
@@ -219,6 +221,8 @@
     <ClCompile Include="src\Optimus\Graphics\Devices\LogicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\PhysicalDevice.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Devices\Surface.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Images\Image.cpp" />
+    <ClCompile Include="src\Optimus\Graphics\Images\Image2D.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Models\QuadModel.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Pipelines\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Optimus\Graphics\Pipelines\Shader.cpp" />

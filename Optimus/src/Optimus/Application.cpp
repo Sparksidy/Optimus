@@ -55,7 +55,7 @@ namespace OP
 			float deltaTime = currTime > 0.0f ? time - currTime : (1.0f / 60.0f);
 			currTime = time;
 
-			OP_CORE_INFO("Time: {0}", deltaTime);
+			//OP_CORE_INFO("Time: {0}", deltaTime);
 
 			m_Window->Update();
 

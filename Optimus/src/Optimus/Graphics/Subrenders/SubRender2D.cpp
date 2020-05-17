@@ -9,7 +9,8 @@ namespace OP
 		m_Pipeline(stage, { "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_frag.spv","C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_vert.spv" }, {Vertex2d::GetVertexInput()}),
 		m_Quad(std::make_unique<QuadModel>()),
 		m_UniformHandler(),
-		m_DescriptorHandler(m_UniformHandler, m_Pipeline)
+		m_Image(std::make_unique<Image2D>("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Textures\\texture.jpg")),
+		m_DescriptorHandler(*m_Image, m_UniformHandler, m_Pipeline)
 	{
 	}
 	void SubRender2D::Render(const CommandBuffer& commandBuffer)

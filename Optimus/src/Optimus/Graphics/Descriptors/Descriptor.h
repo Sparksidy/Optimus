@@ -10,9 +10,16 @@ namespace OP
 	public:
 		WriteDescriptorSet(const VkWriteDescriptorSet& writeDescriptorSet, const VkDescriptorBufferInfo& bufferInfo)
 			:m_WriteDescriptorSet(writeDescriptorSet), 
-			m_BufferInfo(std::make_unique<VkDescriptorBufferInfo>())
+			m_BufferInfo(std::make_unique<VkDescriptorBufferInfo>(bufferInfo))
 		{
 			m_WriteDescriptorSet.pBufferInfo = m_BufferInfo.get();
+		}
+
+		WriteDescriptorSet(const VkWriteDescriptorSet& writeDescriptorSet, const VkDescriptorImageInfo& imageInfo)
+			:m_WriteDescriptorSet(writeDescriptorSet),
+			m_ImageInfo(std::make_unique<VkDescriptorImageInfo>(imageInfo))
+		{
+			m_WriteDescriptorSet.pImageInfo = m_ImageInfo.get();
 		}
 
 		const VkWriteDescriptorSet& GetWriteDescriptorSet()const { return m_WriteDescriptorSet; }
@@ -20,6 +27,8 @@ namespace OP
 	private:
 		VkWriteDescriptorSet m_WriteDescriptorSet;
 		std::unique_ptr<VkDescriptorBufferInfo> m_BufferInfo;
+		std::unique_ptr<VkDescriptorImageInfo> m_ImageInfo;
+
 	};
 
 	class OPTIMUS_API Descriptor

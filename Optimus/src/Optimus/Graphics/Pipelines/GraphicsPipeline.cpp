@@ -153,7 +153,7 @@ namespace OP
 		m_RasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
 		m_RasterizationState.lineWidth = 1.0f;
 		m_RasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-		m_RasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+		m_RasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
 		m_RasterizationState.depthBiasEnable = VK_FALSE;
 		
 		m_BlendAttachmentStates[0] = {};

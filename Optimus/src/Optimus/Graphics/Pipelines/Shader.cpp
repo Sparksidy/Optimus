@@ -54,14 +54,14 @@ namespace OP
 
 		m_DescriptorSetLayouts.emplace_back(uboLayoutBinding);
 
-		/*VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
+		VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
 		samplerLayoutBinding.binding = 1;
 		samplerLayoutBinding.descriptorCount = 1;
 		samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		samplerLayoutBinding.pImmutableSamplers = nullptr;
 		samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		m_DescriptorSetLayouts.emplace_back(samplerLayoutBinding);*/
+		m_DescriptorSetLayouts.emplace_back(samplerLayoutBinding);
 	}
 
 	void Shader::createDescriptorPools()
@@ -75,11 +75,11 @@ namespace OP
 
 		m_DescriptorPools.emplace_back(pool_1);
 
-		//VkDescriptorPoolSize pool_2;
-		//pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		//pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages);
+		VkDescriptorPoolSize pool_2;
+		pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages);
 
-		//m_DescriptorPools.emplace_back(pool_2);
+		m_DescriptorPools.emplace_back(pool_2);
 	}
 
 	std::vector<char> Shader::readFile(const std::string& filename)

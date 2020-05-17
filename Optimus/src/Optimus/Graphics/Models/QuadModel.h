@@ -25,10 +25,11 @@ namespace OP
 
 	private:
 		const std::vector<Vertex2d> m_Vertices = {
-			 {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+			//Pos			//Color				//TexCoords
+			{{0.f, 0.f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+			{{10.f, 0.f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+			{{10.f, 10.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+			{{0.f, 10.f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
 		};
 
 		const std::vector<uint16_t> m_Indices = 
@@ -43,3 +44,16 @@ namespace OP
 		uint32_t m_IndexCount;
 	};
 }
+
+/*
+const std::vector<Vertex2d> m_Vertices = {
+			//Pos			//Color				//TexCoords
+			{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+
+
+
+		};
+*/

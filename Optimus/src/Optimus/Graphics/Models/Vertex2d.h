@@ -12,9 +12,12 @@ namespace OP
 	{
 	public:
 		Vertex2d() = default;
-		Vertex2d(const glm::vec2& position, const glm::vec3& color) :
+		Vertex2d(const glm::vec2& position, const glm::vec3& color, const glm::vec2& texCoord) :
 			m_Position(position),
-			m_Color(color){}
+			m_Color(color),
+			m_TexCoords(texCoord)
+		{
+		}
 
 		static Shader::VertexInput GetVertexInput(uint32_t baseBinding = 0)
 		{
@@ -25,13 +28,10 @@ namespace OP
 			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 			bindingDescriptions.emplace_back(bindingDescription);
 
-			/*{
-				{baseBinding,sizeof(Vertex2d),VK_VERTEX_INPUT_RATE_VERTEX}
-			};*/
-
 			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {
 			{0, baseBinding, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex2d, m_Position)},
-			{1, baseBinding, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex2d, m_Color)}
+			{1, baseBinding, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex2d, m_Color)},
+			{2, baseBinding, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex2d, m_TexCoords)}
 			};
 
 			return { bindingDescriptions, attributeDescriptions };
@@ -41,7 +41,7 @@ namespace OP
 
 		bool operator==(const Vertex2d& other) const
 		{
-			return (m_Position == other.m_Position && m_Color == other.m_Color);
+			return (m_Position == other.m_Position && m_Color == other.m_Color && m_TexCoords == other.m_TexCoords);
 		}
 
 		bool operator!=(const Vertex2d& other) const
@@ -52,5 +52,6 @@ namespace OP
 	public:
 		glm::vec2 m_Position;
 		glm::vec3 m_Color;
+		glm::vec2 m_TexCoords;
 	};
 }
