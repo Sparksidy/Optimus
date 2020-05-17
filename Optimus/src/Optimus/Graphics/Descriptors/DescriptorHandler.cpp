@@ -10,16 +10,10 @@
 namespace OP
 {
 	DescriptorHandler::DescriptorHandler(const Image2D& image, UniformHandler& uniformHandler, const Pipeline& pipeline)
+		:m_DescriptorSets(std::make_unique<DescriptorSet>(pipeline))
 	{
-		//Create descriptor set per swapchain image
-		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
-		m_DescriptorSets.resize(swapchainImages);
-		for (size_t i = 0; i < swapchainImages; i++)
-		{
-			m_DescriptorSets[i] = std::make_unique<DescriptorSet>(pipeline);
-		}
-
 		OP_CORE_INFO("Allocated descriptor sets");
+		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
 
 		//Bind the Buffer, Image & Sampler Info to the descriptor sets
 		//Create Write Descriptor Sets for each Uniform Buffer and Image Sampler
@@ -32,7 +26,7 @@ namespace OP
 
 			VkWriteDescriptorSet descriptorWrite{};
 			descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite.dstSet = m_DescriptorSets[i]->GetDescriptorSet();
+			descriptorWrite.dstSet = m_DescriptorSets->GetDescriptorSet();
 			descriptorWrite.dstBinding = 0;
 			descriptorWrite.dstArrayElement = 0;
 			descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -48,7 +42,7 @@ namespace OP
 
 			VkWriteDescriptorSet descriptorWrite2{};
 			descriptorWrite2.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite2.dstSet = m_DescriptorSets[i]->GetDescriptorSet();
+			descriptorWrite2.dstSet = m_DescriptorSets->GetDescriptorSet();
 			descriptorWrite2.dstBinding = 1;
 			descriptorWrite2.dstArrayElement = 0;
 			descriptorWrite2.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -57,7 +51,7 @@ namespace OP
 
 			m_WriteDescriptorSets.emplace_back(descriptorWrite2);
 
-			m_DescriptorSets[i]->Update(m_WriteDescriptorSets);
+			m_DescriptorSets->Update(m_WriteDescriptorSets);
 		}
 
 		OP_CORE_INFO("Created Write Descriptor Sets");
@@ -73,6 +67,6 @@ namespace OP
 	void DescriptorHandler::BindDescriptor(const CommandBuffer& commandBuffer)
 	{
 		uint32_t imageIndex = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex();
-		m_DescriptorSets[imageIndex]->BindDescriptor(commandBuffer);
+		m_DescriptorSets->BindDescriptor(commandBuffer);
 	}
 }

@@ -26,7 +26,7 @@ namespace OP
 		void BindDescriptor(const CommandBuffer& commandBuffer);
 
 	private:
-		std::vector<std::unique_ptr<DescriptorSet>> m_DescriptorSets; //Temporary: Descriptor sets per swapchain image
+		std::unique_ptr<DescriptorSet> m_DescriptorSets;
 		std::vector<VkWriteDescriptorSet> m_WriteDescriptorSets;
 	};
 }
