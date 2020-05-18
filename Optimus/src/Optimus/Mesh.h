@@ -10,6 +10,8 @@
 #include <Optimus/Graphics/Images/Image2D.h>
 
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
+#include <Optimus/Log.h>
+
 namespace OP
 {
 	class OPTIMUS_API Mesh
@@ -21,17 +23,13 @@ namespace OP
 			m_Image(std::make_unique<Image2D>(filename)),
 			m_DescriptorHandler(*m_Image, m_UniformHandler, pipeline) 
 		{
+			OP_CORE_INFO("Mesh Created");
 		}
-
-		void PreRender(const CommandBuffer& commandBuffer)
+		void Render(const CommandBuffer& commandBuffer)
 		{
 			//Updates the uniform
 			m_UniformHandler.Update();
 
-		}
-
-		void Render(const CommandBuffer& commandBuffer)
-		{
 			//Bind the descriptors
 			m_DescriptorHandler.BindDescriptor(commandBuffer);
 
@@ -41,7 +39,7 @@ namespace OP
 
 		~Mesh()
 		{
-
+			OP_CORE_INFO("Destroying Mesh");
 		}
 
 	private: 

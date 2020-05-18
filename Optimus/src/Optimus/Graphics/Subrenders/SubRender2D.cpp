@@ -14,16 +14,8 @@ namespace OP
 	}
 	void SubRender2D::Render(const CommandBuffer& commandBuffer)
 	{
-		
-		//m_Mesh2->PreRender(commandBuffer); //Binds the uniform handler
-
-
 		m_Pipeline.BindPipeline(commandBuffer); //Binds the Gfx Pipeline
 
-		m_Mesh->PreRender(commandBuffer); //Binds the uniform handler
-
 		m_Mesh->Render(commandBuffer); //Binds the descriptor sets
-		//m_Mesh2->Render(commandBuffer); //Binds the descriptor sets
-
 	}
 }
