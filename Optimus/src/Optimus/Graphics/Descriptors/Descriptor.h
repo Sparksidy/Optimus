@@ -22,7 +22,7 @@ namespace OP
 			m_WriteDescriptorSet.pImageInfo = m_ImageInfo.get();
 		}
 
-		const VkWriteDescriptorSet& GetWriteDescriptorSet()const { return m_WriteDescriptorSet; }
+		VkWriteDescriptorSet& GetWriteDescriptorSet() { return m_WriteDescriptorSet; }
 
 	private:
 		VkWriteDescriptorSet m_WriteDescriptorSet;

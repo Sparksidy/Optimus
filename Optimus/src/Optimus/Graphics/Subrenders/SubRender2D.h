@@ -6,15 +6,12 @@
 
 #include <Optimus/Graphics/Core/SubRender.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
-#include <Optimus/Graphics/Models/QuadModel.h>
-#include <Optimus/Graphics/Buffers/UniformHandler.h>
-#include <Optimus/Graphics/Images/Image2D.h>
 
+
+#include <Optimus/Mesh.h>
 namespace OP
 {
 	class CommandBuffer;
-	class DescriptorHandler;
-
 
 	class OPTIMUS_API SubRender2D : public SubRender
 	{
@@ -25,11 +22,8 @@ namespace OP
 
 	private:
 		GraphicsPipeline m_Pipeline;
-		std::unique_ptr<QuadModel> m_Quad;
+		std::unique_ptr<Mesh> m_Mesh; //Temporary: Fix me by adding Scene 
+		std::unique_ptr<Mesh> m_Mesh2; //Temporary: Fix me by adding Scene 
 
-		UniformHandler m_UniformHandler;
-		std::unique_ptr <Image2D> m_Image;
-		DescriptorHandler m_DescriptorHandler;
 	};
-
 }

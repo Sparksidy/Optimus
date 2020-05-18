@@ -16,7 +16,7 @@ namespace OP
 
 		void Update(const void* newData);
 
-		WriteDescriptorSet GetWriteDescriptorSet(uint32_t binding)const override ;
+		WriteDescriptorSet GetWriteDescriptorSet(uint32_t binding)const override;
 
 		static VkDescriptorSetLayoutBinding GetDescriptorSetLayoutBinding(uint32_t binding, VkDescriptorType descriptorType, VkShaderStageFlags shaderFlags, uint32_t count);
 	};

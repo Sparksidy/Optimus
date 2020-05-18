@@ -196,6 +196,7 @@
     <ClInclude Include="src\Optimus\Layer.h" />
     <ClInclude Include="src\Optimus\LayerStack.h" />
     <ClInclude Include="src\Optimus\Log.h" />
+    <ClInclude Include="src\Optimus\Mesh.h" />
     <ClInclude Include="src\Optimus\Utilities\Macros.h" />
     <ClInclude Include="src\Optimus\Utilities\NonCopyable.h" />
     <ClInclude Include="src\Optimus\Utilities\TypeInfo.h" />

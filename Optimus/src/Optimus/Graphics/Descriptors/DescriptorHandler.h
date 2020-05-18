@@ -23,6 +23,8 @@ namespace OP
 
 		~DescriptorHandler();
 
+		void Update();
+
 		void BindDescriptor(const CommandBuffer& commandBuffer);
 
 	private:

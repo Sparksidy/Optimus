@@ -15,10 +15,13 @@ namespace OP
 		OP_CORE_INFO("Allocated descriptor sets");
 		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
 
-		//Bind the Buffer, Image & Sampler Info to the descriptor sets
-		//Create Write Descriptor Sets for each Uniform Buffer and Image Sampler
+		//Loop through all descriptors
+			//Get the right write descriptor set for the resource(Image, Buffer etc)
+			//Update m_writeDescriptorSet
+
 		for (size_t i = 0; i < swapchainImages; i++)
 		{
+			//Uniform Buffer
 			VkDescriptorBufferInfo bufferInfo{};
 			bufferInfo.buffer = uniformHandler.GetUniformBuffer(i)->GetBuffer(); //TODO: Remove this 
 			bufferInfo.offset = 0;
@@ -34,25 +37,16 @@ namespace OP
 			descriptorWrite.pBufferInfo = &bufferInfo;
 
 			m_WriteDescriptorSets.emplace_back(descriptorWrite);
-
-			VkDescriptorImageInfo imageInfo{};
-			imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			imageInfo.imageView = image.GetView(); //TODO: Remove this 
-			imageInfo.sampler = image.GetSampler();//TODO: Remove this 
-
-			VkWriteDescriptorSet descriptorWrite2{};
-			descriptorWrite2.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite2.dstSet = m_DescriptorSets->GetDescriptorSet();
-			descriptorWrite2.dstBinding = 1;
-			descriptorWrite2.dstArrayElement = 0;
-			descriptorWrite2.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			descriptorWrite2.descriptorCount = 1;
-			descriptorWrite2.pImageInfo = &imageInfo;
-
-			m_WriteDescriptorSets.emplace_back(descriptorWrite2);
-
-			m_DescriptorSets->Update(m_WriteDescriptorSets);
 		}
+
+		//Image
+		WriteDescriptorSet imageDescriptor = image.GetWriteDescriptorSet(1);
+		imageDescriptor.GetWriteDescriptorSet().dstSet = m_DescriptorSets->GetDescriptorSet();
+		
+
+		m_WriteDescriptorSets.emplace_back(imageDescriptor.GetWriteDescriptorSet());
+
+		m_DescriptorSets->Update(m_WriteDescriptorSets);
 
 		OP_CORE_INFO("Created Write Descriptor Sets");
 
@@ -66,7 +60,6 @@ namespace OP
 	
 	void DescriptorHandler::BindDescriptor(const CommandBuffer& commandBuffer)
 	{
-		uint32_t imageIndex = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex();
 		m_DescriptorSets->BindDescriptor(commandBuffer);
 	}
 }

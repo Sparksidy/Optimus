@@ -44,16 +44,3 @@ namespace OP
 		uint32_t m_IndexCount;
 	};
 }
-
-/*
-const std::vector<Vertex2d> m_Vertices = {
-			//Pos			//Color				//TexCoords
-			{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-
-
-
-		};
-*/

@@ -3,9 +3,11 @@
 #include <vulkan/vulkan.hpp>
 #include <Optimus/Core.h>
 
+#include <Optimus/Graphics/Descriptors/Descriptor.h>
+
 namespace OP
 {
-	class OPTIMUS_API Image2D 
+	class OPTIMUS_API Image2D : public Descriptor
 	{
 	public:
 		explicit Image2D(const char* filename,VkFilter filter = VK_FILTER_LINEAR, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT, bool anisotropic = true, bool mipmap = true, bool load = true);
@@ -14,6 +16,8 @@ namespace OP
 		const VkImageView& GetView() const { return m_View; }
 
 		~Image2D();
+
+		WriteDescriptorSet GetWriteDescriptorSet(uint32_t binding)const override;
 
 	private:
 		void Load();

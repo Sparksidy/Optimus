@@ -184,6 +184,9 @@
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
     </ClInclude>
+    <ClInclude Include="src\Optimus\Mesh.h">
+      <Filter>Optimus</Filter>
+    </ClInclude>
     <ClInclude Include="src\Optimus\Utilities\Macros.h">
       <Filter>Optimus\Utilities</Filter>
     </ClInclude>
