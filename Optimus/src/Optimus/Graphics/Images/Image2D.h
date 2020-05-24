@@ -17,7 +17,7 @@ namespace OP
 
 		~Image2D();
 
-		WriteDescriptorSet GetWriteDescriptorSet(uint32_t binding)const override;
+		WriteDescriptorSet GetWriteDescriptorSet()const override;
 
 	private:
 		void Load();

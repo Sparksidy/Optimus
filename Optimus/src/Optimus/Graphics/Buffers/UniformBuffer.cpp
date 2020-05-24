@@ -1,5 +1,7 @@
 #include <pch.h>
 #include <Optimus/Graphics/Buffers/UniformBuffer.h>
+#include <Optimus/Application.h>
+#include <Optimus/Graphics/RenderPass/SwapChain.h>
 
 namespace OP
 {
@@ -16,7 +18,7 @@ namespace OP
 		UnmapMemory();
 	}
 
-	WriteDescriptorSet UniformBuffer::GetWriteDescriptorSet(uint32_t binding) const
+	WriteDescriptorSet UniformBuffer::GetWriteDescriptorSet() const
 	{
 		VkDescriptorBufferInfo bufferInfo = {};
 		bufferInfo.buffer = m_Buffer;
@@ -25,16 +27,16 @@ namespace OP
 
 		VkWriteDescriptorSet descriptorWrite = {};
 		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptorWrite.dstSet = VK_NULL_HANDLE; // Will be set in the descriptor handler.
-		descriptorWrite.dstBinding = binding;
+		descriptorWrite.dstSet = VK_NULL_HANDLE;
+		descriptorWrite.dstBinding = 0;
 		descriptorWrite.dstArrayElement = 0;
 		descriptorWrite.descriptorCount = 1;
 		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		//descriptorWrite.pBufferInfo = &bufferInfo;
+		descriptorWrite.pBufferInfo = &bufferInfo;
 		return { descriptorWrite, bufferInfo };
 	}
 
-	VkDescriptorSetLayoutBinding OP::UniformBuffer::GetDescriptorSetLayoutBinding(uint32_t binding, VkDescriptorType descriptorType, VkShaderStageFlags shaderFlags, uint32_t count)
+	VkDescriptorSetLayoutBinding UniformBuffer::GetDescriptorSetLayoutBinding(uint32_t binding, VkDescriptorType descriptorType, VkShaderStageFlags shaderFlags, uint32_t count)
 	{
 		VkDescriptorSetLayoutBinding descriptorSetLayoutBinding = {};
 		descriptorSetLayoutBinding.binding = binding;

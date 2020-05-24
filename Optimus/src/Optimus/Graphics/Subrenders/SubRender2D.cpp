@@ -7,15 +7,14 @@ namespace OP
 {
 	SubRender2D::SubRender2D(const Pipeline::Stage& stage): SubRender(stage), m_Pipeline(stage, { "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_frag.spv","C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_vert.spv" }, { Vertex2d::GetVertexInput() })
 	{
-		m_Mesh = std::make_unique<Mesh>("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Textures\\texture.jpg", m_Pipeline);
-
-		//m_Mesh2 = std::make_unique<Mesh>("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Textures\\wall.jpg", m_Pipeline);
-
+		m_Mesh = std::make_unique<Mesh>("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Textures\\texture.jpg");
+		m_Mesh2 = std::make_unique<Mesh>("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Textures\\wall.jpg");
 	}
 	void SubRender2D::Render(const CommandBuffer& commandBuffer)
 	{
 		m_Pipeline.BindPipeline(commandBuffer); //Binds the Gfx Pipeline
 
-		m_Mesh->Render(commandBuffer); //Binds the descriptor sets
+		m_Mesh->Render(commandBuffer, m_Pipeline);
+		m_Mesh2->Render(commandBuffer, m_Pipeline);
 	}
 }

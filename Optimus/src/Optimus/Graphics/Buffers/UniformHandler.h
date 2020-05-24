@@ -27,13 +27,13 @@ namespace OP
 
 		void Update();
 
-		const UniformBuffer* GetUniformBuffer(uint32_t imageIndex)const { return m_UniformBuffers[imageIndex].get(); }
+		UniformBuffer* GetUniformBuffer(uint32_t imageIndex) { return m_UniformBuffers[imageIndex].get(); }
 
 		const size_t GetSizeOfUniformBlock()const { return sizeof(m_UniformBlock); }
 
 	private:
 		UniformBlock m_UniformBlock;
 		uint32_t m_Size = 0;
-		std::vector<std::unique_ptr<UniformBuffer>> m_UniformBuffers;
+		std::vector<std::unique_ptr<UniformBuffer>> m_UniformBuffers; //uniform buffer per swapchain image
 	};
 }

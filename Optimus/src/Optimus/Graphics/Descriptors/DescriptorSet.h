@@ -19,12 +19,12 @@ namespace OP
 
 		void BindDescriptor(const CommandBuffer& commandBuffer);
 
-		const VkDescriptorSet& GetDescriptorSet ()const { return m_DescriptorSet; }
+		const VkDescriptorSet& GetDescriptorSet (uint32_t index)const { return m_DescriptorSet[index]; }
 
 	private:
 		VkPipelineLayout m_Pipelinelayout;
 		VkPipelineBindPoint m_PipelineBindPoint;
 		VkDescriptorPool m_DescriptorPool;
-		VkDescriptorSet m_DescriptorSet = VK_NULL_HANDLE;
+		std::vector<VkDescriptorSet> m_DescriptorSet; //descriptor set per swapchain image
 	};
 }

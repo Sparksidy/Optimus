@@ -8,8 +8,8 @@
 #include <Optimus/Graphics/Models/QuadModel.h>
 #include <Optimus/Graphics/Buffers/UniformHandler.h>
 #include <Optimus/Graphics/Images/Image2D.h>
-
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
+#include <Optimus/Application.h>
 #include <Optimus/Log.h>
 
 namespace OP
@@ -17,16 +17,20 @@ namespace OP
 	class OPTIMUS_API Mesh
 	{
 	public:
-		Mesh(const char* filename, const GraphicsPipeline& pipeline) :
+		Mesh(const char* filename) :
 			m_Quad(std::make_unique<QuadModel>()),
 			m_UniformHandler(),
 			m_Image(std::make_unique<Image2D>(filename)),
-			m_DescriptorHandler(*m_Image, m_UniformHandler, pipeline) 
+			m_DescriptorHandler() 
 		{
 			OP_CORE_INFO("Mesh Created");
 		}
-		void Render(const CommandBuffer& commandBuffer)
+
+		void Render(const CommandBuffer& commandBuffer, const Pipeline& pipeline)
 		{
+			if (!m_DescriptorHandler.Update(m_UniformHandler, *m_Image,  pipeline))
+				return;
+
 			//Updates the uniform
 			m_UniformHandler.Update();
 
@@ -44,10 +48,10 @@ namespace OP
 
 	private: 
 		std::unique_ptr<QuadModel> m_Quad; //Model
-		UniformHandler m_UniformHandler;   //Transform
 		std::unique_ptr <Image2D> m_Image; //Material
 
-		DescriptorHandler m_DescriptorHandler; //Resource Manager
+		UniformHandler m_UniformHandler;  
+		DescriptorHandler m_DescriptorHandler; 
 	};
 
 }

@@ -71,13 +71,13 @@ namespace OP
 		//TODO: Add this to reflection system to make it dynamic
 		VkDescriptorPoolSize pool_1;
 		pool_1.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		pool_1.descriptorCount = static_cast<uint32_t>(swapChainImages);
+		pool_1.descriptorCount = static_cast<uint32_t>(swapChainImages) * 2;
 
 		m_DescriptorPools.emplace_back(pool_1);
 
 		VkDescriptorPoolSize pool_2;
 		pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages);
+		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages) * 2;
 
 		m_DescriptorPools.emplace_back(pool_2);
 	}

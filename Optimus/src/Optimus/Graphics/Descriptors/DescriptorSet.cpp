@@ -10,20 +10,24 @@ namespace OP
 		m_PipelineBindPoint(pipeline.GetPipelineBindPoint()),
 		m_DescriptorPool(pipeline.GetDescriptorPool())
 	{
-		VkDescriptorSetLayout layouts[1] = { pipeline.GetDescriptorSetLayout() };
+		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
+		std::vector<VkDescriptorSetLayout> layouts(swapchainImages, pipeline.GetDescriptorSetLayout());
+		m_DescriptorSet.resize(swapchainImages);
 
 		VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = {};
 		descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 		descriptorSetAllocateInfo.descriptorPool = m_DescriptorPool;
-		descriptorSetAllocateInfo.descriptorSetCount = 1;
-		descriptorSetAllocateInfo.pSetLayouts = layouts;
-		OP_VULKAN_ASSERT(vkAllocateDescriptorSets, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &descriptorSetAllocateInfo, &m_DescriptorSet);
-
+		descriptorSetAllocateInfo.descriptorSetCount = swapchainImages;
+		descriptorSetAllocateInfo.pSetLayouts = layouts.data();
+		OP_VULKAN_ASSERT(vkAllocateDescriptorSets, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &descriptorSetAllocateInfo, m_DescriptorSet.data());
 	}
 	DescriptorSet::~DescriptorSet()
 	{
-		vkFreeDescriptorSets(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorPool, 1, &m_DescriptorSet);
-
+		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
+		for (unsigned int i = 0; i < swapchainImages; i++)
+		{
+			vkFreeDescriptorSets(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorPool, 1, &m_DescriptorSet[i]);
+		}
 		OP_CORE_INFO("Freeing Descriptor Pool and Sets");
 	}
 	void DescriptorSet::Update(std::vector<VkWriteDescriptorSet>& descriptorWrites)
@@ -32,6 +36,7 @@ namespace OP
 	}
 	void DescriptorSet::BindDescriptor(const CommandBuffer& commandBuffer)
 	{
-		vkCmdBindDescriptorSets(commandBuffer, m_PipelineBindPoint, m_Pipelinelayout, 0, 1, &m_DescriptorSet, 0, nullptr);
+		uint32_t imageIndex = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex();
+		vkCmdBindDescriptorSets(commandBuffer, m_PipelineBindPoint, m_Pipelinelayout, 0, 1, &m_DescriptorSet[imageIndex], 0, nullptr);
 	}
 }

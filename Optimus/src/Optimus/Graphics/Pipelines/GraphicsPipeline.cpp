@@ -95,6 +95,7 @@ namespace OP
 
 	void GraphicsPipeline::createDescriptorSetLayout()
 	{
+		//Gets Descriptor set layout bindings
 		auto& descriptorSetsLayouts = m_Shader->GetDescriptorSetLayouts();
 
 		VkDescriptorSetLayoutCreateInfo layoutInfo = {};
@@ -120,7 +121,7 @@ namespace OP
 		VkDescriptorPoolCreateInfo info = {};
 		info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 		info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-		info.maxSets = static_cast<uint32_t>(swapChainImages);
+		info.maxSets = 8192;
 		info.poolSizeCount = static_cast<uint32_t>(descriptorPools.size());
 		info.pPoolSizes = descriptorPools.data();
 

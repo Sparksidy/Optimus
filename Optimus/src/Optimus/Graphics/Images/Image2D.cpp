@@ -40,16 +40,17 @@ namespace OP
 		OP_CORE_INFO("Destroyed Image Resources");
 	}
 
-	WriteDescriptorSet Image2D::GetWriteDescriptorSet(uint32_t binding) const
+	WriteDescriptorSet Image2D::GetWriteDescriptorSet() const
 	{
 		//Image
 		VkDescriptorImageInfo imageInfo{};
 		imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 		imageInfo.imageView = m_View; 
 		imageInfo.sampler = m_Sampler;
+
 		VkWriteDescriptorSet descriptorWrite2{};
 		descriptorWrite2.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		descriptorWrite2.dstBinding = binding;
+		descriptorWrite2.dstBinding = 1;
 		descriptorWrite2.dstArrayElement = 0;
 		descriptorWrite2.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 		descriptorWrite2.descriptorCount = 1;

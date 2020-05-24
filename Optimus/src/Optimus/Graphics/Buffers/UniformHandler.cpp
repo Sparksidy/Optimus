@@ -31,8 +31,7 @@ namespace OP
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-		//Move the object to the center
-
+		//Move the object to the center and spin
 		m_UniformBlock.model =  glm::translate(glm::mat4(1.0f), glm::vec3((float)Application::Get().GetWindow().GetWindowWidth() / 2, (float)Application::Get().GetWindow().GetWindowHeight() / 2, 0.0f));
 		m_UniformBlock.model = glm::rotate(m_UniformBlock.model, time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_UniformBlock.model = glm::scale(m_UniformBlock.model,  glm::vec3(10.0f, 10.0f, 1.0f));

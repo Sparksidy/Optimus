@@ -23,6 +23,8 @@ namespace OP
 		}
 
 		VkWriteDescriptorSet& GetWriteDescriptorSet() { return m_WriteDescriptorSet; }
+		VkDescriptorImageInfo& GetImageDescInfo() { return *m_ImageInfo; }
+		VkDescriptorBufferInfo& GetBufferDescInfo() { return *m_BufferInfo; }
 
 	private:
 		VkWriteDescriptorSet m_WriteDescriptorSet;
@@ -38,6 +40,6 @@ namespace OP
 
 		virtual ~Descriptor() = default;
 
-		virtual WriteDescriptorSet GetWriteDescriptorSet(uint32_t binding)const = 0;
+		virtual WriteDescriptorSet GetWriteDescriptorSet()const = 0;
 	};
 }
