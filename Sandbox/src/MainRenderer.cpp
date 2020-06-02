@@ -25,7 +25,7 @@ void MainRenderer::Start()
 void MainRenderer::Update()
 {
 	/*
-		If window is resized, recreate Graphics Pipeline. (Expensive)
+		If window is resized, recreate Graphics Pipeline. (Current: Expensive)
 
 		TODO: Create Dynamic States in Vulkan and just change the scissor and viewport information. (Cheap)
 	*/

@@ -26,7 +26,7 @@ namespace OP
 
 		void AllocateSystems();
 
-		bool Initialize();
+		virtual bool Initialize();
 
 		virtual void Run();
 

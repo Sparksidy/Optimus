@@ -23,12 +23,8 @@ namespace OP
 	}
 	DescriptorSet::~DescriptorSet()
 	{
-		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
-		for (unsigned int i = 0; i < swapchainImages; i++)
-		{
-			vkFreeDescriptorSets(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorPool, 1, &m_DescriptorSet[i]);
-		}
-		OP_CORE_INFO("Freeing Descriptor Pool and Sets");
+		//Descriptor sets are automatically freed when you free up the descriptor pool
+		OP_CORE_INFO("Freeing Descriptor Sets");
 	}
 	void DescriptorSet::Update(std::vector<VkWriteDescriptorSet>& descriptorWrites)
 	{

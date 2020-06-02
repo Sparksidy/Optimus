@@ -48,7 +48,6 @@ namespace OP
 
 	void Application::Run()
 	{
-		
 		while (m_isRunning)
 		{
 			float time = (float)glfwGetTime();
@@ -57,13 +56,16 @@ namespace OP
 
 			//OP_CORE_INFO("Time: {0}", deltaTime);
 
+			//Update Windows
 			m_Window->Update();
 
+			//Update the all Layers
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
 
+			//Update all the systems
 			for (auto system : m_Systems)
 				system.second->Update();
 

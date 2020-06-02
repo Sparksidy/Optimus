@@ -15,6 +15,7 @@ namespace OP
 
 	DescriptorHandler::~DescriptorHandler()
 	{
+		OP_CORE_INFO("Descriptor Handler Destroyed");
 	}
 
 	bool DescriptorHandler::Update(UniformHandler& uniform, Image2D& image,  const Pipeline& pipeline)

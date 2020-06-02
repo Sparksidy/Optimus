@@ -9,27 +9,18 @@ public:
 	Sandbox()
 	{
 	}
-	
-	void Run() override
-	{
-		if (!isInitialized)
-		{
-			//Set the Renderer for the application
-			dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
 
-			isInitialized = true;
-		}
-		
-		OP::Application::Run();
+	virtual bool Initialize() override
+	{
+		dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
+
+		return true;
 	}
 
 	virtual ~Sandbox()
 	{
-
+		OP_CORE_INFO("Destructing Sandbox");
 	}
-
-private:
-	bool isInitialized = false;
 };
 
 OP::Application* OP::CreateApplication()
