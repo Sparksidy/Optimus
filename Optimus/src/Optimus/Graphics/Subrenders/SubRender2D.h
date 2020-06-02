@@ -7,8 +7,10 @@
 #include <Optimus/Graphics/Core/SubRender.h>
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 
-
+//TODO: Remove this from here
 #include <Optimus/Mesh.h>
+#include <Optimus/AnimatedMesh.h>
+
 namespace OP
 {
 	class CommandBuffer;
@@ -24,6 +26,7 @@ namespace OP
 		GraphicsPipeline m_Pipeline;
 		std::unique_ptr<Mesh> m_Mesh; //Temporary: Fix me by adding Scene 
 		std::unique_ptr<Mesh> m_Mesh2; //Temporary: Fix me by adding Scene 
+		std::unique_ptr<AnimatedMesh> m_Mesh3; //Temporary: Fix me by adding Scene 
 
 	};
 }

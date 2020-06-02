@@ -4,6 +4,7 @@
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 
+
 namespace OP
 {
 	Shader::Shader()
@@ -49,7 +50,7 @@ namespace OP
 		uboLayoutBinding.binding = 0;
 		uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		uboLayoutBinding.descriptorCount = 1;
-		uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+		uboLayoutBinding.stageFlags = VK_SHADER_STAGE_ALL;
 		uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
 
 		m_DescriptorSetLayouts.emplace_back(uboLayoutBinding);
@@ -68,16 +69,21 @@ namespace OP
 	{
 		int swapChainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
 
+		uint32_t gameObjects = 3;//TODO: Get list of game objects later
+
 		//TODO: Add this to reflection system to make it dynamic
+
+		//1 UB for scene(TODO) and 1 UBO per game object
 		VkDescriptorPoolSize pool_1;
 		pool_1.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		pool_1.descriptorCount = static_cast<uint32_t>(swapChainImages) * 2;
+		pool_1.descriptorCount = 1 + static_cast<uint32_t>(swapChainImages) * gameObjects;
 
 		m_DescriptorPools.emplace_back(pool_1);
 
+		//1 Image sampler per mesh
 		VkDescriptorPoolSize pool_2;
 		pool_2.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages) * 2;
+		pool_2.descriptorCount = static_cast<uint32_t>(swapChainImages) * gameObjects;
 
 		m_DescriptorPools.emplace_back(pool_2);
 	}

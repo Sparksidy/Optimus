@@ -52,6 +52,9 @@
     <Filter Include="Platforms">
       <UniqueIdentifier>{DDACA145-4917-56BC-9255-0762FEFE3311}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\InDevelopment">
+      <UniqueIdentifier>{f3bf7c9f-faf0-4584-86d1-ff9a42e386fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Optimus.h" />
@@ -184,9 +187,6 @@
     <ClInclude Include="src\Optimus\Log.h">
       <Filter>Optimus</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Mesh.h">
-      <Filter>Optimus</Filter>
-    </ClInclude>
     <ClInclude Include="src\Optimus\Utilities\Macros.h">
       <Filter>Optimus\Utilities</Filter>
     </ClInclude>
@@ -209,6 +209,12 @@
       <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Optimus\Mesh.h">
+      <Filter>Optimus\InDevelopment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\AnimatedMesh.h">
+      <Filter>Optimus\InDevelopment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">

@@ -17,6 +17,10 @@ namespace OP
 		glm::mat4 model;
 		glm::mat4 view;
 		glm::mat4 projection;
+
+		//Test: ColorMode(0), TextureMode(1), AnimatedMode(2)
+		int mode;
+		glm::mat3 textureMatrix;
 	};
 
 
@@ -29,7 +33,13 @@ namespace OP
 
 		UniformBuffer* GetUniformBuffer(uint32_t imageIndex) { return m_UniformBuffers[imageIndex].get(); }
 
+		void SetTextureMatrix(glm::mat3& tMatrix) { m_UniformBlock.textureMatrix = tMatrix; }
+
+		void SetMode(int mode) { m_UniformBlock.mode = mode; }
+
 		const size_t GetSizeOfUniformBlock()const { return sizeof(m_UniformBlock); }
+
+		glm::mat4& GetWorldTransformMatrix(){ return m_UniformBlock.model; }
 
 	private:
 		UniformBlock m_UniformBlock;

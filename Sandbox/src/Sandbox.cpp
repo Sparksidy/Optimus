@@ -12,7 +12,10 @@ public:
 
 	virtual bool Initialize() override
 	{
+		//Set Renderer
 		dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
+
+		//Set Scene
 
 		return true;
 	}
