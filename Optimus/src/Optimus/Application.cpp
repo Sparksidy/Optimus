@@ -28,6 +28,11 @@ namespace OP
 		ISystem* graphics = new Graphics();
 		if (graphics)
 			m_Systems[graphics->GetName()] = graphics;
+
+		//TODO: SceneManager
+		ISystem* scene = new Scene();
+		if (scene)
+			m_Systems[scene->GetName()] = scene;
 	}
 
 	bool Application::Initialize()
@@ -85,8 +90,11 @@ namespace OP
 
 	void Application::DeAllocateSystems()
 	{
-		for (auto system : m_Systems)
-			delete system.second;
+		//Wait for a queue to become idle before freeing resources
+		OP_VULKAN_ASSERT(vkQueueWaitIdle, GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue());
+
+		delete m_Systems["Scene"];
+		delete m_Systems["Graphics"];
 
 		m_Systems.clear();
 	}

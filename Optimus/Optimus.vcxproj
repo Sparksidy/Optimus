@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Optimus.h" />
+    <ClInclude Include="src\Optimus\AnimatedMesh.h" />
     <ClInclude Include="src\Optimus\Application.h" />
     <ClInclude Include="src\Optimus\Core.h" />
     <ClInclude Include="src\Optimus\EntryPoint.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="src\Optimus\LayerStack.h" />
     <ClInclude Include="src\Optimus\Log.h" />
     <ClInclude Include="src\Optimus\Mesh.h" />
+    <ClInclude Include="src\Optimus\Scene.h" />
     <ClInclude Include="src\Optimus\Utilities\Macros.h" />
     <ClInclude Include="src\Optimus\Utilities\NonCopyable.h" />
     <ClInclude Include="src\Optimus\Utilities\TypeInfo.h" />

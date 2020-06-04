@@ -21,6 +21,7 @@ namespace OP
 		OP_VULKAN_ASSERT(vkQueueWaitIdle, m_LogicalDevice->GetGraphicsQueue());
 
 		vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
+		OP_CORE_INFO("Destroyed Pipeline Cache");
 
 		for (std::size_t i = 0; i < m_InFlightFences.size(); i++)
 		{
@@ -28,6 +29,8 @@ namespace OP
 			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphore[i], nullptr);
 			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphore[i], nullptr);
 		}
+		OP_CORE_INFO("Destroyed Fences and Semaphores");
+
 	}
 
 	void Graphics::Update()

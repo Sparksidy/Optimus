@@ -21,10 +21,10 @@ namespace OP
 			m_Quad(std::make_unique<QuadModel>()),
 			m_Image(std::make_unique<Image2D>(filename)),
 			m_UniformHandler(),
-			m_DescriptorHandler() 
+			m_DescriptorHandler()
 		{
 			OP_CORE_INFO("Mesh Created");
-			m_UniformHandler.SetMode(0);
+			m_UniformHandler.SetMode(0); //For static Meshes
 		}
 
 		virtual void Render(const CommandBuffer& commandBuffer, const Pipeline& pipeline)
