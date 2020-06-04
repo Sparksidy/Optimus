@@ -21,8 +21,6 @@ MainRenderer::MainRenderer()
 void MainRenderer::Start()
 {
 	AddSubRender<OP::SubRender2D>({0, 0});
-	
-	
 } 
 void MainRenderer::Update()
 {

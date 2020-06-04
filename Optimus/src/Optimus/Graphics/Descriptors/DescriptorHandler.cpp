@@ -65,8 +65,6 @@ namespace OP
 			}
 
 			m_isInitialized = true;
-
-			OP_CORE_INFO("Descriptors initialized");
 		}
 
 		return true;

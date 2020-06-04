@@ -21,7 +21,7 @@ namespace OP
 		OP_VULKAN_ASSERT(vkAllocateCommandBuffers, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), &allocInfo, &m_CommandBuffer);
 
 
-		OP_CORE_INFO("Command Buffer Created");
+		OP_CORE_TRACE("Command Buffer Created");
 
 		if (begin)
 			Begin();

@@ -52,6 +52,8 @@ namespace OP
 
 		//Bind the memory to the buffer object
 		OP_VULKAN_ASSERT(vkBindBufferMemory, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_Buffer, m_BufferMemory, 0);
+
+		OP_CORE_TRACE("Buffer Created");
 	}
 	Buffer::~Buffer()
 	{

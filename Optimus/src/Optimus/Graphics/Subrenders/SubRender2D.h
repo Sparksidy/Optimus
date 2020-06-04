@@ -8,8 +8,8 @@
 #include <Optimus/Graphics/Pipelines/GraphicsPipeline.h>
 
 //TODO: Remove this from here
-#include <Optimus/Mesh.h>
-#include <Optimus/AnimatedMesh.h>
+#include <Optimus/Scene.h>
+#include <Optimus/Log.h>
 
 namespace OP
 {
@@ -20,13 +20,14 @@ namespace OP
 	public:
 		explicit SubRender2D(const Pipeline::Stage& stage);
 
+		~SubRender2D()
+		{
+			OP_CORE_INFO(" Destructing Subrender2D");
+		}
+
 		void Render(const CommandBuffer& commandBuffer);
 
 	private:
 		GraphicsPipeline m_Pipeline;
-		std::unique_ptr<Mesh> m_Mesh; //Temporary: Fix me by adding Scene 
-		std::unique_ptr<Mesh> m_Mesh2; //Temporary: Fix me by adding Scene 
-		std::unique_ptr<AnimatedMesh> m_Mesh3; //Temporary: Fix me by adding Scene 
-
 	};
 }

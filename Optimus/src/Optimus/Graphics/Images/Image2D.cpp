@@ -93,11 +93,7 @@ namespace OP
 		OP_CORE_INFO("Image Created and Transitioned");
 
 		Image::CreateImageSampler(m_Sampler, m_Filter, m_AddressMode, m_Anisotropic, m_mipLevels);
-	
-		OP_CORE_INFO("Image Sampler has been created");
 
 		Image::CreateImageView(m_Image, m_View, VK_IMAGE_VIEW_TYPE_2D, m_Format, VK_IMAGE_ASPECT_COLOR_BIT, m_mipLevels, 0, 1, 0);
-
-		OP_CORE_INFO("Image View has been created");
 	}
 }

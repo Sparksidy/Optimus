@@ -10,6 +10,11 @@ namespace OP
 	{
 	}
 
+	UniformBuffer::~UniformBuffer()
+	{
+		OP_CORE_INFO("Destroying Uniform Buffer");
+	}
+
 	void UniformBuffer::Update(const void* newData)
 	{
 		void* data;

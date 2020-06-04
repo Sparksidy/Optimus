@@ -29,6 +29,8 @@ namespace OP
 	public:
 		explicit UniformHandler();
 
+		~UniformHandler();
+
 		void Update();
 
 		UniformBuffer* GetUniformBuffer(uint32_t imageIndex) { return m_UniformBuffers[imageIndex].get(); }

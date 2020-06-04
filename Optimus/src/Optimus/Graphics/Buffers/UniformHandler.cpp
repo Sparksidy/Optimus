@@ -19,7 +19,13 @@ namespace OP
 		for (size_t i = 0; i < swapchainImages; i++)
 		{
 			m_UniformBuffers[i] = std::make_unique<UniformBuffer>(m_Size);
+			OP_CORE_INFO("Uniform Buffer is created in the handler");
 		}
+	}
+
+	UniformHandler::~UniformHandler()
+	{
+		OP_CORE_INFO("Destroying Uniform Handler");
 	}
 
 	void UniformHandler::Update()  

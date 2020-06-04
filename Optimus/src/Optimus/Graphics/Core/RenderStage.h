@@ -5,6 +5,8 @@
 #include <Optimus/Graphics/RenderPass/RenderPass.h>
 #include <Optimus/Graphics/RenderPass/SwapChain.h>
 
+#include <Optimus/Log.h>
+
 #include <optional>
 
 namespace OP
@@ -120,7 +122,10 @@ namespace OP
 		friend class Graphics;
 	public:
 		explicit RenderStage(std::vector<Attachment> images = {}, std::vector<SubpassType> subpasses = {}, const Viewport& viewport = Viewport());
-		~RenderStage() {}
+		~RenderStage() 
+		{
+			OP_CORE_INFO("Destroying RenderStage");
+		}
 
 		void Update();
 		void Rebuild(const SwapChain& swapchain);

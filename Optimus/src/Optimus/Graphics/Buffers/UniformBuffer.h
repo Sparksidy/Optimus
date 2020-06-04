@@ -13,6 +13,8 @@ namespace OP
 	public:
 		explicit UniformBuffer(VkDeviceSize size, const void* data = nullptr);
 
+		~UniformBuffer();
+
 		void Update(const void* newData);
 
 		WriteDescriptorSet GetWriteDescriptorSet()const override;
