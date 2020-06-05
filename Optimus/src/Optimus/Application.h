@@ -49,10 +49,7 @@ namespace OP
 		inline ImguiLayer& GetImGUILayer()const { return *m_ImguiLayer; }
 		inline bool IsWindowResized()const { return m_windowResized; }
 
-		inline void ResetWindowResize() { m_windowResized = !m_windowResized; } //TODO:Looks like a hack. Should not be a public Interface
-
 	private:
-
 		std::unique_ptr<Window> m_Window;
 
 		//Stores the systems with their names

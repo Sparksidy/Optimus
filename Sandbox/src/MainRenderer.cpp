@@ -24,20 +24,4 @@ void MainRenderer::Start()
 } 
 void MainRenderer::Update()
 {
-	/*
-		If window is resized, recreate Graphics Pipeline. (Current: Expensive)
-
-		TODO: Create Dynamic States in Vulkan and just change the scissor and viewport information. (Cheap)
-	*/
-	if (OP::Application::Get().IsWindowResized())
-	{
-		OP_CORE_INFO("Window is resized");
-
-		ClearSubRenders();
-
-		AddSubRender<OP::SubRender2D>({ 0, 0 });
-
-		//Set isWindow Resized back to false
-		OP::Application::Get().ResetWindowResize();
-	}
 }

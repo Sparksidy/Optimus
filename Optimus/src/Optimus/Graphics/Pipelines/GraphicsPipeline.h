@@ -52,8 +52,8 @@ namespace OP
 		const VkPipeline& GetPipeline() const override { return m_GraphicsPipeline; }
 		const VkPipelineBindPoint& GetPipelineBindPoint() const override { return m_PipelineBindPoint; }
 		const VkDescriptorPool& GetDescriptorPool()const override { return m_DescriptorPool; }
-		
 
+		void UpdateViewportsAndScissors(const CommandBuffer& commandBuffer)const;
 	private:
 		void createShaderProgram();
 		void createDescriptorSetLayout();
@@ -84,7 +84,6 @@ namespace OP
 		std::vector<VkDynamicState>							m_DynamicStates	{ 
 																			  VK_DYNAMIC_STATE_VIEWPORT, 
 																			  VK_DYNAMIC_STATE_SCISSOR,
-																			  VK_DYNAMIC_STATE_LINE_WIDTH
 																			};
 
 		bool												m_PushDescriptors;

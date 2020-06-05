@@ -58,6 +58,7 @@ namespace OP
 	{
 		//auto& logicalDevice = GET_GRAPHICS_SYSTEM()->GetLogicalDevice();
 
+		OP_VULKAN_ASSERT(vkQueueWaitIdle, GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue());
 		for (const auto& shaderModule : m_ShaderModules)
 		{
 			vkDestroyShaderModule(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), shaderModule, nullptr);
@@ -68,7 +69,25 @@ namespace OP
 		vkDestroyPipelineLayout(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_PipelineLayout, nullptr);
 		vkDestroyDescriptorSetLayout(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_DescriptorSetLayout, nullptr);
 	}
-	
+
+	void GraphicsPipeline::UpdateViewportsAndScissors(const CommandBuffer& commandBuffer) const
+	{
+		VkViewport viewport;
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = (float)Application::Get().GetWindow().GetWindowWidth();
+		viewport.height = (float)Application::Get().GetWindow().GetWindowHeight();
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+
+		VkExtent2D extents = { Application::Get().GetWindow().GetWindowWidth() , Application::Get().GetWindow().GetWindowHeight() };
+
+		VkRect2D scissor;
+		scissor.offset = { 0,0 };
+		scissor.extent = extents;
+		vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+	}
 
 	void GraphicsPipeline::createShaderProgram()
 	{
@@ -170,6 +189,12 @@ namespace OP
 		m_ColourBlendState.blendConstants[1] = 0.0f;
 		m_ColourBlendState.blendConstants[2] = 0.0f;
 		m_ColourBlendState.blendConstants[3] = 0.0f;
+		
+		m_DynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		m_DynamicState.pNext = nullptr;
+		m_DynamicState.flags = 0;
+		m_DynamicState.dynamicStateCount = 2;
+		m_DynamicState.pDynamicStates = m_DynamicStates.data();
 
 		m_Viewport.x = 0.0f;
 		m_Viewport.y = 0.0f;
@@ -191,8 +216,6 @@ namespace OP
 		m_MultisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 		m_MultisampleState.sampleShadingEnable = VK_FALSE;
 		m_MultisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-
 	}
 
 	void GraphicsPipeline::createPipeline()
@@ -234,6 +257,7 @@ namespace OP
 		pipelineInfo.pMultisampleState = &m_MultisampleState;
 		pipelineInfo.pColorBlendState = &m_ColourBlendState;
 		pipelineInfo.layout = m_PipelineLayout;
+		pipelineInfo.pDynamicState = &m_DynamicState;
 		pipelineInfo.renderPass = *renderStage->GetRenderPass();
 		pipelineInfo.subpass = 0;
 		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;

@@ -15,9 +15,12 @@ namespace OP
 	{
 		m_Pipeline.BindPipeline(commandBuffer); //Binds the Gfx Pipeline
 
-		//Get the transforms for the meshes
-		//Update the uniforms
-		//Then Render
+		//If window resize then update viewport and scissors dynamic states
+		m_Pipeline.UpdateViewportsAndScissors(commandBuffer);
+
+		//TODO
+			//Get the transforms for the meshes
+			//Update the uniforms
 
 		size_t numberOfMeshes = dynamic_cast<OP::Scene*>(Application::Get().GetSystem("Scene"))->GetNumberOfMeshes();
 
