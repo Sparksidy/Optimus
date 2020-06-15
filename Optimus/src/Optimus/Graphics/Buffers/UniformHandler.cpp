@@ -12,7 +12,7 @@ namespace OP
 	UniformHandler::UniformHandler():
 		m_Size(sizeof(m_UniformBlock))
 	{
-		size_t swapchainImages = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
+		size_t swapchainImages = 3;//GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainImages();
 		m_UniformBuffers.resize(swapchainImages);
 
 		//Create a uniform buffer per swapchain image

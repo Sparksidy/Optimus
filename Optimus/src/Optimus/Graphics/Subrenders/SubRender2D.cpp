@@ -3,11 +3,23 @@
 #include <Optimus/Graphics/Models/Vertex2d.h>
 #include <Optimus/Graphics/Commands/CommandBuffer.h>
 
-#include <Optimus/Mesh.h>
+#include <Optimus/Application.h>
+#include <Optimus/Systems/GameObjectManager.h>
+#include <Optimus/Core/GameObject.h>
+#include <Optimus/Core/MeshComponent.h>
+#include <Optimus/Core/TransformComponent.h>
 
 namespace OP
 {
-	SubRender2D::SubRender2D(const Pipeline::Stage& stage): SubRender(stage), m_Pipeline(stage, { "C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_frag.spv","C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_vert.spv" }, { Vertex2d::GetVertexInput() })
+	SubRender2D::SubRender2D(const Pipeline::Stage& stage): SubRender(stage), 
+		m_Pipeline(stage, 
+			{ 
+				"C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_frag.spv",
+				"C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Optimus\\src\\Optimus\\Graphics\\Shaders\\SPIR-V\\Generic_vert.spv" 
+			}, 
+		    { 
+				Vertex2d::GetVertexInput() 
+			})
 	{
 		OP_CORE_INFO("Created Subrender");
 	}
@@ -18,15 +30,21 @@ namespace OP
 		//If window resize then update viewport and scissors dynamic states
 		m_Pipeline.UpdateViewportsAndScissors(commandBuffer);
 
-		//TODO
-			//Get the transforms for the meshes
-			//Update the uniforms
-
-		size_t numberOfMeshes = dynamic_cast<OP::Scene*>(Application::Get().GetSystem("Scene"))->GetNumberOfMeshes();
-
-		for(int i = 0; i < numberOfMeshes; i++)
+		//Render Game Objects
+		std::vector<GameObject*> objs = dynamic_cast<OP::GameObjectManager*>(Application::Get().GetSystem("GameObjectManager"))->GetAllGameObjects();
+		for (int i = 0; i < objs.size(); i++)
 		{
-			dynamic_cast<OP::Scene*>(Application::Get().GetSystem("Scene"))->GetMesh(i)->Render(commandBuffer, m_Pipeline);
+			TransformComponent* transform = dynamic_cast<TransformComponent*>(objs[i]->GetComponent(TRANSFORM_COMPONENT));
+			if (transform)
+			{
+				MeshComponent* mesh = dynamic_cast<MeshComponent*>(objs[i]->GetComponent(MESH_COMPONENT));
+				if (mesh)
+				{
+					mesh->PushTransform(transform->GetTranslation(), transform->GetRotation(), transform->GetScale());
+					mesh->Render(commandBuffer, m_Pipeline);
+				}
+					
+			}
 		}
 	}
 }

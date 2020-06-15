@@ -62,10 +62,10 @@ namespace OP
 		UniformHandler m_UniformHandler;  //More like Transform Matrices Handler
 		DescriptorHandler m_DescriptorHandler;
 
-		//Transform Component stuff
+		//TODO: Transform Component stuff
 		glm::vec3 m_Translate;
 		glm::vec3 m_Scale;
-		glm::vec3 m_Rotation;
+		glm::vec3 m_Rotation; 
 	};
 
 }

@@ -4,6 +4,9 @@
     <Filter Include="Optimus">
       <UniqueIdentifier>{D6B0A8D2-4290-276E-4BA8-B244B7068ECF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Core">
+      <UniqueIdentifier>{EECA3F3E-DA2D-CFE2-83B3-07996FF59A65}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Events">
       <UniqueIdentifier>{FA4F80D2-E61D-74D8-CFB1-E4FEBB1E503D}</UniqueIdentifier>
     </Filter>
@@ -46,6 +49,9 @@
     <Filter Include="Optimus\Input">
       <UniqueIdentifier>{5529A506-C1E9-203D-8A24-6ABAF6A36519}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Optimus\Systems">
+      <UniqueIdentifier>{DD7C3960-4908-A724-5219-2A19BE230325}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Optimus\Utilities">
       <UniqueIdentifier>{C158188C-2D6F-1622-76E6-A143E23BE7A9}</UniqueIdentifier>
     </Filter>
@@ -63,6 +69,21 @@
     </ClInclude>
     <ClInclude Include="src\Optimus\Core.h">
       <Filter>Optimus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Core\Component.h">
+      <Filter>Optimus\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Core\GameObject.h">
+      <Filter>Optimus\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Core\MeshComponent.h">
+      <Filter>Optimus\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Core\Scene.h">
+      <Filter>Optimus\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Core\TransformComponent.h">
+      <Filter>Optimus\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\EntryPoint.h">
       <Filter>Optimus</Filter>
@@ -190,8 +211,11 @@
     <ClInclude Include="src\Optimus\Mesh.h">
       <Filter>Optimus</Filter>
     </ClInclude>
-    <ClInclude Include="src\Optimus\Scene.h">
-      <Filter>Optimus</Filter>
+    <ClInclude Include="src\Optimus\Systems\GameObjectManager.h">
+      <Filter>Optimus\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Optimus\Systems\SceneManager.h">
+      <Filter>Optimus\Systems</Filter>
     </ClInclude>
     <ClInclude Include="src\Optimus\Utilities\Macros.h">
       <Filter>Optimus\Utilities</Filter>
@@ -219,6 +243,21 @@
   <ItemGroup>
     <ClCompile Include="src\Optimus\Application.cpp">
       <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Core\Component.cpp">
+      <Filter>Optimus\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Core\GameObject.cpp">
+      <Filter>Optimus\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Core\MeshComponent.cpp">
+      <Filter>Optimus\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Core\Scene.cpp">
+      <Filter>Optimus\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Core\TransformComponent.cpp">
+      <Filter>Optimus\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Graphics\Buffers\Buffer.cpp">
       <Filter>Optimus\Graphics\Buffers</Filter>
@@ -300,6 +339,12 @@
     </ClCompile>
     <ClCompile Include="src\Optimus\Log.cpp">
       <Filter>Optimus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Systems\GameObjectManager.cpp">
+      <Filter>Optimus\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Optimus\Systems\SceneManager.cpp">
+      <Filter>Optimus\Systems</Filter>
     </ClCompile>
     <ClCompile Include="src\Optimus\Window.cpp">
       <Filter>Optimus</Filter>

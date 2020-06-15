@@ -4,7 +4,8 @@
 #include <Optimus/Graphics/Devices/LogicalDevice.h>
 
 #include <Optimus/ISystem.h>
-
+#include <Optimus/Systems/GameObjectManager.h>
+#include <Optimus/Systems/SceneManager.h>
 
 namespace OP
 {
@@ -29,10 +30,20 @@ namespace OP
 		if (graphics)
 			m_Systems[graphics->GetName()] = graphics;
 
-		//TODO: SceneManager
-		ISystem* scene = new Scene();
-		if (scene)
-			m_Systems[scene->GetName()] = scene;
+		OP_CORE_INFO("Graphics System has been created");
+
+		ISystem* gameObjectManager = new GameObjectManager();
+		if (gameObjectManager)
+			m_Systems[gameObjectManager->GetName()] = gameObjectManager;
+
+		OP_CORE_INFO("Game Object Manager has been created");
+
+
+		ISystem* sceneManager = new SceneManager();
+		if (sceneManager)
+			m_Systems[sceneManager->GetName()] = sceneManager;
+
+		OP_CORE_INFO("Scene Manager has been created");
 	}
 
 	bool Application::Initialize()
@@ -93,7 +104,8 @@ namespace OP
 		//Wait for a queue to become idle before freeing resources
 		OP_VULKAN_ASSERT(vkQueueWaitIdle, GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue());
 
-		delete m_Systems["Scene"];
+		delete m_Systems["SceneManager"];
+		delete m_Systems["GameObjectManager"];
 		delete m_Systems["Graphics"];
 
 		m_Systems.clear();

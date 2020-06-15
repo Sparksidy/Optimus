@@ -2,23 +2,23 @@
 #include <Optimus.h>
 
 #include "MainRenderer.h"
-#include "Scene1.h"
+#include <Optimus/Systems/SceneManager.h>
 
 class Sandbox : public OP::Application
 {
 public:
 	Sandbox()
 	{
-
+		OP_CORE_INFO("Constructing Sandbox");
 	}
 
 	virtual bool Initialize() override
 	{
-		//Set Renderer
-		dynamic_cast<OP::Graphics*>(Application::Get().GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
+		dynamic_cast<OP::Graphics*>(GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
 
-		//Set Scene
-		dynamic_cast<OP::Scene*>(Application::Get().GetSystem("Scene"))->SetScene(std::make_unique<Scene1>());
+		dynamic_cast<OP::SceneManager*>(GetSystem("SceneManager"))->LoadScenes("Resources\\Levels");
+
+		OP_CORE_INFO("Sandbox Initialize!");
 
 		return true;
 	}
@@ -27,9 +27,6 @@ public:
 	{
 		OP_CORE_INFO("Destructing Sandbox");
 	}
-
-private:
-	
 };
 
 OP::Application* OP::CreateApplication()

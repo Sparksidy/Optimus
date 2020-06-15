@@ -135,7 +135,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\MainRenderer.h" />
-    <ClInclude Include="src\Scene1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\MainRenderer.cpp" />

@@ -25,7 +25,7 @@ namespace OP
 
 		~Graphics();
 
-		bool Initialize() override { return true; }
+		bool Initialize() override;
 		void Update() override;
 		void Unload() override; 
 

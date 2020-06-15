@@ -33,6 +33,11 @@ namespace OP
 
 	}
 
+	bool Graphics::Initialize()
+	{
+		return true;
+	}
+
 	void Graphics::Update()
 	{
 		DrawFrame();

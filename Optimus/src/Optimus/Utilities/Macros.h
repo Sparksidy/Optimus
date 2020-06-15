@@ -12,3 +12,11 @@
 	}
 
 #define GET_GRAPHICS_SYSTEM()  dynamic_cast<Graphics*>(Application::Get().GetSystem("Graphics"))
+
+#ifndef SafeDelete
+#define SafeDelete(x) { delete x; x = 0; }
+#endif
+
+#ifndef SafeDeleteArr
+#define SafeDeleteArr(x) { delete [] x; x = 0; }
+#endif
