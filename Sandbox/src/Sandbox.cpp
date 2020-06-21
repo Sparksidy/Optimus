@@ -16,9 +16,11 @@ public:
 	{
 		dynamic_cast<OP::Graphics*>(GetSystem("Graphics"))->SetRenderer(std::make_unique<MainRenderer>());
 
-		dynamic_cast<OP::SceneManager*>(GetSystem("SceneManager"))->LoadScenes("Resources\\Levels");
+		dynamic_cast<OP::SceneManager*>(GetSystem("SceneManager"))->LoadScenes("C:\\Users\\sidys\\OneDrive\\Desktop\\Optimus\\Sandbox\\Resources\\Levels");
 
 		OP_CORE_INFO("Sandbox Initialize!");
+
+		OP::Application::Initialize();
 
 		return true;
 	}
