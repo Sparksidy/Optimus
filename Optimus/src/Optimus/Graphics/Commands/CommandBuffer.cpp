@@ -56,10 +56,18 @@ namespace OP
 		if (m_Running)
 			End();
 
+		//Add imgui layer to CB TODO: Use a ifdef of rendering imgui only when debugging
+		std::array<VkCommandBuffer, 2> submitCommandBuffers =
+		{ 
+			m_CommandBuffer, 
+			Application::Get().GetImGUILayer().GetImGUICommandBuffer()[GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex()] 
+		};
+
+		
 		VkSubmitInfo submitInfo = {};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &m_CommandBuffer;
+		submitInfo.commandBufferCount = static_cast<uint32_t>(submitCommandBuffers.size());
+		submitInfo.pCommandBuffers = submitCommandBuffers.data();
 
 		if(waitSemaphore != VK_NULL_HANDLE)
 		{ 

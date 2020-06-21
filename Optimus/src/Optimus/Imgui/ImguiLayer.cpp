@@ -65,9 +65,6 @@ namespace OP
 		//Vulkan Initialization for Imgui
 		_initIMGUIVulkan();
 
-		//Load the Fonts
-		_uploadFonts();
-
 		OP_CORE_INFO("Imgui: Initialized successfully");
 	}
 
@@ -100,7 +97,7 @@ namespace OP
 		attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
 		attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; 
 		attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		attachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachment.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 		attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
 		VkAttachmentReference color_attachment = {};
@@ -195,6 +192,8 @@ namespace OP
 
 
 		ImGui::StyleColorsDark();
+
+		OP_CORE_INFO("Imgui Context is created");
 	}
 
 	void ImguiLayer::_initIMGUIVulkan()
@@ -212,31 +211,35 @@ namespace OP
 		init_info.Allocator = nullptr;
 		init_info.CheckVkResultFn = check_vk_result;
 		ImGui_ImplVulkan_Init(&init_info, m_ImguiRenderPass);
+
+		OP_CORE_INFO("Imgui for Vulkan is initialized");
 	}
 
 	void ImguiLayer::_uploadFonts()
 	{
-		{
-			/*OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
-			VkCommandBufferBeginInfo begin_info = {};
-			begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-			begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()], &begin_info);
+		OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
+		VkCommandBufferBeginInfo begin_info = {};
+		begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+		uint32_t imgIndex = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex(); 
+		if (imgIndex > 3)
+			imgIndex = 0;	//::TODO_HACK
+		OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[imgIndex], &begin_info);
 
-			ImGui_ImplVulkan_CreateFontsTexture(m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()]);
+		ImGui_ImplVulkan_CreateFontsTexture(m_ImguiCommandBuffer[imgIndex]);
 
-			VkSubmitInfo end_info = {};
-			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()];
-			OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[GET_GRAPHICS_SYSTEM()->GetImageIndex()]);
-			OP_VULKAN_ASSERT(vkQueueSubmit, GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue(), 1, &end_info, VK_NULL_HANDLE);
+		VkSubmitInfo end_info = {};
+		end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		end_info.commandBufferCount = 1;
+		end_info.pCommandBuffers = &m_ImguiCommandBuffer[imgIndex];
+		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[imgIndex]);
+		OP_VULKAN_ASSERT(vkQueueSubmit, GET_GRAPHICS_SYSTEM()->GetLogicalDevice().GetGraphicsQueue(), 1, &end_info, VK_NULL_HANDLE);
 
-			OP_VULKAN_ASSERT(vkDeviceWaitIdle, GET_GRAPHICS_SYSTEM()->GetLogicalDevice());
-			ImGui_ImplVulkan_InvalidateFontUploadObjects();
+		OP_VULKAN_ASSERT(vkDeviceWaitIdle, GET_GRAPHICS_SYSTEM()->GetLogicalDevice());
+		ImGui_ImplVulkan_InvalidateFontUploadObjects();
 
-			OP_CORE_INFO("Imgui: Fonts loaded successfully");*/
-		}
+		OP_CORE_INFO("Imgui: Fonts loaded successfully");
+		
 	}
 
 	void ImguiLayer::_createCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags)
@@ -303,9 +306,19 @@ namespace OP
 		io.DeltaTime = m_time > 0.0f ? time - m_time : (1.0f / 60.0f);
 		m_time = time; //Elapsed Time
 
+		//Load the Fonts once ::TODO::HACK
+		if (!fontloaded)
+		{
+			_uploadFonts();
+			fontloaded = true;
+		}
+			
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		
+		bool show = true;
+		ImGui::ShowDemoWindow(&show);
 
 		ImGui::Begin("ImGUI Debug");
 		ImGui::Text("Frame Time   : %.3f ms (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
@@ -313,55 +326,39 @@ namespace OP
 		ImGui::End();
 
 		ImGui::Render();
-
-		FrameRender();
 	}
 
 	void ImguiLayer::FrameRender()
 	{
-		/*size_t img = GET_GRAPHICS_SYSTEM()->GetImageIndex();
-		if (GET_GRAPHICS_SYSTEM()->SwapchainRebuild())
+		uint32_t imgIndex = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetActiveImageIndex();
 		{
-			GET_GRAPHICS_SYSTEM()->SetRecreateSwapchain(false);
+			OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
+			VkCommandBufferBeginInfo info = {};
+			info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+			info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+			OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[imgIndex], &info);
+		}
+		{
+			VkRenderPassBeginInfo info = {};
+			info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+			info.renderPass = m_ImguiRenderPass;
+			info.framebuffer = m_ImguiFrameBuffers[imgIndex];
+			info.renderArea.extent.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
+			info.renderArea.extent.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
+			info.clearValueCount = 1;
+			VkClearValue col;
+			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+			memcpy(&col.color.float32[0], &clear_color, 4 * sizeof(float));
+			info.pClearValues = &col;
+			vkCmdBeginRenderPass(m_ImguiCommandBuffer[imgIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
+		}
 
-			for (auto framebuffer : m_ImguiFrameBuffers)
-			{
-				vkDestroyFramebuffer(GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), framebuffer, nullptr);
-			}
-
-			_createFramebuffers();
-			img = 0;
-		}*/
-
-
-		//{
-		//	OP_VULKAN_ASSERT(vkResetCommandPool, GET_GRAPHICS_SYSTEM()->GetLogicalDevice(), m_ImguiCommandPool, 0);
-		//	VkCommandBufferBeginInfo info = {};
-		//	info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		//	info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-		//	OP_VULKAN_ASSERT(vkBeginCommandBuffer, m_ImguiCommandBuffer[img], &info);
-		//}
-		//{
-		//	VkRenderPassBeginInfo info = {};
-		//	info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		//	info.renderPass = m_ImguiRenderPass;
-		//	info.framebuffer = m_ImguiFrameBuffers[img];
-		//	info.renderArea.extent.width = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().width;
-		//	info.renderArea.extent.height = GET_GRAPHICS_SYSTEM()->GetSwapchain().GetSwapChainExtent().height;
-		//	info.clearValueCount = 1;
-		//	VkClearValue col;
-		//	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-		//	memcpy(&col.color.float32[0], &clear_color, 4 * sizeof(float));
-		//	info.pClearValues = &col;
-		//	vkCmdBeginRenderPass(m_ImguiCommandBuffer[img], &info, VK_SUBPASS_CONTENTS_INLINE);
-		//}
-
-		//// Record Imgui Draw Data and draw funcs into command buffer
-		//ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[img]);
+		// Record Imgui Draw Data and draw funcs into command buffer
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_ImguiCommandBuffer[imgIndex]);
 
 
-		//vkCmdEndRenderPass(m_ImguiCommandBuffer[img]);
-		//OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[img]);
+		vkCmdEndRenderPass(m_ImguiCommandBuffer[imgIndex]);
+		OP_VULKAN_ASSERT(vkEndCommandBuffer, m_ImguiCommandBuffer[imgIndex]);
 	}
 
 	void ImguiLayer::OnEvent(Event& e)

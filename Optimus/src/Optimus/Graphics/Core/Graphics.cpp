@@ -35,12 +35,22 @@ namespace OP
 
 	bool Graphics::Initialize()
 	{
+		if (!m_Renderer->m_Started)
+		{
+			ResetRenderStages();
+			m_Renderer->Start();
+			m_Renderer->m_Started = true;
+		}
+
 		return true;
 	}
 
 	void Graphics::Update()
 	{
 		DrawFrame();
+
+		//Wait for the logical device to finish operations before exiting
+		vkDeviceWaitIdle(*m_LogicalDevice.get());
 	}
 
 	void Graphics::Unload()
@@ -216,13 +226,6 @@ namespace OP
 			return;
 		}
 
-		if (!m_Renderer->m_Started)
-		{
-			ResetRenderStages();
-			m_Renderer->Start();
-			m_Renderer->m_Started = true;
-		}
-
 		m_Renderer->Update();
 
 		auto result = m_SwapChain->AcquireNextImage(m_ImageAvailableSemaphore[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
@@ -237,6 +240,9 @@ namespace OP
 		{
 			OP_CORE_FATAL("Failed to acquire swapchain Image");
 		}
+
+		
+		Application::Get().GetImGUILayer().FrameRender();
 
 		Pipeline::Stage Stage;
 		for (auto& renderstage : m_Renderer->m_RenderStages)

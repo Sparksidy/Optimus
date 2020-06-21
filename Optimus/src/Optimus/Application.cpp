@@ -21,7 +21,7 @@ namespace OP
 		m_Window = std::make_unique<Window>();
 		m_Window ->SetWindowCallbackFunc(OP_BIND_FN(OnEvent));
 
-		//m_ImguiLayer = new ImguiLayer();
+		m_ImguiLayer = new ImguiLayer();
 	}
 
 	void Application::AllocateSystems()
@@ -52,7 +52,7 @@ namespace OP
 			if (!system.second->Initialize())
 				return false;
 
-		//PushOverlay(m_ImguiLayer);
+		PushOverlay(m_ImguiLayer);
 
 		return true;
 	}
@@ -75,12 +75,13 @@ namespace OP
 			//Update Windows
 			m_Window->Update();
 
+
 			//Update the all Layers
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
-
+			
 			//Update all the systems
 			for (auto system : m_Systems)
 				system.second->Update();

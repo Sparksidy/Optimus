@@ -31,6 +31,8 @@ namespace OP
 
 		std::vector<VkCommandBuffer>& GetImGUICommandBuffer()  { return m_ImguiCommandBuffer; } //Used to add to the main command buffers
 
+		void FrameRender();
+
 	private:
 		//Helper functions
 		void _createIMGUIRenderPass();
@@ -43,8 +45,7 @@ namespace OP
 		void _createCommandPool(VkCommandPool* commandPool, VkCommandPoolCreateFlags flags);
 		void _createCommandBuffers(VkCommandBuffer* commandBuffer, uint32_t commandBufferCount, VkCommandPool& commandPool);
 
-
-		void FrameRender();
+		
 
 	private:
 		float m_time = 0.0f;
@@ -55,5 +56,7 @@ namespace OP
 
 		std::vector<VkCommandBuffer>		m_ImguiCommandBuffer;
 		std::vector<VkFramebuffer>			m_ImguiFrameBuffers;
+
+		bool			fontloaded = false; //::TODO::HACK
 	};
 }
