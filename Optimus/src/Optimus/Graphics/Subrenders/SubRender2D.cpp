@@ -40,7 +40,7 @@ namespace OP
 				MeshComponent* mesh = dynamic_cast<MeshComponent*>(objs[i]->GetComponent(MESH_COMPONENT));
 				if (mesh)
 				{
-					mesh->PushTransform(transform->GetTranslation(), transform->GetRotation(), transform->GetScale());
+					//mesh->PushTransform(transform->GetTranslation(), transform->GetRotation(), transform->GetScale());
 					mesh->Render(commandBuffer, m_Pipeline);
 				}
 					
